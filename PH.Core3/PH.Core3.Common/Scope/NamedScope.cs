@@ -1,5 +1,6 @@
 ﻿using System;
 using JetBrains.Annotations;
+using Microsoft.Extensions.Logging;
 
 namespace PH.Core3.Common.Scope
 {
@@ -17,7 +18,12 @@ namespace PH.Core3.Common.Scope
         [NotNull]
         public static NamedScope Instance([NotNull] string name)
         {
-            return new NamedScope(name);
+            return Instance(name, null);
+        }
+
+        public static NamedScope Instance([NotNull] string name, ILogger logger)
+        {
+            return new NamedScope(name, logger);
         }
         
         /// <summary>
@@ -25,16 +31,21 @@ namespace PH.Core3.Common.Scope
         /// </summary>
         public string Scope { get; private set; }
 
-        private NamedScope([NotNull] string scopeName)
+        private IDisposable _logScope;
+
+        private NamedScope([NotNull] string scopeName, [CanBeNull] ILogger logger)
         {
             Scope    = scopeName ?? throw new ArgumentNullException(nameof(scopeName));
             Disposed = false;
+            if (null != logger)
+                _logScope = logger.BeginScope(scopeName);
         }
 
         /// <summary>Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.</summary>
         public void Dispose()
         {
             Disposed = true;
+            _logScope?.Dispose();
             GC.SuppressFinalize(this);
         }
 

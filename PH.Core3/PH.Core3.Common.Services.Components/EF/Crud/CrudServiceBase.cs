@@ -1,0 +1,167 @@
+﻿using System;
+using System.Linq;
+using System.Threading.Tasks;
+using JetBrains.Annotations;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using PH.Core3.Common.CoreSystem;
+using PH.Core3.Common.Extensions;
+using PH.Core3.Common.Models.Entities;
+using PH.Core3.Common.Models.ViewModels;
+using PH.Core3.Common.Result;
+using PH.Core3.Common.Services.Crud;
+
+namespace PH.Core3.Common.Services.Components.EF.Crud
+{
+    /// <summary>
+    /// CRUD Service
+    /// </summary>
+    /// <typeparam name="TContext">Type of DbContext</typeparam>
+    /// <typeparam name="TEntity">Type Of Entity</typeparam>
+    /// <typeparam name="TDto">Type of Result Dto</typeparam>
+    /// <typeparam name="TNewDto">Type of Insert Dto</typeparam>
+    /// <typeparam name="TEditDto">Type of Edit Dto</typeparam>
+    /// <typeparam name="TKey">Type of Id Property of bot Entity and Dto</typeparam>
+    public abstract class CrudServiceBase<TContext, TEntity, TDto, TNewDto, TEditDto, TKey>
+        : CrudServiceBaseInfrastructure<TContext, TEntity, TDto, TNewDto, TEditDto, TKey>
+          , ICrudService<TDto, TNewDto, TEditDto, TKey>
+        where TContext : DbContext
+        where TEntity : class, IEntity<TKey>
+        where TKey : IEquatable<TKey>
+        where TNewDto : IDto, INewDto 
+        where TEditDto :  TNewDto, IEditDto<TKey>, IDto<TKey>
+        where TDto : IDtoResult<TKey>, TEditDto, IDto<TKey>, IIdentifiable<TKey>
+
+
+
+    {
+
+        private readonly ILogger<CrudServiceBase<TContext, TEntity, TDto, TNewDto, TEditDto, TKey>> _logger;
+
+        /// <summary>
+        /// Init new CRUD Service for Insert/Update/Delete 
+        /// </summary>
+        /// <param name="coreIdentifier">Cross Scope Identifier</param>
+        /// <param name="logger">Logger</param>
+        /// <param name="ctx">Entity Framework DbContext</param>
+        /// <param name="settings">CRUD settings</param>
+        /// <param name="tenantId">Tenant Identifier</param>
+        protected CrudServiceBase([NotNull] IIdentifier coreIdentifier
+                                  , [NotNull]
+                                  ILogger<CrudServiceBase<TContext, TEntity, TDto, TNewDto, TEditDto, TKey>> logger
+                                  , [NotNull] TContext ctx
+
+                                  , [NotNull] TransientCrudSettings settings, [NotNull] string tenantId)
+            : base(coreIdentifier, logger, ctx, settings, tenantId)
+        {
+            _logger = logger;
+        }
+
+
+        /// <summary>
+        /// Wrap a <see cref="TEntity">entity</see> to a <see cref=" Result{TDto}">dto</see> to return to consuming services.
+        /// </summary>
+        /// <param name="entity">entity</param>
+        /// <returns>Result </returns>
+        [NotNull]
+        protected internal override IResult<TDto> ToResultOkDto(TEntity entity)
+        {
+            var r = ToDto(entity);
+            return ResultFactory.Ok(Identifier, r);
+        }
+
+        /// <summary>
+        /// Find <see cref="TDto"/> by Id
+        /// </summary>
+        /// <param name="id">Id</param>
+        /// <returns><see cref="Result{TDto}"/> instance</returns>
+        [ItemNotNull]
+        public virtual async Task<IResult<TDto>> FindByIdAsync([NotNull] TKey id)
+        {
+            var e = await FindEntityByIdAsync(id);
+            if (null == e)
+                return ResultFactory.Fail<TDto>(Identifier, $"Unable to find {DtoTypeName} with id '{id}'");
+
+            return ToResultOkDto(e);
+        }
+
+
+        /// <summary>
+        /// Load All <see cref="TDto"/> Items
+        /// </summary>
+        /// <returns><see cref="Result{ToDto}"/> instance</returns>
+        [ItemNotNull]
+        public async Task<IResult<TDto[]>> LoadAllAsync()
+        {
+            var all = await Set.ToArrayAsync();
+            var res = all.Select(ToDto).ToArray();
+            return ResultFactory.Ok(Identifier, res);
+        }
+
+        /// <summary>
+        /// Async Add new <see cref="TNewDto">item</see>
+        /// </summary>
+        /// <param name="entity">Item to Add</param>
+        /// <returns><see cref="Result{TDto}"/> containing added Item or error</returns>
+        [ItemNotNull]
+        public async Task<IResult<TDto>> AddAsync(TNewDto entity)
+        {
+            var t = await ParseDtoAndValidateAsync(entity);
+            if (t.InsertValidationResult.IsValid)
+            {
+                var ins = await CreateEntityAsync(t.EntityToInsert);
+                
+                return ResultFactory.Ok(Identifier,ToDto(ins));
+            }
+            else
+            {
+                return _logger.ErrorAndReturnFail<TDto>(Identifier, t.InsertValidationResult);
+            }
+        }
+
+
+        /// <summary>
+        /// Async remove a <see cref="TDto">dto</see>
+        /// </summary>
+        /// <param name="entity">Content to delete</param>
+        /// <returns><see cref="Result"/> containing True or error</returns>
+        [ItemNotNull]
+        public async Task<IResult> RemoveAsync([NotNull] TDto entity)
+        {
+            var t = await GetEntityForDeleteAsync(entity.Id);
+            if (t.DeleteValidationResult.IsValid)
+            {
+                return await RemoveAsync(t.EntityToDelete);
+            }
+            else
+            {
+                return _logger.ErrorAndReturnFail(Identifier,t.DeleteValidationResult);
+            }
+        }
+
+
+        /// <summary>
+        /// Async update a <see cref="TEditDto">dto</see>
+        /// </summary>
+        /// <param name="entity">Content to Update</param>
+        /// <returns><see cref="Result{TDto}"/> result</returns>
+        [ItemNotNull]
+        public async Task<IResult<TDto>> UpdateAsync(TEditDto entity)
+        {
+            var e = await FindEntityByIdAsync(entity.Id);
+            if (null == e)
+                return _logger.CriticalAndReturnFail<TDto>(Identifier,$"Unable to find {EntityTypeName} with id {entity.Id}");
+            var toUpdate = await MergeWithDtoAndValidateAsync(e, entity);
+            if (toUpdate.UpdateValidationResult.IsValid)
+            {
+                var updated = await UpdateEntityAsync(toUpdate.EntityToUpdate);
+
+                return ResultFactory.Ok(Identifier,ToDto(updated));
+            }
+            else
+            {
+                return _logger.ErrorAndReturnFail<TDto>(Identifier,toUpdate.UpdateValidationResult);
+            }
+        }
+    }
+}
