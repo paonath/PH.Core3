@@ -6,6 +6,7 @@ using System.Security.Principal;
 using System.Threading.Tasks;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
+using Autofac.Multitenant;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Hosting.Internal;
@@ -33,7 +34,8 @@ namespace PH.Core3.Test.WebApp
             Configuration = configuration;
         }
 
-        public IContainer ApplicationContainer { get; private set; }
+        public static MultitenantContainer ApplicationContainer { get; set; }
+        
         public IConfiguration Configuration { get; }
 
 
@@ -80,8 +82,17 @@ namespace PH.Core3.Test.WebApp
             builder.RegisterModule(new MainwebModule(contextConnectionString));
 
 
-            this.ApplicationContainer = builder.Build();
-            return new AutofacServiceProvider(this.ApplicationContainer);
+            var container = builder.Build();
+            var strategy = new HttpTenantIdentificationStrategy(container.Resolve<IHttpContextAccessor>());
+
+
+
+            var multitenantContainer = new MultitenantContainer(strategy, container);
+
+
+            ApplicationContainer = multitenantContainer;
+
+            return new AutofacServiceProvider(multitenantContainer);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -100,7 +111,26 @@ namespace PH.Core3.Test.WebApp
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-            app.UseMvc();
+            //app.UseMvc();
+
+            app.UseMvc(routes =>
+            {
+                routes.MapRoute(
+                                name: "areaRoutev1",
+                                template: "{area=v1}/api/{controller=Home}/{action=Get}/{id?}");
+                /*
+                routes.MapRoute(
+                                name: "fileRoute",
+                                template: "Files/{action=Attachments}/{id}");
+                //http://localhost:5001/Files/Attachments/08d5fc393bd20a13aa02e3e1dcbdb95b-ReSharper_DefaultKeymap_VSscheme.pdf
+                */
+                routes.MapRoute(
+                                name: "default",
+                                template: "{controller=Home}/{action=Index}/{id?}");
+               
+            });
+
+            app.UseStaticFiles();
         }
     }
 }

@@ -2,6 +2,26 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+
+    <!--NUGET PKG-->
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    
+    <PackageId>PH.Core3.Common.Services</PackageId>
+    
+    <Description>
+      NetStandard2.0 and NetCoreApp2.2 Utilities for Crud API System - Base Services Abstraction amd Interfaces. Should be referenced by Services project containing Interfaces
+    </Description>
+
+    <PackageReleaseNotes>
+      First release.
+    </PackageReleaseNotes>
+    
+    <PackageTags>
+      asp.net core, netcore, csharp, services, di
+    </PackageTags>
+
+
   </PropertyGroup>
 
   <ItemGroup>

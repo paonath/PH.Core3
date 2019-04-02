@@ -2,6 +2,24 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
+
+    <!--NUGET PKG-->
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    
+    <PackageId>PH.Core3.AspNetCoreApi</PackageId>
+    
+    <Description>
+     NetCoreApp2.2 astraction - API Base Package: should be referenced by Asp.Net Core API Project
+    </Description>
+
+    <PackageReleaseNotes>
+      First release.
+    </PackageReleaseNotes>
+    
+    <PackageTags>
+      asp.net core, netcore, csharp
+    </PackageTags>
   </PropertyGroup>
 
   <ItemGroup>

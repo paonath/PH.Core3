@@ -2,30 +2,25 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    
     <!--NUGET PKG-->
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     
-    <PackageId>PH.Core2.AbstractionBase.EntityFramework</PackageId>
+    <PackageId>PH.Core3.Common</PackageId>
     
     <Description>
-      NetStandard2.0 and NetCoreApp2.2 Utilities for Crud API System
+      NetStandard2.0 and NetCoreApp2.2 Utilities for Crud API System - Main package, should be referenced by all projects on solution
     </Description>
 
     <PackageReleaseNotes>
       First release.
     </PackageReleaseNotes>
-
     
     <PackageTags>
       asp.net core, netcore, csharp
     </PackageTags>
     
-    <IconUrl>https://raw.githubusercontent.com/paonath/Icons/master/nuget_es_img.png</IconUrl>
-    <RepositoryUrl>https://github.com/paonath/PH.Core2</RepositoryUrl>
-    <PackageProjectUrl>https://github.com/paonath/PH.Core2</PackageProjectUrl>
-    <PackageIconUrl>https://raw.githubusercontent.com/paonath/Icons/master/nuget_es_img.png</PackageIconUrl>
-    <PackageLicenseExpression>BSD-3-Clause</PackageLicenseExpression>
   </PropertyGroup>
 
 
