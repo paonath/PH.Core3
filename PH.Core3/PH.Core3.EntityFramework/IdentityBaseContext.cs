@@ -33,7 +33,10 @@ namespace PH.Core3.EntityFramework
     /// <typeparam name="TKey">Type of User and Role Id Property</typeparam>
     public abstract class IdentityBaseContext<TUser, TRole, TKey> :
         Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityDbContext<TUser, TRole, TKey>,
-        IAuditContext, IIdentityBaseContext<TUser, TRole, TKey> where TUser : IdentityUser<TKey>, IEntity<TKey>
+        IAuditContext, IIdentityBaseContext<TUser, TRole, TKey> , IDbContextUnitOfWork
+        
+        where TUser : IdentityUser<TKey>, IEntity<TKey>
+
         where TRole : IdentityRole<TKey>, IEntity<TKey>
         where TKey : IEquatable<TKey>
     {
@@ -552,6 +555,12 @@ namespace PH.Core3.EntityFramework
         #endregion
 
         public bool Initialized { get; protected set; }
+        
+        [NotNull]
+        IDbContextUnitOfWork IDbContextUnitOfWork.Initialize()
+        {
+            return Initialize();
+        }
 
         /// <summary>
         /// Init Method
@@ -579,7 +588,7 @@ namespace PH.Core3.EntityFramework
     /// <typeparam name="TUser">Type of User Entity class</typeparam>
     /// <typeparam name="TRole">Type of Role Entity class</typeparam>
     public abstract class
-        IdentityBaseContext<TUser, TRole> : IdentityBaseContext<TUser, TRole, string>, ITenantContext
+        IdentityBaseContext<TUser, TRole> : IdentityBaseContext<TUser, TRole, string>, ITenantContext , IDbContextUnitOfWork
         where TUser : UserEntity, IEntity<string>
         where TRole : RoleEntity, IEntity<string>
     {

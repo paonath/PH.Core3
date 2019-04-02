@@ -2,10 +2,11 @@
 using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
 using PH.Core3.TestContext.Map;
+using PH.Core3.UnitOfWork;
 
 namespace PH.Core3.TestContext
 {
-    public class MyContext : PH.Core3.EntityFramework.IdentityBaseContext<User,Role,string>
+    public class MyContext : PH.Core3.EntityFramework.IdentityBaseContext<User,Role,string> 
     {
         public DbSet<Albero> Alberi { get; set; }
         public DbSet<Category> Categories { get; set; }
