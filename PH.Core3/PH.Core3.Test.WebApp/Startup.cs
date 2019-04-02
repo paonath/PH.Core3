@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -24,6 +25,9 @@ using Newtonsoft.Json;
 using PH.Core3.AspNetCoreApi.Filters;
 using PH.Core3.Test.WebApp.AutofacModules;
 using PH.Core3.TestContext;
+using Swashbuckle.AspNetCore.Swagger;
+using Swashbuckle.AspNetCore.SwaggerGen;
+using Swashbuckle.AspNetCore.SwaggerUI;
 
 namespace PH.Core3.Test.WebApp
 {
@@ -42,6 +46,8 @@ namespace PH.Core3.Test.WebApp
         // This method gets called by the runtime. Use this method to add services to the container.
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
+            #region base DI
+
             services.AddTransient<IPrincipal>(
                                               provider => provider
                                                           .GetService<IHttpContextAccessor>().HttpContext?.User);
@@ -66,14 +72,52 @@ namespace PH.Core3.Test.WebApp
             var contextConnectionString = Configuration.GetConnectionString("MySqlConnection");
 
             services.AddDbContext<MyContext>(options =>
-                                               options
-                                                   .UseMySql(contextConnectionString)
-                                                   .UseLazyLoadingProxies(true)
-                                          );
+                                                 options
+                                                     .UseMySql(contextConnectionString)
+                                                     .UseLazyLoadingProxies(true)
+                                            );
             services.AddIdentity<User, Role>()
                     .AddEntityFrameworkStores<MyContext>()
                     .AddDefaultTokenProviders();
             
+            /*
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v0", new Info
+                {
+                    Version        = "v0",
+                    Title          = "ToDo API V0",
+                    Description    = "A simple example ASP.NET Core Web API",
+                    TermsOfService = "None",
+                    Contact = new Contact
+                    {
+                        Name  = "Paolo Innocenti",
+                        Email = "paolo.innocenti@estrobit.com",
+                        Url   = "https://estrobit.com/"
+                    },
+                    //License = new License
+                    //{
+                    //    Name = "Use under LICX",
+                    //    Url  = "https://example.com/license"
+                    //},
+
+                });
+                //c.SwaggerDoc("v0", new Info { Title = "My API", Version = "v0" });
+                c.SwaggerDoc("v1", new Info { Title = "My API", Version = "v1" });
+            });
+            */
+
+
+            services.AddApiVersioning();
+            services.AddVersionedApiExplorer( options => options.GroupNameFormat = "'v'VVV" );
+            services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
+            services.AddSwaggerGen();
+
+            #endregion
+
+            
+
+            #region Autofac
 
             var builder = new ContainerBuilder();
 
@@ -83,7 +127,7 @@ namespace PH.Core3.Test.WebApp
 
 
             var container = builder.Build();
-            var strategy = new HttpTenantIdentificationStrategy(container.Resolve<IHttpContextAccessor>());
+            var strategy  = new HttpTenantIdentificationStrategy(container.Resolve<IHttpContextAccessor>());
 
 
 
@@ -93,11 +137,13 @@ namespace PH.Core3.Test.WebApp
             ApplicationContainer = multitenantContainer;
 
             return new AutofacServiceProvider(multitenantContainer);
+
+            #endregion
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory
-                              , Microsoft.AspNetCore.Hosting.IApplicationLifetime appLifetime)
+                              , Microsoft.AspNetCore.Hosting.IApplicationLifetime appLifetime, IApiVersionDescriptionProvider apiVersionProvider)
         {
             if (env.IsDevelopment())
             {
@@ -112,6 +158,31 @@ namespace PH.Core3.Test.WebApp
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             //app.UseMvc();
+
+            // Enable middleware to serve generated Swagger as a JSON endpoint.
+            app.UseSwagger( );
+
+            // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.), specifying the Swagger JSON endpoint.
+            //app.UseSwaggerUI(c =>
+            //{
+            //    c.SwaggerEndpoint("/swagger/v0/swagger.json", "My API V0");
+            //    c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+            //    //c.DocExpansion("none");
+            //    //c.DocExpansion(DocExpansion.None);
+            //    c.DocExpansion(DocExpansion.None);
+
+            //});
+            app.UseSwaggerUI(
+                             options =>
+                             {
+                                 foreach ( var description in apiVersionProvider.ApiVersionDescriptions )
+                                 {
+                                     options.SwaggerEndpoint(
+                                                             $"/swagger/{description.GroupName}/swagger.json",
+                                                             description.GroupName.ToUpperInvariant() );
+                                     options.DocExpansion(DocExpansion.None);
+                                 }
+                             } );
 
             app.UseMvc(routes =>
             {
@@ -131,6 +202,48 @@ namespace PH.Core3.Test.WebApp
             });
 
             app.UseStaticFiles();
+        }
+    }
+
+
+    public class SwaggerDefaultValues : IOperationFilter
+    {
+        /// <summary>
+        /// Applies the filter to the specified operation using the given context.
+        /// </summary>
+        /// <param name="operation">The operation to apply the filter to.</param>
+        /// <param name="context">The current operation filter context.</param>
+        public void Apply( Operation operation, OperationFilterContext context )
+        {
+            var apiDescription = context.ApiDescription;
+
+            operation.Deprecated = apiDescription.IsDeprecated();
+            
+
+
+            if ( operation.Parameters == null )
+            {
+                return;
+            }
+
+            // REF: https://github.com/domaindrivendev/Swashbuckle.AspNetCore/issues/412
+            // REF: https://github.com/domaindrivendev/Swashbuckle.AspNetCore/pull/413
+            foreach (var parameter in operation.Parameters.OfType<NonBodyParameter>())
+            {
+                var description = apiDescription.ParameterDescriptions.First(p => p.Name == parameter.Name);
+
+                if (parameter.Description == null)
+                {
+                    parameter.Description = description.ModelMetadata?.Description;
+                }
+
+                if (parameter.Default == null)
+                {
+                    parameter.Default = description.DefaultValue;
+                }
+
+                parameter.Required |= description.IsRequired;
+            }
         }
     }
 }

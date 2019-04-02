@@ -2,6 +2,26 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+
+    <!--NUGET PKG-->
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    
+    <PackageId>PH.Core3.UnitOfWork</PackageId>
+    
+    <Description>
+      NetStandard2.0 and NetCoreApp2.2 Utilities for Crud API System - Unit Of Work Interface: should be referenced only by API project for Commit and Rollback actions.
+    </Description>
+
+    <PackageReleaseNotes>
+      First release.
+    </PackageReleaseNotes>
+    
+    <PackageTags>
+      asp.net core, netcore, csharp, ef, entity framework core, DAL, data access layer, dbcontext, IdentityDbContext, unit of work
+    </PackageTags>
+
+
   </PropertyGroup>
 
   <ItemGroup>

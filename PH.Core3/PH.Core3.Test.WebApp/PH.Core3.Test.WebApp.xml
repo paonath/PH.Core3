@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>PH.Core3.Test.WebApp</name>
+    </assembly>
+    <members>
+        <member name="T:PH.Core3.Test.WebApp.Areas.v0.Controllers.ValuesController">
+            <summary>
+            Controller V0
+            </summary>
+        </member>
+        <member name="T:PH.Core3.Test.WebApp.Areas.v1.Controllers.ValuesController">
+            <summary>
+            Controller V1
+            </summary>
+        </member>
+        <member name="M:PH.Core3.Test.WebApp.AutofacModules.MainwebModule.Load(Autofac.ContainerBuilder)">
+            <summary>Override to add registrations to the container.</summary>
+            <remarks>
+            Note that the ContainerBuilder parameter is unique to this module.
+            </remarks>
+            <param name="builder">The builder through which components can be
+            registered.</param>
+        </member>
+        <member name="M:PH.Core3.Test.WebApp.HttpTenantIdentificationStrategy.TryIdentifyTenant(System.Object@)">
+            <summary>
+            Attempts to identify the tenant from the current execution context.
+            </summary>
+            <param name="tenantId">The current tenant identifier.</param>
+            <returns>
+            <see langword="true" /> if the tenant could be identified; <see langword="false" />
+            if not.
+            </returns>
+        </member>
+    </members>
+</doc>
