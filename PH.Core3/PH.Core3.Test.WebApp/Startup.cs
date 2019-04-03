@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
+using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -107,8 +108,14 @@ namespace PH.Core3.Test.WebApp
             });
             */
 
+            services.AddScoped<TenantApiFinder, TenantApiFinder>();
 
-            services.AddApiVersioning();
+            services.AddApiVersioning(options =>
+            {
+                options.AssumeDefaultVersionWhenUnspecified = true;
+                options.ApiVersionSelector = new PerRouteApiVersionSelector(new TenantApiFinder());
+                //options.RouteConstraintName = "area";
+            });
             services.AddVersionedApiExplorer( options => options.GroupNameFormat = "'v'VVV" );
             services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
             services.AddSwaggerGen();
@@ -127,7 +134,7 @@ namespace PH.Core3.Test.WebApp
 
 
             var container = builder.Build();
-            var strategy  = new HttpTenantIdentificationStrategy(container.Resolve<IHttpContextAccessor>());
+            var strategy  = new HttpTenantIdentificationStrategy(container.Resolve<IHttpContextAccessor>(), container.Resolve<TenantApiFinder>());
 
 
 
@@ -205,6 +212,29 @@ namespace PH.Core3.Test.WebApp
         }
     }
 
+    public class PerRouteApiVersionSelector : IApiVersionSelector
+    {
+        private readonly TenantApiFinder _finder;
+
+        public PerRouteApiVersionSelector(TenantApiFinder finder)
+        {
+            _finder = finder;
+        }
+
+        /// <summary>
+        /// Selects an API version given the specified HTTP request and API version information.
+        /// </summary>
+        /// <param name="request">The current <see cref="T:Microsoft.AspNetCore.Http.HttpRequest">HTTP request</see> to select the version for.</param>
+        /// <param name="model">The <see cref="T:Microsoft.AspNetCore.Mvc.Versioning.ApiVersionModel">model</see> to select the version from.</param>
+        /// <returns>The selected <see cref="T:Microsoft.AspNetCore.Mvc.ApiVersion">API version</see>.</returns>
+        public ApiVersion SelectVersion(HttpRequest request, ApiVersionModel model)
+        {
+            if (_finder.IsMatch(request.HttpContext, out var tenant, out var version))
+                return new ApiVersion(version, 0);
+            else
+                throw new ArgumentException("Unable to determine API Version from Request Context", nameof(request));
+        }
+    }
 
     public class SwaggerDefaultValues : IOperationFilter
     {
