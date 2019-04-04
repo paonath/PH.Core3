@@ -1,4 +1,6 @@
-﻿namespace PH.Core3.Common.Result
+﻿using Microsoft.Extensions.Logging;
+
+namespace PH.Core3.Common.Result
 {
     /// <summary>
     /// Error
@@ -9,6 +11,8 @@
         /// Error Message
         /// </summary>
         string ErrorMessage { get; }
+
+        EventId? ErrorEventId { get; }
 
         /// <summary>
         /// Optional Message to Service that received the error

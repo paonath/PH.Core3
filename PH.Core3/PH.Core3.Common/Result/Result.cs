@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Xml.Schema;
 using JetBrains.Annotations;
+using Microsoft.Extensions.Logging;
 
 namespace PH.Core3.Common.Result
 {
@@ -89,10 +90,10 @@ namespace PH.Core3.Common.Result
         }
 
         [NotNull]
-        public static IResult Fail([NotNull] IIdentifier identifier, [NotNull] string errorMessage,
+        public static IResult Fail([NotNull] IIdentifier identifier, [NotNull] string errorMessage,EventId? eventId = null,
                                    string outputMessage = "")
         {
-            return new ResultEmpty(identifier, new[] {new Error(errorMessage, outputMessage)});
+            return new ResultEmpty(identifier, new[] {new Error(errorMessage,outputMessage,eventId)});
         }
 
         [NotNull]
@@ -109,10 +110,18 @@ namespace PH.Core3.Common.Result
 
         [NotNull]
         public static IResult<TContent> Fail<TContent>([NotNull] IIdentifier identifier, [NotNull] string errorMessage,
+                                                       string outputMessage = "",EventId? eventId = null)
+        {
+            return new Result<TContent>(identifier, new []{new Error(errorMessage,outputMessage, eventId) }); 
+        }
+
+        [NotNull]
+        public static IResult<TContent> Fail<TContent>([NotNull] IIdentifier identifier, EventId eventId, [NotNull] string errorMessage,
                                                        string outputMessage = "")
         {
-            return new Result<TContent>(identifier, new []{new Error(errorMessage,outputMessage) }); 
+            return new Result<TContent>(identifier, new []{new Error(errorMessage,outputMessage, eventId) }); 
         }
+
 
     }
 }

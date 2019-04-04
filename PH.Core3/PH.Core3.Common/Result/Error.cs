@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using JetBrains.Annotations;
+using Microsoft.Extensions.Logging;
 
 namespace PH.Core3.Common.Result
 {
     public class Error : IError
     {
 
-        public Error([NotNull] string errorMessage, [CanBeNull] string outputMessage, [CanBeNull] IError innerError = null)
+        public Error([NotNull] string errorMessage, [CanBeNull] string outputMessage, EventId? errorEventId, [CanBeNull] IError innerError = null)
         {
             if (string.IsNullOrEmpty(errorMessage))
                 throw new ArgumentException("Value cannot be null or empty.", nameof(errorMessage));
@@ -16,6 +17,7 @@ namespace PH.Core3.Common.Result
 
             ErrorMessage  = errorMessage;
             OutputMessage = outputMessage;
+            ErrorEventId = errorEventId;
             InnerError    = innerError;
         }
 
@@ -23,6 +25,8 @@ namespace PH.Core3.Common.Result
         /// Error Message
         /// </summary>
         public string ErrorMessage { get;  }
+
+        public EventId? ErrorEventId { get; }
 
         /// <summary>
         /// Optional Message to Service that received the error
@@ -32,9 +36,9 @@ namespace PH.Core3.Common.Result
         public IError InnerError { get; }
 
         [NotNull]
-        public static Error Parse([NotNull] string errorMessage)
+        public static Error Parse([NotNull] string errorMessage, EventId? eventId = null)
         {
-            return new Error(errorMessage, "");
+            return new Error(errorMessage, "",eventId);
         }
 
         [NotNull]

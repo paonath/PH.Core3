@@ -32,5 +32,20 @@
             if not.
             </returns>
         </member>
+        <member name="M:PH.Core3.Test.WebApp.PerRouteApiVersionSelector.SelectVersion(Microsoft.AspNetCore.Http.HttpRequest,Microsoft.AspNetCore.Mvc.Versioning.ApiVersionModel)">
+            <summary>
+            Selects an API version given the specified HTTP request and API version information.
+            </summary>
+            <param name="request">The current <see cref="T:Microsoft.AspNetCore.Http.HttpRequest">HTTP request</see> to select the version for.</param>
+            <param name="model">The <see cref="T:Microsoft.AspNetCore.Mvc.Versioning.ApiVersionModel">model</see> to select the version from.</param>
+            <returns>The selected <see cref="T:Microsoft.AspNetCore.Mvc.ApiVersion">API version</see>.</returns>
+        </member>
+        <member name="M:PH.Core3.Test.WebApp.SwaggerDefaultValues.Apply(Swashbuckle.AspNetCore.Swagger.Operation,Swashbuckle.AspNetCore.SwaggerGen.OperationFilterContext)">
+            <summary>
+            Applies the filter to the specified operation using the given context.
+            </summary>
+            <param name="operation">The operation to apply the filter to.</param>
+            <param name="context">The current operation filter context.</param>
+        </member>
     </members>
 </doc>

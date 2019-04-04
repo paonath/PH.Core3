@@ -15,7 +15,23 @@ namespace PH.Core3.Common.Extensions
                                                  , [NotNull] IIdentifier i, [NotNull] string errorMessage,string outputMessage = "")
         {
             l.LogError(errorMessage);
-            return ResultFactory.Fail(i, errorMessage, outputMessage);
+            return ResultFactory.Fail(i, errorMessage, null, outputMessage);
+        }
+
+        [NotNull]
+        public static IResult ErrorAndReturnFail(this ILogger l
+                                                 , [NotNull] IIdentifier i, [NotNull] string errorMessage, EventId? eventId = null,string outputMessage = "")
+        {
+            l.LogError(errorMessage);
+            return ResultFactory.Fail(i, errorMessage, eventId, outputMessage);
+        }
+
+        [NotNull]
+        public static IResult ErrorAndReturnFail(this ILogger l
+                                                 , [NotNull] IIdentifier i, [NotNull] string errorMessage, EventId eventId ,string outputMessage = "")
+        {
+            l.LogError(errorMessage);
+            return ResultFactory.Fail(i, errorMessage, eventId, outputMessage);
         }
 
         [NotNull]
@@ -86,8 +102,25 @@ namespace PH.Core3.Common.Extensions
                                                     , [NotNull] IIdentifier i, [NotNull] string errorMessage,string outputMessage = "")
         {
             l.LogCritical(errorMessage);
-            return ResultFactory.Fail(i, errorMessage, outputMessage);
+            return ResultFactory.Fail(i, errorMessage, null,outputMessage);
         }
+
+        [NotNull]
+        public static IResult CriticalAndReturnFail(this ILogger l
+                                                    , [NotNull] IIdentifier i, [NotNull] string errorMessage, EventId? eventId = null,string outputMessage = "")
+        {
+            l.LogCritical(errorMessage);
+            return ResultFactory.Fail(i, errorMessage, eventId,outputMessage);
+        }
+
+        [NotNull]
+        public static IResult CriticalAndReturnFail(this ILogger l
+                                                    , [NotNull] IIdentifier i, [NotNull] string errorMessage, EventId eventId,string outputMessage = "")
+        {
+            l.LogCritical(errorMessage);
+            return ResultFactory.Fail(i, errorMessage, eventId,outputMessage);
+        }
+
 
         [NotNull]
         public static IResult<T> CriticalAndReturnFail<T>(this ILogger l

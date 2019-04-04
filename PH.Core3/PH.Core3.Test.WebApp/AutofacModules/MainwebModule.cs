@@ -5,6 +5,7 @@ using System.Security.Claims;
 using System.Security.Principal;
 using Autofac;
 using Autofac.Core;
+using Microsoft.Extensions.Logging;
 using NLog;
 using PH.Core3.Common;
 using PH.Core3.Common.Identifiers;
@@ -56,7 +57,7 @@ namespace PH.Core3.Test.WebApp.AutofacModules
                     ctx.Author = id.Name;
                     ctx.TenantId = "ABC";
 
-                    return new EntityFrameworkUnitOfWork(ctx);
+                    return new EntityFrameworkUnitOfWork(ctx, c.Resolve<ILogger<EntityFrameworkUnitOfWork>>());
 
                 })
                    .AsSelf()
