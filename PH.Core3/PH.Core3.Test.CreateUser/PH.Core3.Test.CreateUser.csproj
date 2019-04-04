@@ -1,0 +1,61 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+  </PropertyGroup>
+ 
+
+  <ItemGroup>
+    <PackageReference Include="Autofac" Version="4.9.2" />
+    <PackageReference Include="FluentValidation" Version="8.2.0" />
+    <PackageReference Include="JetBrains.Annotations" Version="2019.1.1" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="2.2.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
+
+    <PackageReference Include="NLog.Web.AspNetCore" Version="4.8.1" />
+    
+    <PackageReference Include="PH.PicoCrypt2" Version="1.0.0" />
+    <PackageReference Include="System.ComponentModel.Annotations" Version="4.5.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="2.2.0" />
+    <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="4.4.0" />
+    <PackageReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning.ApiExplorer" Version="3.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.0" />
+    <PackageReference Include="NLog.Web.AspNetCore" Version="4.8.1" />
+
+
+    <PackageReference Include="Microsoft.Extensions.Configuration"  Version="2.2.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Binder"  Version="2.2.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables"  Version="2.2.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions"  Version="2.2.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json"  Version="2.2.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets"  Version="2.2.0" />
+
+
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="2.2.0" />
+    <PackageReference Include="JetBrains.Annotations" Version="2019.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="2.2.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" Version="2.2.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="2.2.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="2.2.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="NLog" Version="4.6.2" />
+    <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="2.2.0" />
+    <PackageReference Include="Pomelo.EntityFrameworkCore.MySql.Design" Version="1.1.2" />
+
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\PH.Core3.AspNetCoreApi\PH.Core3.AspNetCoreApi.csproj" />
+    <ProjectReference Include="..\PH.Core3.Common.Services.Components\PH.Core3.Common.Services.Components.csproj" />
+    <ProjectReference Include="..\PH.Core3.Common.Services\PH.Core3.Common.Services.csproj" />
+    <ProjectReference Include="..\PH.Core3.Common\PH.Core3.Common.csproj" />
+    <ProjectReference Include="..\PH.Core3.EntityFramework\PH.Core3.EntityFramework.csproj" />
+    <ProjectReference Include="..\PH.Core3.TestContext\PH.Core3.TestContext.csproj" />
+    <ProjectReference Include="..\PH.Core3.UnitOfWork\PH.Core3.UnitOfWork.csproj" />
+  </ItemGroup>
+</Project>

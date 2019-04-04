@@ -49,6 +49,8 @@ namespace PH.Core3.Test.WebApp
         {
             #region base DI
 
+            services.AddCors();
+
             services.AddTransient<IPrincipal>(
                                               provider => provider
                                                           .GetService<IHttpContextAccessor>().HttpContext?.User);
@@ -210,6 +212,8 @@ namespace PH.Core3.Test.WebApp
 
             app.UseStaticFiles();
         }
+
+
     }
 
     public class PerRouteApiVersionSelector : IApiVersionSelector
@@ -276,4 +280,6 @@ namespace PH.Core3.Test.WebApp
             }
         }
     }
+
+
 }

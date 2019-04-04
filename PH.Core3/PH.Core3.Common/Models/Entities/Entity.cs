@@ -10,7 +10,7 @@ namespace PH.Core3.Common.Models.Entities
     /// All entities that need to persist on the database must implement the current interface
     /// </summary>
     /// <typeparam name="TKey">Type of the Id property</typeparam>
-    public abstract class Entity<TKey> : IEntity<TKey>
+    public abstract class Entity<TKey> : IEntity<TKey>, IEntity
         where TKey : IEquatable<TKey>
     {
         /// <summary>

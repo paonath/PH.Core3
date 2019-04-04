@@ -1,5 +1,6 @@
 ﻿using System;
 using JetBrains.Annotations;
+using Microsoft.Extensions.Logging;
 using PH.Core3.Common;
 using PH.Core3.Common.CoreSystem;
 using PH.Core3.Common.UnitOfWorkInfrastructure;
@@ -9,6 +10,8 @@ namespace PH.Core3.EntityFramework
 {
     public interface IDbContextUnitOfWork : IUnitOfWork
     {
+        ILogger UowLogger { get; set; }
+
         bool Initialized { get; }
         IDbContextUnitOfWork Initialize();
     }
@@ -16,17 +19,22 @@ namespace PH.Core3.EntityFramework
     public sealed class  EntityFrameworkUnitOfWork : CoreDisposable , IUnitOfWork
     {
         private IDbContextUnitOfWork _dbUow;
+        private ILogger _logger;
 
         /// <summary>
         /// Initialize a new instance of <see cref="CoreDisposable"/>
         /// </summary>
-        public EntityFrameworkUnitOfWork([NotNull] IDbContextUnitOfWork efContextUnitOfWork) 
+        public EntityFrameworkUnitOfWork([NotNull] IDbContextUnitOfWork efContextUnitOfWork, [NotNull] ILogger logger) 
             : base(efContextUnitOfWork.Identifier)
         {
             if (efContextUnitOfWork is null) 
                 throw new ArgumentNullException(nameof(efContextUnitOfWork));
 
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            efContextUnitOfWork.UowLogger = _logger;
+
             _dbUow = efContextUnitOfWork.Initialize();
+            
             _dbUow.Committed += _dbUow_Committed;
         }
 
