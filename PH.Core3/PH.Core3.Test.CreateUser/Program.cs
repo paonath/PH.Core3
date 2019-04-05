@@ -93,7 +93,13 @@ namespace PH.Core3.Test.CreateUser
 
                 var userManager = scope.Resolve<ApplicationUserManager>();
 
-                var ty = await userManager.CreateAsync(new User() { Email = "paolo2.innocenti@estrobit.com", UserName = "paolo2.innocenti@estrobit.com"}, "Pa$$w0rd");
+                Console.WriteLine("Provide Email");
+                var user = Console.ReadLine();
+
+                Console.WriteLine("Provide Password");
+                var password = Console.ReadLine();
+
+                var ty = await userManager.CreateAsync(new User() { Email = user, UserName = user}, password);
 
 
                 var tyu = await ctx.SaveChangesAsync();

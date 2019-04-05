@@ -7,38 +7,128 @@ using PH.Core3.Common.Result;
 
 namespace PH.Core3.Common.Extensions
 {
-      public static class LoggingExtensions
+    public static class LoggingExtensions
     {
+        #region IResult
 
         [NotNull]
-        public static IResult ErrorAndReturnFail(this ILogger l
-                                                 , [NotNull] IIdentifier i, [NotNull] string errorMessage,string outputMessage = "")
+        public static IResult ErrorAndReturnFail(this ILogger l, [NotNull] IIdentifier i, [NotNull] string errorMessage,string outputMessage = "")
         {
             l.LogError(errorMessage);
             return ResultFactory.Fail(i, errorMessage, null, outputMessage);
         }
 
         [NotNull]
-        public static IResult ErrorAndReturnFail(this ILogger l
-                                                 , [NotNull] IIdentifier i, [NotNull] string errorMessage, EventId? eventId = null,string outputMessage = "")
+        public static IResult ErrorAndReturnFail(this ILogger l, [NotNull] IIdentifier i, [NotNull] string errorMessage,EventId? eventId = null, string outputMessage = "")
         {
             l.LogError(errorMessage);
             return ResultFactory.Fail(i, errorMessage, eventId, outputMessage);
         }
 
         [NotNull]
-        public static IResult ErrorAndReturnFail(this ILogger l
-                                                 , [NotNull] IIdentifier i, [NotNull] string errorMessage, EventId eventId ,string outputMessage = "")
+        public static IResult ErrorAndReturnFail(this ILogger l, [NotNull] IIdentifier i, [NotNull] string errorMessage,EventId eventId, string outputMessage = "")
         {
             l.LogError(errorMessage);
             return ResultFactory.Fail(i, errorMessage, eventId, outputMessage);
         }
 
         [NotNull]
-        private static StringBuilder PrepareValidationFailures([NotNull] ValidationResult fluentValidationResult, [NotNull] out Error[] errors)
-        { 
-            StringBuilder sb = new StringBuilder();
-            var errs = new List<Error>();
+        public static IResult ErrorAndReturnFail(this ILogger l, [NotNull] IIdentifier i,[NotNull] ValidationResult fluentValidationResult)
+        {
+            StringBuilder sb = PrepareValidationFailures(fluentValidationResult, null, out var errors);
+            l.LogError(sb.ToString());
+            return ResultFactory.Fail(i, errors);
+        }
+
+        [NotNull]
+        public static IResult CriticalAndReturnFail(this ILogger l, [NotNull] IIdentifier i,[NotNull] ValidationResult fluentValidationResult,EventId? eventId = null)
+        {
+            StringBuilder sb = PrepareValidationFailures(fluentValidationResult, eventId, out var errors);
+            l.LogCritical(sb.ToString());
+            return ResultFactory.Fail(i, errors);
+        }
+
+        [NotNull]
+        public static IResult CriticalAndReturnFail(this ILogger l, [NotNull] IIdentifier i, [NotNull] string errorMessage,string outputMessage = "")
+        {
+            l.LogCritical(errorMessage);
+            return ResultFactory.Fail(i, errorMessage, null, outputMessage);
+        }
+
+        [NotNull]
+        public static IResult CriticalAndReturnFail(this ILogger l, [NotNull] IIdentifier i, [NotNull] string errorMessage,EventId? eventId = null, string outputMessage = "")
+        {
+            l.LogCritical(errorMessage);
+            return ResultFactory.Fail(i, errorMessage, eventId, outputMessage);
+        }
+
+        [NotNull]
+        public static IResult CriticalAndReturnFail(this ILogger l, [NotNull] IIdentifier i, [NotNull] string errorMessage,EventId eventId, string outputMessage = "")
+        {
+            l.LogCritical(errorMessage);
+            return ResultFactory.Fail(i, errorMessage, eventId, outputMessage);
+        }
+
+        #endregion
+
+        #region IResult<T>
+
+        [NotNull]
+        public static IResult<T> ErrorAndReturnFail<T>(this ILogger l, [NotNull] IIdentifier i,[NotNull] ValidationResult fluentValidationResult,EventId? eventId = null)
+        {
+            StringBuilder sb = PrepareValidationFailures(fluentValidationResult, eventId, out var errors);
+            l.LogError(sb.ToString());
+            return ResultFactory.Fail<T>(i, errors);
+        }
+
+        [NotNull]
+        public static IResult<T> ErrorAndReturnFail<T>(this ILogger l, [NotNull] IIdentifier i, [NotNull] string errorMessage,EventId? eventId = null, string outputMessage = "")
+        {
+            l.LogError(errorMessage);
+            return ResultFactory.Fail<T>(i, errorMessage, outputMessage, eventId);
+        }
+
+        [NotNull]
+        public static IResult<T> ErrorAndReturnFail<T>(this ILogger l, [NotNull] IIdentifier i, [NotNull] string errorMessage,EventId eventId , string outputMessage = "")
+        {
+            l.LogError(errorMessage);
+            return ResultFactory.Fail<T>(i, errorMessage, outputMessage, eventId);
+        }
+
+        [NotNull]
+        public static IResult<T> CriticalAndReturnFail<T>(this ILogger l, [NotNull] IIdentifier i,[NotNull] ValidationResult fluentValidationResult,EventId? eventId = null)
+        {
+            StringBuilder sb = PrepareValidationFailures(fluentValidationResult, eventId, out var errors);
+            l.LogCritical(sb.ToString());
+            return ResultFactory.Fail<T>(i, errors);
+        }
+
+
+        [NotNull]
+        public static IResult<T> CriticalAndReturnFail<T>(this ILogger l, [NotNull] IIdentifier i, [NotNull] string errorMessage,EventId? eventId = null, string outputMessage = "")
+        {
+            l.LogCritical(errorMessage);
+            return ResultFactory.Fail<T>(i, errorMessage, outputMessage, eventId);
+        }
+        
+        [NotNull]
+        public static IResult<T> CriticalAndReturnFail<T>(this ILogger l, [NotNull] IIdentifier i, [NotNull] string errorMessage,EventId eventId, string outputMessage = "")
+        {
+            l.LogCritical(errorMessage);
+            return ResultFactory.Fail<T>(i, errorMessage, outputMessage, eventId);
+        }
+
+        #endregion
+
+
+        #region private methods
+
+        [NotNull]
+        private static StringBuilder PrepareValidationFailures([NotNull] ValidationResult fluentValidationResult,
+                                                               EventId? eventId, [NotNull] out Error[] errors)
+        {
+            StringBuilder sb   = new StringBuilder();
+            var           errs = new List<Error>();
             foreach (var failure in fluentValidationResult.Errors)
             {
                 string msg = $"{failure.ErrorMessage}; ";
@@ -46,89 +136,13 @@ namespace PH.Core3.Common.Extensions
                     msg = $"PropertyName '{failure.PropertyName}' - ErrorMessage '{failure.ErrorMessage}'; ";
 
                 sb.Append(msg);
-                errs.Add(Error.Parse(msg));
+                errs.Add(Error.Parse(msg, eventId));
             }
 
             errors = errs.ToArray();
             return sb;
         }
 
-        [NotNull]
-        public static IResult ErrorAndReturnFail(this ILogger l
-                                                 , [NotNull] IIdentifier i, [NotNull] ValidationResult fluentValidationResult)
-        {
-            StringBuilder sb = PrepareValidationFailures(fluentValidationResult, out var errors);
-            l.LogError(sb.ToString());
-            return ResultFactory.Fail(i, errors);
-        }
-
-        [NotNull]
-        public static IResult<T> ErrorAndReturnFail<T>(this ILogger l
-                                                 , [NotNull] IIdentifier i, [NotNull] ValidationResult fluentValidationResult)
-        {
-            StringBuilder sb = PrepareValidationFailures(fluentValidationResult, out var errors);
-            l.LogError(sb.ToString());
-            return ResultFactory.Fail<T>(i, errors);
-        }
-
-        [NotNull]
-        public static IResult<T> ErrorAndReturnFail<T>(this ILogger l
-                                                       , [NotNull] IIdentifier i, [NotNull] string errorMessage,string outputMessage = "")
-        {
-            l.LogError(errorMessage);
-            return ResultFactory.Fail<T>(i, errorMessage, outputMessage);
-        }
-
-        [NotNull]
-        public static IResult CriticalAndReturnFail(this ILogger l
-                                                 , [NotNull] IIdentifier i, [NotNull] ValidationResult fluentValidationResult)
-        {
-            StringBuilder sb = PrepareValidationFailures(fluentValidationResult, out var errors);
-            l.LogCritical(sb.ToString());
-            return ResultFactory.Fail(i, errors);
-        }
-
-        [NotNull]
-        public static IResult<T> CriticalAndReturnFail<T>(this ILogger l
-                                                    , [NotNull] IIdentifier i, [NotNull] ValidationResult fluentValidationResult)
-        {
-            StringBuilder sb = PrepareValidationFailures(fluentValidationResult, out var errors);
-            l.LogCritical(sb.ToString());
-            return ResultFactory.Fail<T>(i, errors);
-        }
-
-        [NotNull]
-        public static IResult CriticalAndReturnFail(this ILogger l
-                                                    , [NotNull] IIdentifier i, [NotNull] string errorMessage,string outputMessage = "")
-        {
-            l.LogCritical(errorMessage);
-            return ResultFactory.Fail(i, errorMessage, null,outputMessage);
-        }
-
-        [NotNull]
-        public static IResult CriticalAndReturnFail(this ILogger l
-                                                    , [NotNull] IIdentifier i, [NotNull] string errorMessage, EventId? eventId = null,string outputMessage = "")
-        {
-            l.LogCritical(errorMessage);
-            return ResultFactory.Fail(i, errorMessage, eventId,outputMessage);
-        }
-
-        [NotNull]
-        public static IResult CriticalAndReturnFail(this ILogger l
-                                                    , [NotNull] IIdentifier i, [NotNull] string errorMessage, EventId eventId,string outputMessage = "")
-        {
-            l.LogCritical(errorMessage);
-            return ResultFactory.Fail(i, errorMessage, eventId,outputMessage);
-        }
-
-
-        [NotNull]
-        public static IResult<T> CriticalAndReturnFail<T>(this ILogger l
-                                                          , [NotNull] IIdentifier i, [NotNull] string errorMessage,string outputMessage = "")
-        {
-            l.LogCritical(errorMessage);
-            return ResultFactory.Fail<T>(i, errorMessage, outputMessage);
-        }
+        #endregion
     }
-
 }

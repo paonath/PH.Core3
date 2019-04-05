@@ -1,5 +1,4 @@
-﻿using System.Security.Claims;
-using JetBrains.Annotations;
+﻿using JetBrains.Annotations;
 
 namespace PH.Core3.Common.Identifiers
 {
@@ -14,19 +13,5 @@ namespace PH.Core3.Common.Identifiers
         /// Unique Identifier
         /// </summary>
         public string Uid { get; }
-    }
-
-    public class ClaimsPrincipalIdentifier : Identifier, IIdentifier
-    {
-        public string Name { get; }
-        public ClaimsPrincipal Principal { get; }
-
-
-        public ClaimsPrincipalIdentifier([NotNull] string uid, [CanBeNull] ClaimsPrincipal principal) 
-            : base(uid)
-        {
-            Principal = principal;
-            Name = principal?.Identity?.Name;
-        }
     }
 }

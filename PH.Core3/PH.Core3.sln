@@ -28,7 +28,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PH.Core3.AspNetCoreApi", "P
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PH.Core3.Test.WebApp", "PH.Core3.Test.WebApp\PH.Core3.Test.WebApp.csproj", "{2CD19379-C9C9-47F9-99E8-E4F76601220C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PH.Core3.Test.CreateUser", "PH.Core3.Test.CreateUser\PH.Core3.Test.CreateUser.csproj", "{6EB2D1CA-1464-4086-8C4F-97FCCBFF0ED3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PH.Core3.Test.CreateUser", "PH.Core3.Test.CreateUser\PH.Core3.Test.CreateUser.csproj", "{6EB2D1CA-1464-4086-8C4F-97FCCBFF0ED3}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BuildPackages", "BuildPackages", "{BA24B0B9-83C1-495D-954F-AC5877A9D297}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
