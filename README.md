@@ -12,3 +12,6 @@ This repo is a small framework for CRUD operation on a API System, structuread a
 | **PH.Core3.EntityFramework** | DAL Abstraction: should be referenced by project containing Entrity Framework Core DbContext | netstandard2.0 | 
 | **PH.Core3.UnitOfWork** | Unit Of Work Interface: should be referenced only by API project for Commit and Rollback actions. | netstandard2.0 | 
 | **PH.Core3.AspNetCoreApi** | API Base Package: should be referenced by Asp.Net Core API Project | netcoreapp2.2 |
+
+
+[![NuGet Badge](https://buildstats.info/nuget/PH.Core3.Common)](https://www.nuget.org/packages/PH.Core3.Common/)
