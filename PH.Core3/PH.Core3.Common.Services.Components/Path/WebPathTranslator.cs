@@ -38,9 +38,12 @@ namespace PH.Core3.Common.Services.Components.Path
             if (webrelativePath.StartsWith(Root, StringComparison.InvariantCulture))
                 webrelativePath = webrelativePath.Replace(Root, $"{_webRootPath}{System.IO.Path.DirectorySeparatorChar}");
 
-            var pt = webrelativePath.Replace("//", "/").Replace("/", $"{System.IO.Path.DirectorySeparatorChar}")
-                                    .Replace($"{System.IO.Path.DirectorySeparatorChar}{System.IO.Path.DirectorySeparatorChar}",
-                                             $"{System.IO.Path.DirectorySeparatorChar}");
+            var pt = webrelativePath.Replace("//", "/").Replace("/", $"{System.IO.Path.DirectorySeparatorChar}");
+                                  
+            pt = $"{_webRootPath}{System.IO.Path.DirectorySeparatorChar}{pt}";
+            pt = pt.Replace($"{System.IO.Path.DirectorySeparatorChar}{System.IO.Path.DirectorySeparatorChar}",
+                          $"{System.IO.Path.DirectorySeparatorChar}");
+
             _logger?.LogDebug($"PATH '{webrelativePath}' to '{pt}'");
             return pt;
 

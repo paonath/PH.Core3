@@ -23,13 +23,15 @@ namespace PH.Core3.EntityFramework
         protected IdentityBaseContextInfrastructure([NotNull] DbContextOptions options)
             :base(options)
         {
-            
+            Changecount = 0;
         }
 
         /// <summary>
         /// Tenant Identifier
         /// </summary>
         public string TenantId { get; set; }
+
+        public int Changecount { get; protected set; }
 
 
 
@@ -44,6 +46,7 @@ namespace PH.Core3.EntityFramework
             var auditEntries = OnBeforeSaveChanges(identifier,author);
             var result       = base.SaveChanges();
             var auditsNum    = OnAfterSaveChanges(auditEntries);
+            Changecount += result;
             return result;
         }
 
@@ -58,6 +61,7 @@ namespace PH.Core3.EntityFramework
             var auditEntries = OnBeforeSaveChanges(identifier,author);
             var result       = base.SaveChanges(b);
             var auditsNum    = OnAfterSaveChanges(auditEntries);
+            Changecount += result;
             return result;
         }
 
@@ -73,6 +77,7 @@ namespace PH.Core3.EntityFramework
             var auditEntries = OnBeforeSaveChanges(identifier,author);
             var result       = await base.SaveChangesAsync(cancellationToken);
             var auditsNum    = OnAfterSaveChanges(auditEntries);
+            Changecount += result;
             return result;
         }
 
@@ -86,6 +91,7 @@ namespace PH.Core3.EntityFramework
             var auditEntries = OnBeforeSaveChanges(identifier,author);
             var result       = await base.SaveChangesAsync(b, cancellationToken);
             var auditsNum    = OnAfterSaveChanges(auditEntries);
+            Changecount += result;
             return result;
         }
 

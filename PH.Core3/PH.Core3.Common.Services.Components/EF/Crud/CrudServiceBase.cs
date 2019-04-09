@@ -91,7 +91,7 @@ namespace PH.Core3.Common.Services.Components.EF.Crud
         /// </summary>
         /// <returns><see cref="Result{ToDto}"/> instance</returns>
         [ItemNotNull]
-        public async Task<IResult<TDto[]>> LoadAllAsync()
+        public  virtual async Task<IResult<TDto[]>> LoadAllAsync()
         {
             var all = await Set.ToArrayAsync();
             var res = all.Select(ToDto).ToArray();
@@ -104,7 +104,7 @@ namespace PH.Core3.Common.Services.Components.EF.Crud
         /// <param name="entity">Item to Add</param>
         /// <returns><see cref="Result{TDto}"/> containing added Item or error</returns>
         [ItemNotNull]
-        public async Task<IResult<TDto>> AddAsync(TNewDto entity)
+        public  virtual async Task<IResult<TDto>> AddAsync(TNewDto entity)
         {
             var t = await ParseDtoAndValidateAsync(entity);
             if (t.InsertValidationResult.IsValid)
@@ -126,7 +126,7 @@ namespace PH.Core3.Common.Services.Components.EF.Crud
         /// <param name="entity">Content to delete</param>
         /// <returns><see cref="Result"/> containing True or error</returns>
         [ItemNotNull]
-        public async Task<IResult> RemoveAsync([NotNull] TDto entity)
+        public  virtual async Task<IResult> RemoveAsync([NotNull] TDto entity)
         {
             var t = await GetEntityForDeleteAsync(entity.Id);
             if (t.DeleteValidationResult.IsValid)
@@ -146,7 +146,7 @@ namespace PH.Core3.Common.Services.Components.EF.Crud
         /// <param name="entity">Content to Update</param>
         /// <returns><see cref="Result{TDto}"/> result</returns>
         [ItemNotNull]
-        public async Task<IResult<TDto>> UpdateAsync(TEditDto entity)
+        public  virtual async Task<IResult<TDto>> UpdateAsync(TEditDto entity)
         {
             var e = await FindEntityByIdAsync(entity.Id);
             if (null == e)

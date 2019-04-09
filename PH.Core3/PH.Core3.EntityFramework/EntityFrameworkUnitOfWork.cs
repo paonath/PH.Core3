@@ -8,14 +8,6 @@ using PH.Core3.UnitOfWork;
 
 namespace PH.Core3.EntityFramework
 {
-    public interface IDbContextUnitOfWork : IUnitOfWork
-    {
-        ILogger UowLogger { get; set; }
-
-        bool Initialized { get; }
-        IDbContextUnitOfWork Initialize();
-    }
-
     public sealed class  EntityFrameworkUnitOfWork : CoreDisposable , IUnitOfWork
     {
         private IDbContextUnitOfWork _dbUow;

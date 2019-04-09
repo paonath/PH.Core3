@@ -274,15 +274,18 @@ namespace PH.Core3.EntityFramework
             var t = Task.Run(async () =>
             {
                 _transaction = await Database.BeginTransactionAsync(CancellationToken);
-
-                var ta = await TransactionAudits.AddAsync(new TransactionAudit()
+                var tyAudit = new TransactionAudit()
                 {
                     Id = Identifier.Uid, Author = Author, UtcDateTime = DateTime.UtcNow, TenantId = TenantId
-                }, CancellationToken);
-                _transactionAudit = ta.Entity;
+                };
+                var ty = await TransactionAudits.AddAsync(tyAudit, CancellationToken);
+                _transactionAudit = ty.Entity;
+
             });
 
             t.Wait(CancellationToken);
+
+           
 
             
             UowLogger?.LogDebug($"Initialized Uow with {nameof(IIdentifier.Uid)} '{Identifier.Uid}'");
@@ -313,12 +316,21 @@ namespace PH.Core3.EntityFramework
             var transactionCommitMessage = "";
             if (!string.IsNullOrEmpty(logMessage) && !string.IsNullOrWhiteSpace(logMessage))
             {
-                UowLogger?.LogDebug($"Commit - {logMessage}");
+                UowLogger?.LogInformation($"Commit - {logMessage}");
 
                 transactionCommitMessage = logMessage.Trim();
                 if (transactionCommitMessage.Length > 500)
                     transactionCommitMessage = transactionCommitMessage.Substring(0, 499);
             }
+
+            if (Changecount == 0)
+            {
+                UowLogger?.LogTrace("No changes to commit");
+                return;
+            }
+
+
+            
 
             var d = DateTime.UtcNow - _transactionAudit.UtcDateTime;
             _transactionAudit.MillisecDuration = d.TotalMilliseconds;
@@ -336,9 +348,17 @@ namespace PH.Core3.EntityFramework
                 _transactionAudit.Scopes = s;
             }
 
-            TransactionAudits.Update(_transactionAudit);
-            var t2 = SaveChangesAsync(CancellationToken);
-            t2.Wait(CancellationToken);
+           
+
+            var t = Task.Run(async () =>
+            {
+                TransactionAudits.Update(_transactionAudit);
+                var t2 = await SaveChangesAsync(CancellationToken);
+
+            });
+
+            t.Wait(CancellationToken);
+
 
 
             UowLogger?.LogDebug($"Commit Transaction '{Identifier.Uid}'");
