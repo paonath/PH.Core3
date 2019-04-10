@@ -18,6 +18,8 @@ namespace PH.Core3.Common.Result
         List<IError> Errors { get; }
 
         IIdentifier Identifier { get; }
+
+
     }
 
 

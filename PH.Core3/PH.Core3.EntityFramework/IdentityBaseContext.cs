@@ -240,11 +240,13 @@ namespace PH.Core3.EntityFramework
         }
 
 
-        [NotNull]
-        protected virtual Type[] ScanAssemblyTypes()
-        {
-            return GetType().Assembly.GetTypes();
-        }
+        //[NotNull]
+        //protected virtual Type[] ScanAssemblyTypes()
+        //{
+        //    return GetType().Assembly.GetTypes();
+        //}
+
+        protected abstract Type[] ScanAssemblyTypes();
 
 
         [NotNull]
@@ -386,6 +388,7 @@ namespace PH.Core3.EntityFramework
             try
             {
                 _transaction.Rollback();
+                UowLogger?.LogTrace("Rollback");
             }
             catch (Exception e)
             {

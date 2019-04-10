@@ -74,6 +74,14 @@ namespace PH.Core3.Common.Extensions
         #region IResult<T>
 
         [NotNull]
+        public static IResult<T> ErrorAndReturnFail<T>(this ILogger l, [NotNull] IIdentifier i,[NotNull] IError error)
+        {
+            l.LogError(error.ErrorMessage);
+            return ResultFactory.Fail<T>(i, error);
+        }
+
+
+        [NotNull]
         public static IResult<T> ErrorAndReturnFail<T>(this ILogger l, [NotNull] IIdentifier i,[NotNull] ValidationResult fluentValidationResult,EventId? eventId = null)
         {
             StringBuilder sb = PrepareValidationFailures(fluentValidationResult, eventId, out var errors);
@@ -87,12 +95,19 @@ namespace PH.Core3.Common.Extensions
             l.LogError(errorMessage);
             return ResultFactory.Fail<T>(i, errorMessage, outputMessage, eventId);
         }
-
+        
         [NotNull]
         public static IResult<T> ErrorAndReturnFail<T>(this ILogger l, [NotNull] IIdentifier i, [NotNull] string errorMessage,EventId eventId , string outputMessage = "")
         {
             l.LogError(errorMessage);
             return ResultFactory.Fail<T>(i, errorMessage, outputMessage, eventId);
+        }
+
+        [NotNull]
+        public static IResult<T> CriticalAndReturnFail<T>(this ILogger l, [NotNull] IIdentifier i,[NotNull] IError error)
+        {
+            l.LogCritical(error.ErrorMessage);
+            return ResultFactory.Fail<T>(i, error);
         }
 
         [NotNull]

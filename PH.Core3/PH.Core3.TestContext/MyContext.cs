@@ -1,4 +1,5 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System;
+using System.Runtime.CompilerServices;
 using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
 using PH.Core3.TestContext.Map;
@@ -31,6 +32,12 @@ namespace PH.Core3.TestContext
             builder.ApplyConfiguration(new AlberoMap());
             builder.ApplyConfiguration(new CategoryMap());
 
+        }
+
+        protected override Type[] ScanAssemblyTypes()
+        {
+            var a = GetType().Assembly.GetTypes();
+            return a;
         }
     }
 }

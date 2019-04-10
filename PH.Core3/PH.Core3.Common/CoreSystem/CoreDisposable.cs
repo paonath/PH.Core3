@@ -15,7 +15,7 @@ namespace PH.Core3.Common.CoreSystem
             return new CoreDisposableInstance(identifier);
         }
 
-        private IIdentifier _identifier;
+        protected IIdentifier _identifier;
 
         /// <summary>
         /// Initialize a new instance of <see cref="CoreDisposable"/>

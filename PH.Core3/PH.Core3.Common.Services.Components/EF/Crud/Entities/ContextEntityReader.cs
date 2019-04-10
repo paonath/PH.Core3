@@ -57,7 +57,7 @@ namespace PH.Core3.Common.Services.Components.EF.Crud.Entities
             if (null != pending)
                 return pending.Entity;
 
-            return await Set.FirstAsync(x => x.Id.Equals(id));
+            return await Set.FirstOrDefaultAsync(x => x.Id.Equals(id));
             
         }
     }

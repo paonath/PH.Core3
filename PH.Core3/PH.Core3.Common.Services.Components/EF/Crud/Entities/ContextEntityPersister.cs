@@ -318,6 +318,11 @@ namespace PH.Core3.Common.Services.Components.EF.Crud.Entities
             
 
             var en = await FindEntityByIdAsync(id);
+            if(null == en)
+            {
+                return ResultFactory.Fail(Identifier, Error.Parse($"{EntityTypeName} with id '{id}' not found"));
+            }
+            
             return await RemoveAsync(en);
         }
 
