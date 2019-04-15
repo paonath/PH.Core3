@@ -37,32 +37,37 @@ namespace PH.Core3.EntityFramework
 
         protected  int SaveBaseChanges([NotNull] IIdentifier identifier,[NotNull] string author)
         {
-            if (identifier is null) 
+            if (identifier is null)
                 throw new ArgumentNullException(nameof(identifier));
 
             if (string.IsNullOrEmpty(author) || string.IsNullOrWhiteSpace(author))
                 throw new ArgumentNullException(nameof(author), @"Author must be set before any savechanges");
 
-            var auditEntries = OnBeforeSaveChanges(identifier,author);
-            var result       = base.SaveChanges();
-            var auditsNum    = OnAfterSaveChanges(auditEntries);
+            var auditEntries = this.OnBeforeSaveChanges(identifier, author);
+            var result = base.SaveChanges();
+            var auditsNum = OnAfterSaveChanges(auditEntries);
             Changecount += result;
             return result;
+
+            
         }
 
         protected  int SaveBaseChanges([NotNull] IIdentifier identifier,[NotNull] string author, bool b)
         {
-            if (identifier is null) 
+            if (identifier is null)
                 throw new ArgumentNullException(nameof(identifier));
 
             if (string.IsNullOrEmpty(author) || string.IsNullOrWhiteSpace(author))
                 throw new ArgumentNullException(nameof(author), @"Author must be set before any savechanges");
 
-            var auditEntries = OnBeforeSaveChanges(identifier,author);
-            var result       = base.SaveChanges(b);
-            var auditsNum    = OnAfterSaveChanges(auditEntries);
+            var auditEntries = OnBeforeSaveChanges(identifier, author);
+            var result = base.SaveChanges(b);
+            var auditsNum = OnAfterSaveChanges(auditEntries);
             Changecount += result;
             return result;
+
+            
+
         }
 
 
@@ -74,11 +79,13 @@ namespace PH.Core3.EntityFramework
             if (string.IsNullOrEmpty(author) || string.IsNullOrWhiteSpace(author))
                 throw new ArgumentNullException(nameof(author), @"Author must be set before any savechanges");
 
-            var auditEntries = OnBeforeSaveChanges(identifier,author);
-            var result       = await base.SaveChangesAsync(cancellationToken);
-            var auditsNum    = OnAfterSaveChanges(auditEntries);
+            var auditEntries = OnBeforeSaveChanges(identifier, author);
+            var result = await base.SaveChangesAsync(cancellationToken);
+            var auditsNum = await OnAfterSaveChangesAsync(auditEntries);
             Changecount += result;
             return result;
+
+            
         }
 
         protected  async Task<int> SaveBaseChangesAsync([NotNull] IIdentifier identifier,[NotNull] string author, bool b,CancellationToken cancellationToken =
@@ -88,22 +95,24 @@ namespace PH.Core3.EntityFramework
             if (string.IsNullOrEmpty(author) || string.IsNullOrWhiteSpace(author))
                 throw new ArgumentNullException(nameof(author), @"Author must be set before any savechanges");
 
-            var auditEntries = OnBeforeSaveChanges(identifier,author);
-            var result       = await base.SaveChangesAsync(b, cancellationToken);
-            var auditsNum    = OnAfterSaveChanges(auditEntries);
+            var auditEntries = OnBeforeSaveChanges(identifier, author);
+            var result = await base.SaveChangesAsync(b, cancellationToken);
+            var auditsNum = await OnAfterSaveChangesAsync(auditEntries);
             Changecount += result;
             return result;
+
+            
         }
 
         #region Audits
 
-  
+
 
 
 
 
         [NotNull]
-        private List<AuditEntry> OnBeforeSaveChanges(IIdentifier identifier,string author)
+        private List<AuditEntry> OnBeforeSaveChanges(IIdentifier identifier, string author)
         {
             ChangeTracker.DetectChanges();
             var auditEntries = new List<AuditEntry>();
@@ -119,8 +128,7 @@ namespace PH.Core3.EntityFramework
                     continue;
                 }
 
-                var e = entry.Entity as IEntity;
-                if (null != e)
+                if (entry.Entity is IEntity e)
                 {
                     if (null == e.TenantId)
                     {
@@ -128,8 +136,8 @@ namespace PH.Core3.EntityFramework
 
                         if (entry.State == EntityState.Added)
                         {
-                            if (string.IsNullOrEmpty(e.CreatedTransactionId))
-                                e.CreatedTransactionId = identifier.Uid;
+                            e.CreatedTransactionId = identifier.Uid;
+                            e.Deleted = false;
                         }
 
                         if (entry.State == EntityState.Modified)
@@ -140,11 +148,11 @@ namespace PH.Core3.EntityFramework
                         }
                     }
 
-                    
-                    
+
+
                 }
 
-                
+
 
 
                 var auditEntry = new AuditEntry(entry, transactionId, author)
@@ -202,6 +210,9 @@ namespace PH.Core3.EntityFramework
             // keep a list of entries where the value of some properties are unknown at this step
             return auditEntries.Where(_ => _.HasTemporaryProperties).ToList();
         }
+
+
+       
 
         private int OnAfterSaveChanges([CanBeNull] List<AuditEntry> auditEntries)
         {

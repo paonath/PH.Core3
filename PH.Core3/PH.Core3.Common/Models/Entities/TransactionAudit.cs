@@ -15,6 +15,11 @@ namespace PH.Core3.Common.Models.Entities
         [Required]
         public string Id { get; set; }
 
+        /// <summary>
+        /// Progressive order number
+        /// </summary>
+        public long Progr { get; set; }
+
 
         /// <summary>
         /// Author of current Transaction

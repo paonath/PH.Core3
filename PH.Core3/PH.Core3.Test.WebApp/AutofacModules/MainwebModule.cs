@@ -5,11 +5,15 @@ using System.Security.Claims;
 using System.Security.Principal;
 using Autofac;
 using Autofac.Core;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Logging;
 using NLog;
+using PH.Core3.AspNetCoreApi.Services.Components;
 using PH.Core3.Common;
 using PH.Core3.Common.Identifiers;
+using PH.Core3.Common.Services.Path;
 using PH.Core3.EntityFramework;
+using PH.Core3.Test.WebApp.HostedService;
 using PH.Core3.TestContext;
 using PH.Core3.UnitOfWork;
 using ILogger = Microsoft.Extensions.Logging.ILogger;
@@ -35,9 +39,20 @@ namespace PH.Core3.Test.WebApp.AutofacModules
         {
             base.Load(builder);
 
+            builder.Register(c => new PH.Core3.Common.Services.Components.Path.WebPathTranslator(c.Resolve<IHostingEnvironment>().WebRootPath))
+                   .AsSelf()
+                   .AsImplementedInterfaces()
+                   .As<IWebPathTranslator>()
+                   .InstancePerLifetimeScope();
+
             builder.Register(c =>
                    {
-                       var principal = c.Resolve<IPrincipal>() as ClaimsPrincipal;
+
+                       //ClaimsPrincipal principal = null;
+                       //if (c.TryResolve(typeof(IPrincipal), out var principal2))
+                       //    principal = principal2 as ClaimsPrincipal;
+
+                       var principal = c.Resolve<IPrincipal>()  as ClaimsPrincipal;
 
                        string iid = $"{Guid.NewGuid():N}";
                        MappedDiagnosticsLogicalContext.Set("IID", iid);
@@ -70,6 +85,14 @@ namespace PH.Core3.Test.WebApp.AutofacModules
             // If you want to set up a controller for, say, property injection
             // you can override the controller registration after populating services.
             //builder.RegisterType<MyController>().PropertiesAutowired();
+
+
+
+            builder.RegisterType<ViewRenderService>().AsSelf().AsImplementedInterfaces().InstancePerLifetimeScope();
+
+            builder.RegisterType<MailSenderService>().AsSelf().AsImplementedInterfaces().SingleInstance();
+
+
 
         }
     }

@@ -192,10 +192,10 @@ namespace PH.Core3.Common.Services.Components.EF.Crud.Entities
         {
             if (entity is null) throw new ArgumentNullException(nameof(entity));
 
-            entity.Deleted              = false;
-            entity.CreatedTransactionId = Identifier.Uid;
-            entity.UpdatedTransactionId = Identifier.Uid;
-            entity.TenantId             = TenantId;
+            //entity.Deleted              = false;
+            //entity.CreatedTransactionId = Identifier.Uid;
+            //entity.UpdatedTransactionId = Identifier.Uid;
+            //entity.TenantId             = TenantId;
 
 
 
@@ -243,7 +243,7 @@ namespace PH.Core3.Common.Services.Components.EF.Crud.Entities
         {
             if (entity is null) throw new ArgumentNullException(nameof(entity));
 
-            entity.UpdatedTransactionId = Identifier.Uid;
+            //entity.UpdatedTransactionId = Identifier.Uid;
             Ctx.Entry(entity).State     = EntityState.Modified;
 
             if (AutoSaveChanges)

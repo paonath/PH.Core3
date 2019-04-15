@@ -92,6 +92,7 @@ namespace PH.Core3.EntityFramework
 
 
         
+        
         public sealed override int SaveChanges()
         {
             return base.SaveBaseChanges(Identifier, Author);
@@ -186,17 +187,19 @@ namespace PH.Core3.EntityFramework
             var allTypes = ScanAssemblyTypes();
             var tt       = GetAllEntityTypes(allTypes);
 
+
+
             foreach (Type entityType in tt)
             {
                 #region QueryFilters
 
-                var entityName     = entityType.Name;
+                var entityName = entityType.Name;
                 var entityFullName = entityType?.FullName ?? entityName;
-                var paramName      = $"{entityName}_p";
+                var paramName = $"{entityName}_p";
 
                 var entityTypeFromModel = builder.Model.FindEntityType(entityFullName);
-                var queryFilter         = entityTypeFromModel.QueryFilter;
-                var queryParam          = queryFilter?.Parameters.FirstOrDefault();
+                var queryFilter = entityTypeFromModel.QueryFilter;
+                var queryParam = queryFilter?.Parameters.FirstOrDefault();
                 if (null != queryParam)
                 {
                     paramName = queryParam.Name;
@@ -227,7 +230,7 @@ namespace PH.Core3.EntityFramework
                 var name = $"TenantQueryFilter_{entityName}";
 
                 LambdaExpression lambdaExpr = Expression.Lambda(body, name,
-                                                                new List<ParameterExpression>() {paramExpr}
+                                                                new List<ParameterExpression>() { paramExpr }
                                                                );
 
                 var entyTYpeBuilder = builder.Entity(entityType);
@@ -331,9 +334,6 @@ namespace PH.Core3.EntityFramework
                 return;
             }
 
-
-            
-
             var d = DateTime.UtcNow - _transactionAudit.UtcDateTime;
             _transactionAudit.MillisecDuration = d.TotalMilliseconds;
 
@@ -354,6 +354,9 @@ namespace PH.Core3.EntityFramework
 
             var t = Task.Run(async () =>
             {
+                var progr = await TransactionAudits.MaxAsync(x => x.Progr, CancellationToken);
+                _transactionAudit.Progr = 1 + progr;
+
                 TransactionAudits.Update(_transactionAudit);
                 var t2 = await SaveChangesAsync(CancellationToken);
 

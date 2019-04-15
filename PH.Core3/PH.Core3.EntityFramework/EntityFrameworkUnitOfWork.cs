@@ -11,7 +11,7 @@ namespace PH.Core3.EntityFramework
     public sealed class  EntityFrameworkUnitOfWork : CoreDisposable , IUnitOfWork
     {
         private IDbContextUnitOfWork _dbUow;
-        private ILogger _logger;
+        private readonly ILogger _logger;
 
         /// <summary>
         /// Initialize a new instance of <see cref="CoreDisposable"/>

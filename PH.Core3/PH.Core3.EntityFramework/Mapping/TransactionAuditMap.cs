@@ -12,6 +12,7 @@ namespace PH.Core3.EntityFramework.Mapping
             builder.ToTable("transaction_audit");
             
             builder.Property(x => x.MillisecDuration).HasDefaultValue(0);
+            builder.Property(x => x.Progr).HasDefaultValue(1);
 
 
             builder

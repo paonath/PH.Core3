@@ -44,12 +44,12 @@ namespace PH.Core3.EntityFramework.Audit
         {
             byte[] old = null;
             if(OldValues.Count > 0)
-                old = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(OldValues));
+                old = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(OldValues, Formatting.None, new JsonSerializerSettings(){ ReferenceLoopHandling = ReferenceLoopHandling.Ignore } ));
 
             byte[] add = null;
             if (NewValues.Count > 0)
             {
-                add = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(NewValues));
+                add = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(NewValues, Formatting.None, new JsonSerializerSettings(){ ReferenceLoopHandling = ReferenceLoopHandling.Ignore } ));
             }
 
 

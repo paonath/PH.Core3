@@ -78,6 +78,14 @@ namespace PH.Core3.Common.Result
             return new Result<TContent>(identifier, content);
         }
 
+        //[NotNull]
+        //public static IResult<TContent> SwitchResult<TInputContent,TContent>([NotNull] IIdentifier identifier, [NotNull] IResult<TInputContent> content, Func<TInputContent, TContent> transformFunc)
+        //{
+        //    return new Result<TContent>(identifier, content);
+        //}
+
+
+
         [NotNull]
         public static IResult Fail([NotNull] IIdentifier identifier, [NotNull] IEnumerable<IError> errors)
         {

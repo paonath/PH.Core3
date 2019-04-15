@@ -22,6 +22,33 @@
             <param name="builder">The builder through which components can be
             registered.</param>
         </member>
+        <member name="M:PH.Core3.Test.WebApp.HostedService.MailSenderService.#ctor(PH.Core3.AspNetCoreApi.Services.IViewRenderService)">
+            <summary>
+            Initialize a new instance of <see cref="T:PH.Core3.Common.CoreSystem.CoreDisposable"/>
+            </summary>
+        </member>
+        <member name="M:PH.Core3.Test.WebApp.HostedService.MailSenderService.Dispose(System.Boolean)">
+            <summary>
+            Dispose Pattern.
+            This method check if already <see cref="P:PH.Core3.Common.CoreSystem.CoreDisposable.Disposed"/> (and set it to True).
+            </summary>
+            <param name="disposing">True if disposing</param>
+        </member>
+        <member name="M:PH.Core3.Test.WebApp.HostedService.MailSenderService.StartAsync(System.Threading.CancellationToken)">
+            <summary>
+            Triggered when the application host is ready to start the service.
+            </summary>
+            <param name="cancellationToken">Indicates that the start process has been aborted.</param>
+        </member>
+        <member name="M:PH.Core3.Test.WebApp.HostedService.MailSenderService.StopAsync(System.Threading.CancellationToken)">
+            <summary>
+            Triggered when the application host is performing a graceful shutdown.
+            </summary>
+            <param name="cancellationToken">Indicates that the shutdown process should no longer be graceful.</param>
+        </member>
+        <member name="M:PH.Core3.Test.WebApp.HostedService.MailSenderService.Dispose">
+            <summary>Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.</summary>
+        </member>
         <member name="M:PH.Core3.Test.WebApp.HttpTenantIdentificationStrategy.TryIdentifyTenant(System.Object@)">
             <summary>
             Attempts to identify the tenant from the current execution context.

@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using PH.Core3.Test.WebApp.HostedService;
 
 namespace PH.Core3.Test.WebApp.Areas.v0.Controllers
 {
@@ -12,15 +14,32 @@ namespace PH.Core3.Test.WebApp.Areas.v0.Controllers
     [ApiController]
     public class ValuesController : ControllerBase
     {
+        private readonly IMailSenderService _mailSenderService;
+
+        public ValuesController(IMailSenderService mailSenderService)
+        {
+            _mailSenderService = mailSenderService;
+        }
 
 
         // GET api/values
         [HttpGet]
-        public ActionResult<IEnumerable<string>> Get()
+        public async Task<ActionResult<IEnumerable<string>>> Get()
         {
+            await _mailSenderService.SendEmailAsync("pippo@gmail.com");
+
             return new string[] { "value0", "value28" };
+           
         }
 
 
+    }
+
+    public class VValidator : FluentValidation.AbstractValidator<string>
+    {
+        public VValidator()
+        {
+            //RuleFor().
+        }
     }
 }
