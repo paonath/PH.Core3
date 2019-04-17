@@ -1,4 +1,6 @@
 using System;
+using System.Threading;
+using System.Threading.Tasks;
 using PH.Core3.Common.Identifiers;
 using PH.Core3.Common.Result;
 using Xunit;
@@ -15,6 +17,37 @@ namespace PH.Core3.XUnitTest
             _testOutputHelper = testOutputHelper;
         }
 
+        
+        private Task<IResult<int>> MethodTestAsync(IResult<int> input)
+        {
+            _testOutputHelper.WriteLine($"MethodTestAsync {input.Content} {Thread.CurrentThread.ManagedThreadId}");
+
+            return Task.Run( ()=>
+            {
+                
+                var i = new Identifier("abc");
+                if(input.Content == 7)
+                    return ResultFactory.Fail<int>(i, "some error");
+
+
+                return ResultFactory.Ok<int>(i, input.Content + 1);
+            }) ;
+        }
+
+        private Task<IResult<int>> MethodTestAsync2(IResult<int> input)
+        {
+            
+            _testOutputHelper.WriteLine($"MethodTestAsync {input.Content} {Thread.CurrentThread.ManagedThreadId}");
+
+            return Task.Run( ()=>
+            {
+               
+                var i = new Identifier("abc");
+                
+                return ResultFactory.Ok<int>(i, input.Content + 1);
+            }) ;
+        }
+
         private IResult<int> MethodTest(IResult<int> input)
         {
             _testOutputHelper.WriteLine($"{input.Content}");
@@ -24,6 +57,65 @@ namespace PH.Core3.XUnitTest
                 return ResultFactory.Fail<int>(i, "some error");
 
             return ResultFactory.Ok<int>(i, input.Content +1);
+        }
+
+
+        [Fact]
+        public async void TestAsync()
+        {
+            _testOutputHelper.WriteLine($"TestAsync start {Thread.CurrentThread.ManagedThreadId}");
+
+            var chain = await new LazyEvaluatorAsync<int>(
+                    async () => await MethodTestAsync(ResultFactory.Ok<int>(new Identifier("wer")
+                    , 1)))
+                .Next(async result => await MethodTestAsync(result))
+                .Next(async result => await MethodTestAsync(result))
+                .Next(async result => await MethodTestAsync(result))
+                .Next(async result => await MethodTestAsync(result))
+                .Next(async result => await MethodTestAsync(result))
+                .Next(async result => await MethodTestAsync(result))
+                .Next(async result => await MethodTestAsync(result))
+                .Next(async result => await MethodTestAsync(result))
+                .Next(async result => await MethodTestAsync(result))
+                .Next(async result => await MethodTestAsync(result))
+                .Next(async result => await MethodTestAsync(result))
+                .Next(async result => await MethodTestAsync(result))
+                .Next(async result => await MethodTestAsync(result))
+
+                .ResolveAsync();
+
+            _testOutputHelper.WriteLine($"TestAsync end {Thread.CurrentThread.ManagedThreadId}");
+
+            Assert.True(chain.OnError);
+        }
+
+        [Fact]
+        public async void TestAsync2()
+        {
+            _testOutputHelper.WriteLine($"TestAsync start {Thread.CurrentThread.ManagedThreadId}");
+
+            var chain = await new LazyEvaluatorAsync<int>(
+                    async () => await MethodTestAsync(ResultFactory.Ok<int>(new Identifier("wer")
+                        , 1)))
+                .Next(async result => await MethodTestAsync2(result))
+                .Next(async result => await MethodTestAsync2(result))
+                .Next(async result => await MethodTestAsync2(result))
+                .Next(async result => await MethodTestAsync2(result))
+                .Next(async result => await MethodTestAsync2(result))
+                .Next(async result => await MethodTestAsync2(result))
+                .Next(async result => await MethodTestAsync2(result))
+                .Next(async result => await MethodTestAsync2(result))
+                .Next(async result => await MethodTestAsync2(result))
+                .Next(async result => await MethodTestAsync2(result))
+                .Next(async result => await MethodTestAsync2(result))
+                .Next(async result => await MethodTestAsync2(result))
+                .Next(async result => await MethodTestAsync2(result))
+
+                .ResolveAsync();
+
+            _testOutputHelper.WriteLine($"TestAsync end {Thread.CurrentThread.ManagedThreadId}");
+
+            Assert.True(chain.OnError == false);
         }
 
         [Fact]
@@ -74,8 +166,47 @@ namespace PH.Core3.XUnitTest
         }
 
         }
-    
-    
+
+
+    public class LazyEvaluatorAsync<T>
+    {
+        private Lazy<Task<IResult<T>>> _lazyResult;
+
+        public LazyEvaluatorAsync(Func<Task<IResult<T>>> asyncFnc )
+        {
+            _lazyResult = new Lazy<Task<IResult<T>>>(async () => await asyncFnc.Invoke() );
+        }
+
+        private Task<IResult<T>> GetValue()
+        {
+            var t = Task.Run(() =>
+            {
+                var r = _lazyResult.Value;
+                return r;
+            });
+
+            return t;
+        }
+
+        private IResult<T> Value =>  GetValue().Result;
+        
+        public LazyEvaluatorAsync<TOther> Next<TOther>(Func<IResult<T>, Task<IResult<TOther>>> nextFunction)
+        {
+            return new LazyEvaluatorAsync<TOther>(async () =>
+            {
+                var r =  this.Value;
+                if (r.OnError)
+                    return ResultFactory.Fail<TOther>(r.Identifier, r.Errors);
+                
+                return  await nextFunction.Invoke(r);
+            });
+        }
+        
+        
+        public async Task<IResult<T>> ResolveAsync() =>  await _lazyResult.Value;
+ 
+    }
+
     public class LazyEvaluator<T>
     {
         
