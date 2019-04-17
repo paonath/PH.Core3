@@ -6,6 +6,8 @@ using Xunit;
 
 namespace PH.Core3.XUnitTest
 {
+
+
     public class UnitTest1
     {
         private IResult<int> TryTre(bool b)
@@ -42,7 +44,7 @@ namespace PH.Core3.XUnitTest
                                             result =>
                                             {
                                                 var i  = result.Identifier;
-                                                var kc = ResultFactory.Ok<string>(i, $"Tre è '{result.Content}'");
+                                                var kc = ResultFactory.Ok<string>(i, $"Tre ï¿½ '{result.Content}'");
                                                 return Task.FromResult(kc);
                                             });
 
@@ -91,7 +93,7 @@ namespace PH.Core3.XUnitTest
 
     }
 
-    public class Couple<TInput, TOuput> : BaseCouple
+    public class Couple<TInput, TOuput> //: BaseCouple
     {
    
 
