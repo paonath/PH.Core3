@@ -3,6 +3,10 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     
+
+    <!-- Generate XML docs -->
+    <DocumentationFile>bin\$(Configuration)\PH.Core3.Common.xml</DocumentationFile>
+
     <!--NUGET PKG-->
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
@@ -22,6 +26,7 @@
     </PackageTags>
     
   </PropertyGroup>
+  
 
 
   <ItemGroup>
@@ -32,6 +37,10 @@
     <PackageReference Include="Microsoft.Extensions.Logging" Version="2.2.0" />
     <PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="2.2.0">
       <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Vsxmd" Version="1.4.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
 
   </ItemGroup>

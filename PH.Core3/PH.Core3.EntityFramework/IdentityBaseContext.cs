@@ -191,54 +191,68 @@ namespace PH.Core3.EntityFramework
 
             foreach (Type entityType in tt)
             {
-                #region QueryFilters
-
-                var entityName = entityType.Name;
+                var entityName     = entityType.Name;
                 var entityFullName = entityType?.FullName ?? entityName;
-                var paramName = $"{entityName}_p";
 
-                var entityTypeFromModel = builder.Model.FindEntityType(entityFullName);
-                var queryFilter = entityTypeFromModel.QueryFilter;
-                var queryParam = queryFilter?.Parameters.FirstOrDefault();
-                if (null != queryParam)
+                try
                 {
-                    paramName = queryParam.Name;
+
+                    #region QueryFilters
+
+                    
+                    var paramName      = $"{entityName}_p";
+
+                    var entityTypeFromModel = builder.Model.FindEntityType(entityFullName);
+                    var queryFilter         = entityTypeFromModel.QueryFilter;
+                    var queryParam          = queryFilter?.Parameters.FirstOrDefault();
+                    if (null != queryParam)
+                    {
+                        paramName = queryParam.Name;
+                    }
+
+
+                    ParameterExpression paramExpr = Expression.Parameter(entityType, paramName);
+                    Expression bodyTenant = Expression.Equal(Expression.Property(paramExpr, "TenantId"),
+                                                             Expression.Constant(TenantId)
+                                                            );
+                    Expression bodyDeleted = Expression.Equal(Expression.Property(paramExpr, "Deleted"),
+                                                              Expression.Constant(false)
+                                                             );
+                    Expression body = null;
+                    if (null != queryFilter)
+                    {
+                        var res = Expression.Lambda(Expression.Invoke(queryFilter, paramExpr), paramExpr);
+
+
+                        body = Expression.AndAlso(Expression.AndAlso(bodyDeleted, bodyTenant), res.Body);
+                    }
+                    else
+                    {
+                        body = Expression.AndAlso(bodyDeleted, bodyTenant);
+                    }
+
+
+                    var name = $"TenantQueryFilter_{entityName}";
+
+                    LambdaExpression lambdaExpr = Expression.Lambda(body, name,
+                                                                    new List<ParameterExpression>() { paramExpr }
+                                                                   );
+
+                    var entyTYpeBuilder = builder.Entity(entityType);
+
+
+                    entyTYpeBuilder.HasQueryFilter(lambdaExpr);
+
+                    #endregion
+
+                }
+                catch (Exception e)
+                {
+                    var err = $"Error configuring '{entityName}'";
+                    Logger.LogCritical(err, e);
+                    throw new Exception(err, e);
                 }
 
-
-                ParameterExpression paramExpr = Expression.Parameter(entityType, paramName);
-                Expression bodyTenant = Expression.Equal(Expression.Property(paramExpr, "TenantId"),
-                                                         Expression.Constant(TenantId)
-                                                        );
-                Expression bodyDeleted = Expression.Equal(Expression.Property(paramExpr, "Deleted"),
-                                                          Expression.Constant(false)
-                                                         );
-                Expression body = null;
-                if (null != queryFilter)
-                {
-                    var res = Expression.Lambda(Expression.Invoke(queryFilter, paramExpr), paramExpr);
-
-
-                    body = Expression.AndAlso(Expression.AndAlso(bodyDeleted, bodyTenant), res.Body);
-                }
-                else
-                {
-                    body = Expression.AndAlso(bodyDeleted, bodyTenant);
-                }
-
-
-                var name = $"TenantQueryFilter_{entityName}";
-
-                LambdaExpression lambdaExpr = Expression.Lambda(body, name,
-                                                                new List<ParameterExpression>() { paramExpr }
-                                                               );
-
-                var entyTYpeBuilder = builder.Entity(entityType);
-
-
-                entyTYpeBuilder.HasQueryFilter(lambdaExpr);
-
-                #endregion
             }
         }
 
@@ -420,7 +434,7 @@ namespace PH.Core3.EntityFramework
         [NotNull]
         IDbContextUnitOfWork IDbContextUnitOfWork.Initialize()
         {
-            return Initialize();
+            return InitializeSelf();
         }
 
         /// <summary>
@@ -429,6 +443,11 @@ namespace PH.Core3.EntityFramework
         /// <returns>Instance of initialized Service</returns>
         [NotNull]
         public IdentityBaseContext<TUser, TRole, TKey> Initialize()
+        {
+            return InitializeSelf();
+        }
+
+        private IdentityBaseContext<TUser, TRole, TKey> InitializeSelf()
         {
             if (!Initialized)
             {

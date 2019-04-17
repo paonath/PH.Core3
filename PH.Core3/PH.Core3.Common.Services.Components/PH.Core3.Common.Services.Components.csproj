@@ -3,6 +3,13 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
 
+
+    <!-- Generate XML docs -->
+    <DocumentationFile>bin\$(Configuration)\PH.Core3.Common.Services.Components.xml</DocumentationFile>
+
+
+
+
     <!--NUGET PKG-->
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
@@ -33,6 +40,10 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.2.4" />
     <PackageReference Include="MimeKit" Version="2.1.4" />
     <PackageReference Include="System.Runtime.Extensions" Version="4.3.1" />
+    <PackageReference Include="Vsxmd" Version="1.4.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
   </ItemGroup>
 
 </Project>

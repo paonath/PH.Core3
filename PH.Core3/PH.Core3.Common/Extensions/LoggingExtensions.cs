@@ -9,6 +9,35 @@ namespace PH.Core3.Common.Extensions
 {
     public static class LoggingExtensions
     {
+        
+        public static void LogOnlyError(this ILogger l, [NotNull] IError error)
+        {
+            if (error.ErrorEventId.HasValue)
+            {
+                var evId = error.ErrorEventId.Value;
+                l.Log(LogLevel.Error,evId, error.ErrorMessage);
+            }
+            else
+            {
+                l.LogError(error.ErrorMessage);
+            }
+        }
+
+        public static void LogOnlyCritical(this ILogger l, [NotNull] IError error)
+        {
+            if (error.ErrorEventId.HasValue)
+            {
+                var evId = error.ErrorEventId.Value;
+                l.Log(LogLevel.Critical,evId, error.ErrorMessage);
+            }
+            else
+            {
+                l.LogCritical(error.ErrorMessage);
+            }
+
+            
+        }
+
         #region IResult
 
         [NotNull]
@@ -76,7 +105,7 @@ namespace PH.Core3.Common.Extensions
         [NotNull]
         public static IResult<T> ErrorAndReturnFail<T>(this ILogger l, [NotNull] IIdentifier i,[NotNull] IError error)
         {
-            l.LogError(error.ErrorMessage);
+           LogOnlyError(l, error);
             return ResultFactory.Fail<T>(i, error);
         }
 
@@ -106,7 +135,7 @@ namespace PH.Core3.Common.Extensions
         [NotNull]
         public static IResult<T> CriticalAndReturnFail<T>(this ILogger l, [NotNull] IIdentifier i,[NotNull] IError error)
         {
-            l.LogCritical(error.ErrorMessage);
+            l.LogOnlyCritical(error);
             return ResultFactory.Fail<T>(i, error);
         }
 

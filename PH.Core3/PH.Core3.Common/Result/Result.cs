@@ -3,25 +3,44 @@ using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Xml.Schema;
 using JetBrains.Annotations;
-using Microsoft.Extensions.Logging;
 
 namespace PH.Core3.Common.Result
 {
+    /// <summary>
+    /// Transport object wrapping a real Result
+    ///
+    /// <see cref="IResult{TContent}"/>
+    /// </summary>
+    /// <typeparam name="TContent">Type of the Result content</typeparam>
     internal class Result<TContent> : IResult<TContent>
     {
-        internal Result()
+        /// <summary>
+        /// 
+        /// </summary>
+        private Result()
         {
             Errors = new List<IError>();
         }
 
+        /// <summary>
+        /// Init new instance of result with no error
+        /// </summary>
+        /// <param name="identifier">Identifier</param>
+        /// <param name="content">Content</param>
         internal Result([NotNull] IIdentifier identifier,[NotNull] TContent content)
         {
             Content = content;
             Identifier = identifier;
         }
 
+        /// <summary>
+        /// Init new instance of result with errors
+        /// </summary>
+        /// <param name="identifier">Identifier</param>
+        /// <param name="errors">errors </param>
         internal Result([NotNull] IIdentifier identifier, [NotNull] IEnumerable<IError> errors)
         {
             Identifier = identifier;
@@ -43,93 +62,6 @@ namespace PH.Core3.Common.Result
         /// <summary>
         /// Result Content
         /// </summary>
-        public TContent Content { get; }
-    }
-
-    internal class ResultEmpty : Result<bool> , IResult
-    {
-        internal ResultEmpty([NotNull] IIdentifier identifier) : base(identifier, true)
-        {
-        }
-
-        internal ResultEmpty([NotNull] IIdentifier identifier, [NotNull] IEnumerable<IError> errors) : base(identifier, errors)
-        {
-        }
-    }
-
-    public static class ResultFactory
-    {
-
-        [NotNull]
-        public static IResult True([NotNull] IIdentifier identifier)
-        {
-            return new ResultEmpty(identifier);
-        }
-
-        [NotNull]
-        public static IResult Ok([NotNull] IIdentifier identifier)
-        {
-            return new ResultEmpty(identifier);
-        }
-
-        [NotNull]
-        public static IResult<TContent> Ok<TContent>([NotNull] IIdentifier identifier, [NotNull] TContent content)
-        {
-            return new Result<TContent>(identifier, content);
-        }
-
-        //[NotNull]
-        //public static IResult<TContent> SwitchResult<TInputContent,TContent>([NotNull] IIdentifier identifier, [NotNull] IResult<TInputContent> content, Func<TInputContent, TContent> transformFunc)
-        //{
-        //    return new Result<TContent>(identifier, content);
-        //}
-
-
-
-        [NotNull]
-        public static IResult Fail([NotNull] IIdentifier identifier, [NotNull] IEnumerable<IError> errors)
-        {
-            return new ResultEmpty(identifier, errors);
-        }
-        [NotNull]
-        public static IResult Fail([NotNull] IIdentifier identifier, [NotNull] IError error)
-        {
-            return new ResultEmpty(identifier, new []{error});
-        }
-
-        [NotNull]
-        public static IResult Fail([NotNull] IIdentifier identifier, [NotNull] string errorMessage,EventId? eventId = null,
-                                   string outputMessage = "")
-        {
-            return new ResultEmpty(identifier, new[] {new Error(errorMessage,outputMessage,eventId)});
-        }
-
-        [NotNull]
-        public static IResult<TContent> Fail<TContent>([NotNull] IIdentifier identifier, [NotNull] IEnumerable<IError> errors)
-        {
-            return new Result<TContent>(identifier, errors);
-        }
-        
-        [NotNull]
-        public static IResult<TContent> Fail<TContent>([NotNull] IIdentifier identifier, [NotNull] IError error)
-        {
-            return new Result<TContent>(identifier, new []{error});
-        }
-
-        [NotNull]
-        public static IResult<TContent> Fail<TContent>([NotNull] IIdentifier identifier, [NotNull] string errorMessage,
-                                                       string outputMessage = "",EventId? eventId = null)
-        {
-            return new Result<TContent>(identifier, new []{new Error(errorMessage,outputMessage, eventId) }); 
-        }
-
-        [NotNull]
-        public static IResult<TContent> Fail<TContent>([NotNull] IIdentifier identifier, EventId eventId, [NotNull] string errorMessage,
-                                                       string outputMessage = "")
-        {
-            return new Result<TContent>(identifier, new []{new Error(errorMessage,outputMessage, eventId) }); 
-        }
-
-
+        public TContent Content { get; protected set; }
     }
 }
