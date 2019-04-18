@@ -108,6 +108,21 @@ namespace PH.Core3.Common.Result
            
         }
 
+        /// <summary>
+        /// Evaluate a content and wrap into <see cref="IResult{TContent}"/>
+        /// </summary>
+        /// <typeparam name="T">Type of content</typeparam>
+        /// <param name="identifier">Identifier</param>
+        /// <param name="content">content instance or null</param>
+        /// <returns>IResult</returns>
+        [NotNull]
+        public static IResult<T> Eval<T>([NotNull] IIdentifier identifier, [CanBeNull] T content)
+        {
+            if (null == content)
+                return Fail<T>(identifier, "null object");
+
+            return Ok(identifier, content);
+        }
 
 
         /// <summary>

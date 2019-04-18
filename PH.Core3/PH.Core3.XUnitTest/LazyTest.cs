@@ -16,7 +16,7 @@ namespace PH.Core3.XUnitTest
         {
             var id = new Identifier("abc");
             var chain = await ResultFactory
-                              .ChainAsync<int>(id, async () => await Fnc01())
+                              .ChainAsync(id, async () => await Fnc01())
                               .ResolveAsync();
         }
 
