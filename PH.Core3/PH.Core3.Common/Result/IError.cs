@@ -1,4 +1,7 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using System;
+using System.Runtime.Serialization;
+using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 
 namespace PH.Core3.Common.Result
 {
@@ -26,5 +29,11 @@ namespace PH.Core3.Common.Result
         /// Inner Error
         /// </summary>
         IError InnerError { get; }
+
+        /// <summary>
+        /// Error Exception
+        /// </summary>
+        [JsonIgnore]
+        Exception Exception { get; }
     }
 }

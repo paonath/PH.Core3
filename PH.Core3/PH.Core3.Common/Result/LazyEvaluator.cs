@@ -14,17 +14,19 @@ namespace PH.Core3.Common.Result
     {
         
         private readonly Lazy<IResult<T>> _lazyResult;
+        private readonly IIdentifier _identifier;
         internal readonly int ProgrId;
 
-        internal LazyEvaluator([NotNull] Func<IResult<T>> fnc,Func<IResult<T>,IResult<T>> onErrorFunc = null)
-            :this(0, fnc)
+        internal LazyEvaluator([NotNull] Func<IResult<T>> fnc, IIdentifier identifier, Func<IResult<T>,IResult<T>> onErrorFunc = null)
+            :this(0, fnc, identifier)
         {
             
         }
 
-        private LazyEvaluator(int progrId,Func<IResult<T>> fnc,Func<IResult<T>,IResult<T>> onErrorFunc = null)
+        private LazyEvaluator(int progrId,Func<IResult<T>> fnc, IIdentifier identifier, Func<IResult<T>,IResult<T>> onErrorFunc = null)
         {
             ProgrId     = progrId;
+            _identifier = identifier;
             _lazyResult = new Lazy<IResult<T>>(() => FunctionCombiner(fnc, onErrorFunc));
         }
 
@@ -91,7 +93,9 @@ namespace PH.Core3.Common.Result
         private LazyEvaluator<TOther> NextCombiner<TOther>(int progrIdentifier,[NotNull] Func<IResult<T>, IResult<TOther>> nextFunction,
                                                            Func<IResult<TOther>, IResult<TOther>> onErrorFunc = null)
         {
-            return new LazyEvaluator<TOther>(progrIdentifier,() => FunctionCombinerWithArg(Value, progrIdentifier, nextFunction, onErrorFunc));
+            return new LazyEvaluator<TOther>(progrIdentifier
+                                             , () => FunctionCombinerWithArg(Value, progrIdentifier, nextFunction, onErrorFunc),
+                                             _identifier);
         }
 
         /// <summary>
@@ -99,6 +103,7 @@ namespace PH.Core3.Common.Result
         /// </summary>
         /// <typeparam name="TOther">Type of output result</typeparam>
         /// <param name="nextFunction">Function to lazy-evaluate</param>
+        /// <param name="onErrorFunc"></param>
         /// <returns>lazy evaluator</returns>
         [NotNull]
         public LazyEvaluator<TOther> Next<TOther>([NotNull] Func<IResult<T>, IResult<TOther>> nextFunction,Func<IResult<TOther>, IResult<TOther>> onErrorFunc = null)
@@ -119,6 +124,20 @@ namespace PH.Core3.Common.Result
         /// </summary>
         /// <returns>final result</returns>
         public IResult<T> Resolve() => Value;
+
+        public bool TryResolve(out IResult<T> result)
+        {
+            try
+            {
+                result = Resolve();
+                return true;
+            }
+            catch (Exception e)
+            {
+                result = ResultFactory.FailLazyEvaluatedFunctionFromException<T>(ProgrId, _identifier, e);
+                return false;
+            }
+        }
 
     }
 }

@@ -53,9 +53,10 @@ namespace PH.Core3.Common.Result
         /// <param name="fnc">function to lazy evaluate</param>
         /// <returns>Result</returns>
         [NotNull]
-        public static LazyEvaluator<TContent> Chain<TContent>(Func<IResult<TContent>> fnc,Func<IResult<TContent>,IResult<TContent>> onErrorFunc = null)
+        public static LazyEvaluator<TContent> Chain<TContent>([NotNull] IIdentifier identifier ,[NotNull] Func<IResult<TContent>> fnc
+                                                              ,[CanBeNull] Func<IResult<TContent>,IResult<TContent>> onErrorFunc = null)
         {
-            return new LazyEvaluator<TContent>(fnc, onErrorFunc);
+            return new LazyEvaluator<TContent>(fnc, identifier,onErrorFunc);
         }
 
         /// <summary>
@@ -93,12 +94,19 @@ namespace PH.Core3.Common.Result
         /// <param name="asyncFnc">async function to lazy evaluate</param>
         /// <returns>Result</returns>
         [NotNull]
-        public static LazyEvaluatorAsync<TContent> Chain<TContent>(Func<Task<IResult<TContent>>> asyncFnc )
+        public static LazyEvaluatorAsync<TContent> ChainAsync<TContent>([NotNull] IIdentifier identifier ,Func<Task<IResult<TContent>>> asyncFnc 
+                                                                   ,[CanBeNull] Func<IResult<TContent>, Task<IResult<TContent>>> onErrorFunc = null)
         {
-            return new LazyEvaluatorAsync<TContent>(asyncFnc);
+            return new LazyEvaluatorAsync<TContent>(asyncFnc, identifier, onErrorFunc);
         }
 
-
+        public static IResult<T> FailFromException<T>([NotNull] IIdentifier identifier, Exception ex, EventId? eventId = null, string errorMessage = null, string outputMessage = null)
+        {
+            var msg = string.IsNullOrEmpty(errorMessage) ? ex.Message : errorMessage;
+            var err = new Error(msg, outputMessage, eventId) {Exception = ex};
+            return new Result<T>(identifier, new []{ err });
+           
+        }
 
 
 
@@ -137,12 +145,7 @@ namespace PH.Core3.Common.Result
             return new Result<TContent>(identifier, content);
         }
 
-        //[NotNull]
-        //public static IResult<TContent> SwitchResult<TInputContent,TContent>([NotNull] IIdentifier identifier, [NotNull] IResult<TInputContent> content, Func<TInputContent, TContent> transformFunc)
-        //{
-        //    return new Result<TContent>(identifier, content);
-        //}
-
+        
         /// <summary>
         /// Return an instance of Result with a Not Found content (NULL): this is intended as not error: a "good empty result"
         /// </summary>
@@ -230,6 +233,28 @@ namespace PH.Core3.Common.Result
 
             return new Result<TContent>(identifier, l.OrderBy(x => x.ProgrId).ToArray());
         }
+
+        /// <summary>
+        /// Bad Result
+        /// </summary>
+        /// <typeparam name="TContent">Type of object on error</typeparam>
+        /// <param name="progrId">Int id of LazyEvaluator</param>
+        /// <param name="identifier">Identifier</param>
+        /// <param name="exception"></param>
+        /// <returns>bad result</returns>
+        [NotNull]
+        internal static IResult<TContent> FailLazyEvaluatedFunctionFromException<TContent>(int progrId,[NotNull] IIdentifier identifier
+                                                                                           , Exception exception, EventId? eventId = null, string errorMessage = null, string outputMessage = null)
+        {
+            
+            var msg = string.IsNullOrEmpty(errorMessage) ? exception.Message : errorMessage;
+            var err = new LazyEvaluatedError(progrId,msg, outputMessage, eventId) {Exception = exception};
+
+
+            return new Result<TContent>(identifier, new[] {err});
+        }
+
+
 
         /// <summary>
         /// Bad Result
