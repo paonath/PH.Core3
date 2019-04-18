@@ -5,9 +5,18 @@ using Microsoft.Extensions.Logging;
 
 namespace PH.Core3.Common.Result
 {
+    /// <summary>
+    /// Error instance
+    /// </summary>
     public class Error : IError
     {
-
+        /// <summary>
+        /// Init new instance of Error
+        /// </summary>
+        /// <param name="errorMessage">Error message (useful for logging)</param>
+        /// <param name="outputMessage">Optional Message to Service that received the error</param>
+        /// <param name="errorEventId">Event Id for this error</param>
+        /// <param name="innerError">Inner Error</param>
         public Error([NotNull] string errorMessage, [CanBeNull] string outputMessage, EventId? errorEventId, [CanBeNull] IError innerError = null)
         {
             if (string.IsNullOrEmpty(errorMessage))
@@ -26,6 +35,9 @@ namespace PH.Core3.Common.Result
         /// </summary>
         public string ErrorMessage { get;  }
 
+        /// <summary>
+        /// Event Id for this error
+        /// </summary>
         public EventId? ErrorEventId { get; }
 
         /// <summary>
@@ -33,14 +45,29 @@ namespace PH.Core3.Common.Result
         /// </summary>
         public string OutputMessage { get;  }
 
+        /// <summary>
+        /// Inner Error
+        /// </summary>
         public IError InnerError { get; }
 
+
+        /// <summary>
+        /// Parse a string error message and optional event id and return new instance of <see cref="Error"/>
+        /// </summary>
+        /// <param name="errorMessage">Error message</param>
+        /// <param name="eventId">event id</param>
+        /// <returns>instance of Error</returns>
         [NotNull]
         public static Error Parse([NotNull] string errorMessage, EventId? eventId = null)
         {
             return new Error(errorMessage, "",eventId);
         }
 
+        /// <summary>
+        /// Parse a string array messages and return new array of Errors
+        /// </summary>
+        /// <param name="errorMessages">messages</param>
+        /// <returns>Error array</returns>
         [NotNull]
         public static Error[] Parse([NotNull] string[] errorMessages)
         {

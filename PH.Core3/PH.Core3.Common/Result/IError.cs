@@ -12,6 +12,9 @@ namespace PH.Core3.Common.Result
         /// </summary>
         string ErrorMessage { get; }
 
+        /// <summary>
+        /// Event Id
+        /// </summary>
         EventId? ErrorEventId { get; }
 
         /// <summary>
@@ -19,6 +22,9 @@ namespace PH.Core3.Common.Result
         /// </summary>
         string OutputMessage { get; }
 
+        /// <summary>
+        /// Inner Error
+        /// </summary>
         IError InnerError { get; }
     }
 }
