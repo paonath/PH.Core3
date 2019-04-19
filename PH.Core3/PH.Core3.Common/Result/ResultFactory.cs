@@ -59,45 +59,47 @@ namespace PH.Core3.Common.Result
             return new LazyEvaluator<TContent>(fnc, identifier,onErrorFunc);
         }
 
-        /// <summary>
-        /// Begin a chain of async functions that accept an incoming <see cref="IResult{TContent}"/>  as argument
+        ///  <summary>
+        ///  Begin a chain of async functions that accept an incoming <see cref="IResult{TContent}"/>  as argument
+        ///  
+        /// <para>Use <see cref="LazyEvaluator{T}.Resolve"/> to resolve chain of functions</para>
         /// 
-        ///<para>Use <see cref="LazyEvaluator{T}.Resolve"/> to resolve chain of functions</para>
-        ///
-        /// <example>
-        /// Example:
-        ///<code>
-        /// var chain = await ResultFactory.Chain(async () => await SomeMethodTestAsync(ResultFactory.Ok&lt;int&lt;(new Identifier("wer"), 1)))
-        ///             .Next(async result => await SomeOtherMethodTestAsync(result))
-        ///             .Next(async result => await SomeOtherMethod2TestAsync(result))
-        ///             .Next(async result => await MethodTestAsync(result))
-        ///             .ResolveAsync();
-        ///
-        /// if(chain.OnError)
-        /// {
-        ///     //...
-        /// }
+        ///  <example>
+        ///  Example:
+        /// <code>
+        ///  var chain = await ResultFactory.Chain(async () => await SomeMethodTestAsync(ResultFactory.Ok&lt;int&lt;(new Identifier("wer"), 1)))
+        ///              .Next(async result => await SomeOtherMethodTestAsync(result))
+        ///              .Next(async result => await SomeOtherMethod2TestAsync(result))
+        ///              .Next(async result => await MethodTestAsync(result))
+        ///              .ResolveAsync();
         /// 
-        /// </code>
-        /// </example>
-        /// <para>
-        /// see <see cref="IResult{TContent}"/>
-        /// </para>
-        /// <para>
-        /// see <see cref="LazyEvaluatorAsync{T}"/>
-        /// </para>
-        /// <para>
-        /// see <see cref="LazyEvaluatedError"/>
-        /// </para>
-        /// </summary>
-        /// <typeparam name="TContent">Type of content result</typeparam>
-        /// <param name="asyncFnc">async function to lazy evaluate</param>
-        /// <returns>Result</returns>
+        ///  if(chain.OnError)
+        ///  {
+        ///      //...
+        ///  }
+        ///  
+        ///  </code>
+        ///  </example>
+        ///  <para>
+        ///  see <see cref="IResult{TContent}"/>
+        ///  </para>
+        ///  <para>
+        ///  see <see cref="LazyEvaluatorAsync{T}"/>
+        ///  </para>
+        ///  <para>
+        ///  see <see cref="LazyEvaluatedError"/>
+        ///  </para>
+        ///  </summary>
+        ///  <typeparam name="TContent">Type of content result</typeparam>
+        ///  <param name="identifier"></param>
+        ///  <param name="asyncFnc">async function to lazy evaluate</param>
+        ///  <param name="onErrorFunc"></param>
+        ///  <returns>Result</returns>
         [NotNull]
         public static LazyEvaluatorAsync<TContent> ChainAsync<TContent>([NotNull] IIdentifier identifier ,Func<Task<IResult<TContent>>> asyncFnc 
-                                                                   ,[CanBeNull] Func<IResult<TContent>, Task<IResult<TContent>>> onErrorFunc = null)
+                                                                        ,[CanBeNull] Func<IResult<TContent>, Task<IResult<TContent>>> onErrorFunc = null)
         {
-            return new LazyEvaluatorAsync<TContent>(asyncFnc, identifier, onErrorFunc);
+            return new LazyEvaluatorAsync<TContent>(identifier, asyncFnc, onErrorFunc);
         }
 
         public static IResult<T> FailFromException<T>([NotNull] IIdentifier identifier, Exception ex, EventId? eventId = null, string errorMessage = null, string outputMessage = null)

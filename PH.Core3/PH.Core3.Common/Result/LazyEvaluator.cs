@@ -125,6 +125,8 @@ namespace PH.Core3.Common.Result
         /// <returns>final result</returns>
         public IResult<T> Resolve() => Value;
 
+        
+
         public bool TryResolve(out IResult<T> result)
         {
             try

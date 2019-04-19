@@ -1,5 +1,6 @@
 ﻿using System;
 using JetBrains.Annotations;
+using Newtonsoft.Json;
 
 namespace PH.Core3.Common.Identifiers
 {
@@ -11,7 +12,14 @@ namespace PH.Core3.Common.Identifiers
         /// <summary>
         /// Guid
         /// </summary>
+        [JsonProperty(PropertyName = @"_guid")]
         public Guid BaseIdentifierGuid {get;}
+
+        /// <summary>
+        /// Utc Date and Time init of current identifier
+        /// </summary>
+        [JsonProperty(PropertyName = @"_utc")]
+        public DateTime UtcGenerated { get; }
 
 
         /// <summary>
@@ -20,7 +28,9 @@ namespace PH.Core3.Common.Identifiers
         protected BaseIdentifier()
         {
             BaseIdentifierGuid = Guid.NewGuid();
+            UtcGenerated = DateTime.UtcNow;
         }
+        
     }
 
 
@@ -56,7 +66,16 @@ namespace PH.Core3.Common.Identifiers
         /// <returns>A hash code for the current object.</returns>
         public override int GetHashCode()
         {
-            return ($"{Uid} {BaseIdentifierGuid}").GetHashCode();
+            return ($"{typeof(Identifier)} {ToString()}").GetHashCode();
         }
+
+        /// <summary>Returns a string that represents the current object.</summary>
+        /// <returns>A string that represents the current object.</returns>
+        public override string ToString()
+        {
+            return $"Uid: '{Uid}' - Generated on '{UtcGenerated:O}' - Guid '{BaseIdentifierGuid}'";
+        }
+
+        
     }
 }
