@@ -29,5 +29,20 @@ namespace PH.Core3.Common.Services.Crud
         /// </summary>
         /// <returns><see cref="Result{TDto}"/> instance</returns>
         Task<IResult<TDto[]>> LoadAllAsync();
+
+        /// <summary>
+        /// Load Items as Paged Result using default pagination setting
+        /// </summary>
+        /// <param name="pageNumber">page number</param>
+        /// <returns><see cref="PagedResult{TContent}"/> instance</returns>
+        Task<IPagedResult<TDto>> LoadAsync(int pageNumber);
+
+        /// <summary>
+        /// Load Items as Paged Result
+        /// </summary>
+        /// <param name="skipItems">number of items to skip</param>
+        /// <param name="itemsToLoad">number of items to load</param>
+        /// <returns><see cref="PagedResult{TContent}"/> instance</returns>
+        Task<IPagedResult<TDto>> LoadAsync(int skipItems, int itemsToLoad);
     }
 }

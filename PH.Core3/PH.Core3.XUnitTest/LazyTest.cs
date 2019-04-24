@@ -110,6 +110,21 @@ namespace PH.Core3.XUnitTest
 
         }
 
+
+        private Task<IResult<object>> MethodTestAsync3(IResult<object> input)
+        {
+            var m = $"MethodTestAsync3  {Thread.CurrentThread.ManagedThreadId}";
+            Debug.WriteLine(m);
+            _testOutputHelper.WriteLine(m);
+            var i = new Identifier("abc");
+
+
+            return Task.FromResult(ResultFactory.Ok<object>(i, input.Content));
+
+
+        }
+
+
         private IResult<int> MethodTest(IResult<int> input)
         {
             _testOutputHelper.WriteLine($"{input.Content}");
@@ -144,6 +159,8 @@ namespace PH.Core3.XUnitTest
             {
                 //...
             }
+
+            Assert.True(lastResult.OnError == false);
         }
 
 
@@ -165,197 +182,197 @@ namespace PH.Core3.XUnitTest
 
                                #region body
 
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))                
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))                
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))                
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))                
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))                
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))                
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))                
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))                
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))                
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
-                               .Next(async result => await MethodTestAsync(result))
+                               .Next(async (v, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))                
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))                
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))                
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))                
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))                
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))                
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))                
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))                
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))                
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
                 
-                               .Next(async result => await MethodTestAsync(result))
+                               .Next(async (eval, result) => await MethodTestAsync(result))
 
                 #endregion
 
@@ -383,70 +400,70 @@ namespace PH.Core3.XUnitTest
                         _testOutputHelper.WriteLine(error.Errors.First().ErrorMessage);
                         return Task.FromResult(error);
                     })
-                .Next(async result => await MethodTestAsync(result))
-                .Next(async result => await MethodTestAsync(result))
-                .Next(async result => await MethodTestAsync(result))
-                .Next(async result => await MethodTestAsync(result))
-                .Next(async result => await MethodTestAsync(result))
-                .Next(async result => await MethodTestAsync(result))
-                .Next(async result => await MethodTestAsync(result))
-                .Next(async result => await MethodTestAsync(result))
-                .Next(async result => await MethodTestAsync(result))
-                .Next(async result => await MethodTestAsync(result))
-                .Next(async result => await MethodTestAsync(result))
-                .Next(async result => await MethodTestAsync(result))
-                .Next(async result => await MethodTestAsync(result))
-                .Next(async result => await MethodTestAsync(result))
-                .Next(async result => await MethodTestAsync(result))
-                .Next(async result => await MethodTestAsync(result))                
-                .Next(async result => await MethodTestAsync(result))
-                .Next(async result => await MethodTestAsync(result))
-                .Next(async result => await MethodTestAsync(result))
-                .Next(async result => await MethodTestAsync(result))
-                .Next(async result => await MethodTestAsync(result))
-                .Next(async result => await MethodTestAsync(result))
-                .Next(async result => await MethodTestAsync(result))
-                .Next(async result => await MethodTestAsync(result))
-                .Next(async result => await MethodTestAsync(result))
-                .Next(async result => await MethodTestAsync(result))
-                .Next(async result => await MethodTestAsync(result))
-                .Next(async result => await MethodTestAsync(result))
-                .Next(async result => await MethodTestAsync(result))
-                .Next(async result => await MethodTestAsync(result))
-                .Next(async result => await MethodTestAsync(result))
-                .Next(async result => await MethodTestAsync(result))                
-                .Next(async result => await MethodTestAsync(result))
-                .Next(async result => await MethodTestAsync(result))
-                .Next(async result => await MethodTestAsync(result))
-                .Next(async result => await MethodTestAsync(result))
-                .Next(async result => await MethodTestAsync(result))
-                .Next(async result => await MethodTestAsync(result))
-                .Next(async result => await MethodTestAsync(result))
-                .Next(async result => await MethodTestAsync(result))
-                .Next(async result => await MethodTestAsync(result))
-                .Next(async result => await MethodTestAsync(result))
-                .Next(async result => await MethodTestAsync(result))
-                .Next(async result => await MethodTestAsync(result))
-                .Next(async result => await MethodTestAsync(result))
-                .Next(async result => await MethodTestAsync(result))
-                .Next(async result => await MethodTestAsync(result))
-                .Next(async result => await MethodTestAsync(result))                
-                .Next(async result => await MethodTestAsync(result))
-                .Next(async result => await MethodTestAsync(result))
-                .Next(async result => await MethodTestAsync(result))
-                .Next(async result => await MethodTestAsync(result))
-                .Next(async result => await MethodTestAsync(result))
-                .Next(async result => await MethodTestAsync(result))
-                .Next(async result => await MethodTestAsync(result))
-                .Next(async result => await MethodTestAsync(result))
-                .Next(async result => await MethodTestAsync(result))
-                .Next(async result => await MethodTestAsync(result))
-                .Next(async result => await MethodTestAsync(result))
-                .Next(async result => await MethodTestAsync(result))
-                .Next(async result => await MethodTestAsync(result))
-                .Next(async result => await MethodTestAsync(result))
-                .Next(async result => await MethodTestAsync(result))
-                .Next(async result => await MethodTestAsync(result))
+                .Next(async (eval, result) => await MethodTestAsync(result))
+                .Next(async (eval, result) => await MethodTestAsync(result))
+                .Next(async (eval, result) => await MethodTestAsync(result))
+                .Next(async (eval, result) => await MethodTestAsync(result))
+                .Next(async (eval, result) => await MethodTestAsync(result))
+                .Next(async (eval, result) => await MethodTestAsync(result))
+                .Next(async (eval, result) => await MethodTestAsync(result))
+                .Next(async (eval, result) => await MethodTestAsync(result))
+                .Next(async (eval, result) => await MethodTestAsync(result))
+                .Next(async (eval, result) => await MethodTestAsync(result))
+                .Next(async (eval, result) => await MethodTestAsync(result))
+                .Next(async (eval, result) => await MethodTestAsync(result))
+                .Next(async (eval, result) => await MethodTestAsync(result))
+                .Next(async (eval, result) => await MethodTestAsync(result))
+                .Next(async (eval, result) => await MethodTestAsync(result))
+                .Next(async (eval, result) => await MethodTestAsync(result))                
+                .Next(async (eval, result) => await MethodTestAsync(result))
+                .Next(async (eval, result) => await MethodTestAsync(result))
+                .Next(async (eval, result) => await MethodTestAsync(result))
+                .Next(async (eval, result) => await MethodTestAsync(result))
+                .Next(async (eval, result) => await MethodTestAsync(result))
+                .Next(async (eval, result) => await MethodTestAsync(result))
+                .Next(async (eval, result) => await MethodTestAsync(result))
+                .Next(async (eval, result) => await MethodTestAsync(result))
+                .Next(async (eval, result) => await MethodTestAsync(result))
+                .Next(async (eval, result) => await MethodTestAsync(result))
+                .Next(async (eval, result) => await MethodTestAsync(result))
+                .Next(async (eval, result) => await MethodTestAsync(result))
+                .Next(async (eval, result) => await MethodTestAsync(result))
+                .Next(async (eval, result) => await MethodTestAsync(result))
+                .Next(async (eval, result) => await MethodTestAsync(result))
+                .Next(async (eval, result) => await MethodTestAsync(result))                
+                .Next(async (eval, result) => await MethodTestAsync(result))
+                .Next(async (eval, result) => await MethodTestAsync(result))
+                .Next(async (eval, result) => await MethodTestAsync(result))
+                .Next(async (eval, result) => await MethodTestAsync(result))
+                .Next(async (eval, result) => await MethodTestAsync(result))
+                .Next(async (eval, result) => await MethodTestAsync(result))
+                .Next(async (eval, result) => await MethodTestAsync(result))
+                .Next(async (eval, result) => await MethodTestAsync(result))
+                .Next(async (eval, result) => await MethodTestAsync(result))
+                .Next(async (eval, result) => await MethodTestAsync(result))
+                .Next(async (eval, result) => await MethodTestAsync(result))
+                .Next(async (eval, result) => await MethodTestAsync(result))
+                .Next(async (eval, result) => await MethodTestAsync(result))
+                .Next(async (eval, result) => await MethodTestAsync(result))
+                .Next(async (eval, result) => await MethodTestAsync(result))
+                .Next(async (eval, result) => await MethodTestAsync(result))                
+                .Next(async (eval, result) => await MethodTestAsync(result))
+                .Next(async (eval, result) => await MethodTestAsync(result))
+                .Next(async (eval, result) => await MethodTestAsync(result))
+                .Next(async (eval, result) => await MethodTestAsync(result))
+                .Next(async (eval, result) => await MethodTestAsync(result))
+                .Next(async (eval, result) => await MethodTestAsync(result))
+                .Next(async (eval, result) => await MethodTestAsync(result))
+                .Next(async (eval, result) => await MethodTestAsync(result))
+                .Next(async (eval, result) => await MethodTestAsync(result))
+                .Next(async (eval, result) => await MethodTestAsync(result))
+                .Next(async (eval, result) => await MethodTestAsync(result))
+                .Next(async (eval, result) => await MethodTestAsync(result))
+                .Next(async (eval, result) => await MethodTestAsync(result))
+                .Next(async (eval, result) => await MethodTestAsync(result))
+                .Next(async (eval, result) => await MethodTestAsync(result))
+                .Next(async (eval, result) => await MethodTestAsync(result))
 
                 .ResolveAsync();
 
@@ -465,19 +482,19 @@ namespace PH.Core3.XUnitTest
 
             var chain = await ResultFactory.ChainAsync(id,
                     async () => await MethodTestAsync(ResultFactory.Ok<int>(id, 1)))
-                .Next(async result => await MethodTestAsync2(result))
-                .Next(async result => await MethodTestAsync2(result))
-                .Next(async result => await MethodTestAsync2(result))
-                .Next(async result => await MethodTestAsync2(result))
-                .Next(async result => await MethodTestAsync2(result))
-                .Next(async result => await MethodTestAsync2(result))
-                .Next(async result => await MethodTestAsync2(result))
-                .Next(async result => await MethodTestAsync2(result))
-                .Next(async result => await MethodTestAsync2(result))
-                .Next(async result => await MethodTestAsync2(result))
-                .Next(async result => await MethodTestAsync2(result))
-                .Next(async result => await MethodTestAsync2(result))
-                .Next(async result => await MethodTestAsync2(result))
+                .Next(async (eval, result) => await MethodTestAsync2(result))
+                .Next(async (eval, result) => await MethodTestAsync2(result))
+                .Next(async (eval, result) => await MethodTestAsync2(result))
+                .Next(async (eval, result) => await MethodTestAsync2(result))
+                .Next(async (eval, result) => await MethodTestAsync2(result))
+                .Next(async (eval, result) => await MethodTestAsync2(result))
+                .Next(async (eval, result) => await MethodTestAsync2(result))
+                .Next(async (eval, result) => await MethodTestAsync2(result))
+                .Next(async (eval, result) => await MethodTestAsync2(result))
+                .Next(async (eval, result) => await MethodTestAsync2(result))
+                .Next(async (eval, result) => await MethodTestAsync2(result))
+                .Next(async (eval, result) => await MethodTestAsync2(result))
+                .Next(async (eval, result) => await MethodTestAsync2(result))
 
                 .ResolveAsync();
 
@@ -640,6 +657,111 @@ namespace PH.Core3.XUnitTest
             
         }
         
+
+        [Fact]
+        [TestBeforeAfter]
+        public async void TestWithExit()
+        {
+            _testOutputHelper.WriteLine($"TestAsync start {Thread.CurrentThread.ManagedThreadId}");
+            var       id      = new Identifier("wer");
+            Stopwatch counter = Stopwatch.StartNew();
+
+            var chain = await ResultFactory.ChainAsync(id,
+                                                       async () => await MethodTestAsync(ResultFactory.Ok<int>(id, 1)))
+                                           .Next(async (eval, result) =>
+                                           {
+                                               var r = await MethodTestAsync3(ResultFactory.Ok(id, new object()));
+                                               return r;
+                                           }).Next(async (eval, result) =>
+                                           {
+                                               var r = await MethodTestAsync3(ResultFactory.Ok(id, new object()));
+                                               return r;
+                                           })
+                                           .Next(async (eval, result) =>
+                                           {
+                                               var r =  await MethodTestAsync3(ResultFactory.Ok(id, new object()));
+                                               await eval.RaiseExitAsync();
+
+
+                                               return r;
+                                           } )
+                                          .Next(async (eval, result) =>
+                                                 {
+                                                     var r = await MethodTestAsync3(ResultFactory.Ok(id, new object()));
+                                                     return r;
+                                                 })
+                                           .Next(async (eval, result) =>
+                                           {
+                                               var r = await MethodTestAsync3(ResultFactory.Ok(id, new object()));
+                                               return r;
+                                           })
+                                           .Next(async (eval, result) =>
+                                           {
+                                               var r = await MethodTestAsync3(ResultFactory.Ok(id, new object()));
+                                               return r;
+                                           })
+                                           .Next(async (eval, result) =>
+                                           {
+                                               var r = await MethodTestAsync3(ResultFactory.Ok(id, new object()));
+                                               return r;
+                                           })
+                                           .Next(async (eval, result) =>
+                                           {
+                                               var r = await MethodTestAsync3(ResultFactory.Ok(id, new object()));
+                                               return r;
+                                           })
+                                           .Next(async (eval, result) =>
+                                           {
+                                               var r = await MethodTestAsync3(ResultFactory.Ok(id, new object()));
+                                               return r;
+                                           })
+                                           .Next(async (eval, result) =>
+                                           {
+                                               var r = await MethodTestAsync3(ResultFactory.Ok(id, new object()));
+                                               return r;
+                                           })
+                                           .Next(async (eval, result) =>
+                                           {
+                                               var r = await MethodTestAsync3(ResultFactory.Ok(id, new object()));
+                                               return r;
+                                           })
+                                           //.Next(async (eval, result) =>
+                                           //{
+                                           //    var r =  await MethodTestAsync3(ResultFactory.Ok(id, new object()));
+                                           //    return r;
+                                           //} )
+                                           //.Next(async (eval, result) =>
+                                           //{
+                                           //    var r =  await MethodTestAsync3(ResultFactory.Ok(id, new object()));
+                                           //    return r;
+                                           //} )
+                                           /*
+                                            .Next(async v =>
+                                            {
+                                                var xy = await MethodTestAsync3(ResultFactory.Ok(id, new object()));
+
+
+                                            } )
+                                            .Next(async v => await MethodTestAsync3(ResultFactory.Ok(id, new object()) ))
+                                           */
+
+
+                                           //.Next(async (eval, result) => await MethodTestAsync2(result))
+                                           //.Next(async (eval, result) => await MethodTestAsync2(result))
+                                           //.Next(async (eval, result) => await MethodTestAsync2(result))
+
+
+                                           .ResolveAsync();
+
+            counter.Stop();
+            _testOutputHelper
+                .WriteLine($"TestAsync end {Thread.CurrentThread.ManagedThreadId}:  Time elapsed: {counter.Elapsed}");
+
+
+            Assert.True(chain.OnError == false);
+            
+        }
+
         [Fact]
         [TestBeforeAfter]
         public void Test()

@@ -12,6 +12,10 @@ namespace PH.Core3.Common.Result
     /// </summary>
     public static class ResultFactory
     {
+       
+
+
+
         /// <summary>
         /// Begin a chain of functions that accept an incoming <see cref="IResult{TContent}"/>  as argument
         ///
@@ -102,6 +106,11 @@ namespace PH.Core3.Common.Result
             return new LazyEvaluatorAsync<TContent>(identifier, asyncFnc, onErrorFunc);
         }
 
+        //public static IResult<TExit> RaiseExit<TExit,TContent>(IResult<TContent> result)
+        //{
+        //    LazyResult<TExit>.Parse<TExit,TContent>()
+        //}
+
         public static IResult<T> FailFromException<T>([NotNull] IIdentifier identifier, Exception ex, EventId? eventId = null, string errorMessage = null, string outputMessage = null)
         {
             var msg = string.IsNullOrEmpty(errorMessage) ? ex.Message : errorMessage;
@@ -159,10 +168,35 @@ namespace PH.Core3.Common.Result
         [NotNull]
         public static IResult<TContent> Ok<TContent>([NotNull] IIdentifier identifier, [NotNull] TContent content)
         {
+            //if (content is Array)
+            //    return PagedOk<TContent>(identifier, content, -1, -1, -1);
+
             return new Result<TContent>(identifier, content);
         }
 
-        
+
+
+        [NotNull]
+        public static IPagedResult<TContent> PagedOk<TContent>([NotNull] IIdentifier identifier, [NotNull] TContent[] content, long count, int pageNumber, int pageSize)
+        {
+            return new PagedResult<TContent>(identifier, content, count, pageNumber, pageSize);
+        }
+
+        [NotNull]
+        public static IPagedResult<TContent> PagedEmpty<TContent>([NotNull] IIdentifier identifier)
+        {
+            return new PagedResult<TContent>(identifier, new TContent[0], 0, -1, -1);
+        }
+
+        [NotNull]
+        public static IPagedResult<TContent> PagedFail<TContent>([NotNull] IIdentifier identifier, [NotNull] IEnumerable<IError> errors)
+        {
+            return new PagedResult<TContent>(identifier, errors);
+        }
+
+
+
+
         /// <summary>
         /// Return an instance of Result with a Not Found content (NULL): this is intended as not error: a "good empty result"
         /// </summary>
@@ -248,7 +282,7 @@ namespace PH.Core3.Common.Result
                 l.Add(err);
             }
 
-            return new Result<TContent>(identifier, l.OrderBy(x => x.ProgrId).ToArray());
+            return Fail<TContent>(identifier, l.OrderBy(x => x.ProgrId).ToArray());
         }
 
         /// <summary>
@@ -268,7 +302,8 @@ namespace PH.Core3.Common.Result
             var err = new LazyEvaluatedError(progrId,msg, outputMessage, eventId) {Exception = exception};
 
 
-            return new Result<TContent>(identifier, new[] {err});
+            //return new Result<TContent>(identifier, new[] {err});
+            return Fail<TContent>(identifier, new[] {err});
         }
 
 
@@ -296,7 +331,8 @@ namespace PH.Core3.Common.Result
         [NotNull]
         public static IResult<TContent> Fail<TContent>([NotNull] IIdentifier identifier, [NotNull] IError error)
         {
-            return new Result<TContent>(identifier, new []{error});
+            //return new Result<TContent>(identifier, new []{error});
+            return Fail<TContent>(identifier, new[] {error});
         }
 
 
@@ -313,7 +349,8 @@ namespace PH.Core3.Common.Result
         public static IResult<TContent> Fail<TContent>([NotNull] IIdentifier identifier, [NotNull] string errorMessage,
                                                        string outputMessage = "",EventId? eventId = null)
         {
-            return new Result<TContent>(identifier, new []{new Error(errorMessage,outputMessage, eventId) }); 
+            //return new Result<TContent>(identifier, new []{new Error(errorMessage,outputMessage, eventId) });
+            return Fail<TContent>(identifier, new []{new Error(errorMessage,outputMessage, eventId) });
         }
 
         /// <summary>
@@ -329,7 +366,8 @@ namespace PH.Core3.Common.Result
         public static IResult<TContent> Fail<TContent>([NotNull] IIdentifier identifier, EventId eventId, [NotNull] string errorMessage,
                                                        string outputMessage = "")
         {
-            return new Result<TContent>(identifier, new []{new Error(errorMessage,outputMessage, eventId) }); 
+            //return new Result<TContent>(identifier, new []{new Error(errorMessage,outputMessage, eventId) }); 
+            return Fail<TContent>(identifier, new []{new Error(errorMessage,outputMessage, eventId) });
         }
 
 

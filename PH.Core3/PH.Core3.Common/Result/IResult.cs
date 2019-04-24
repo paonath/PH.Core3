@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace PH.Core3.Common.Result
 {
@@ -33,5 +34,36 @@ namespace PH.Core3.Common.Result
         /// Result Content
         /// </summary>
         TContent Content { get; }
+    }
+
+    /// <summary>
+    /// Transport object wrapping a Result array paged
+    /// </summary>
+    /// <typeparam name="TContent">Type of the Result content</typeparam>
+    public interface IPagedResult<out TContent> : IResult<TContent[]>, IResult
+    {
+        /// <summary>
+        /// Count of All Items
+        /// </summary>
+        long Count { get;  }
+
+        /// <summary>
+        /// Page Number
+        /// </summary>
+        int PageNumber { get;  }
+
+        /// <summary>
+        /// Number Of items per Page
+        /// </summary>
+        int PageSize { get;  }
+
+        /// <summary>
+        /// Get Number of Total Pages if Pagination not disabled
+        ///
+        /// If Result is OnError this value is always -1.
+        /// </summary>
+        /// <returns></returns>
+        Lazy<long> PageCount{ get;  }
+
     }
 }

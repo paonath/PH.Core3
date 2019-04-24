@@ -2,10 +2,15 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using PH.Core3.Common;
+using PH.Core3.Common.Result;
+using PH.Core3.Test.WebApp.Services;
 using PH.Core3.UnitOfWork;
 
 namespace PH.Core3.Test.WebApp.Areas.v1.Controllers
 {
+
+    
+
     /// <summary>
     /// Controller V1
     /// </summary>
@@ -16,14 +21,16 @@ namespace PH.Core3.Test.WebApp.Areas.v1.Controllers
     public class ValuesController : ControllerBase
     {
         private readonly ILogger<ValuesController> _logger;
+        private readonly AlberoService _alberoService;
         private readonly IIdentifier _identifier;
         private readonly IUnitOfWork _uow;
 
-        public ValuesController(IIdentifier identifier, ILogger<ValuesController> logger, IUnitOfWork uow)
+        public ValuesController(IIdentifier identifier, ILogger<ValuesController> logger, IUnitOfWork uow, AlberoService alberoService)
         {
             _identifier = identifier;
             _logger = logger;
             _uow = uow;
+            _alberoService = alberoService;
 
             _logger.BeginScope("test scope");
             _logger.LogInformation("Passo di qui");
@@ -34,6 +41,16 @@ namespace PH.Core3.Test.WebApp.Areas.v1.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<string>> Get()
         {
+            var tst = _alberoService.LoadAsync();
+            tst.Wait();
+            var r = tst.Result;
+
+            
+
+            var xx = ResultFactory.PagedOk<AlberoDTo>(_identifier, r.Content, -1, -1, -1);
+            var xxx = ResultFactory.PagedOk(_identifier, new AlberoDTo[]{new AlberoDTo(), new AlberoDTo(), }, 5, 0, 2);
+
+
             return new string[] { "value1", "value2" };
         }
 

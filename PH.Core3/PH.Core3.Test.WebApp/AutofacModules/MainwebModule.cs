@@ -11,9 +11,11 @@ using NLog;
 using PH.Core3.AspNetCoreApi.Services.Components;
 using PH.Core3.Common;
 using PH.Core3.Common.Identifiers;
+using PH.Core3.Common.Services.Components.EF;
 using PH.Core3.Common.Services.Path;
 using PH.Core3.EntityFramework;
 using PH.Core3.Test.WebApp.HostedService;
+using PH.Core3.Test.WebApp.Services;
 using PH.Core3.TestContext;
 using PH.Core3.UnitOfWork;
 using ILogger = Microsoft.Extensions.Logging.ILogger;
@@ -38,6 +40,22 @@ namespace PH.Core3.Test.WebApp.AutofacModules
         protected override void Load(ContainerBuilder builder)
         {
             base.Load(builder);
+
+            builder.RegisterType<MyContext>()
+                   /*
+                   .OnPreparing(e => e.Parameters = e.Parameters.Union(
+                                                                       new[]
+                                                                       {
+                                                                           new NamedParameter("babelStringLocalizer",
+                                                                                              e.Context
+                                                                                               .Resolve<BabelStringLocalizer>()
+                                                                                             )
+
+                                                                       }))
+                                                                       */
+                   .AsSelf()
+                   .AsImplementedInterfaces()
+                   .InstancePerLifetimeScope();
 
             builder.Register(c => new PH.Core3.Common.Services.Components.Path.WebPathTranslator(c.Resolve<IHostingEnvironment>().WebRootPath))
                    .AsSelf()
@@ -92,7 +110,29 @@ namespace PH.Core3.Test.WebApp.AutofacModules
 
             builder.RegisterType<MailSenderService>().AsSelf().AsImplementedInterfaces().SingleInstance();
 
+            var v1Svcs = typeof(AlberoService).Assembly.GetTypes().Where(t => t.IsAbstract == false ).ToArray();
 
+            builder.Register(c => new TransientCrudSettings(c.Resolve<IIdentifier>(),
+                                                            c.Resolve<ILogger<TransientCrudSettings>>(), true, true,
+                                                            true, true)).AsSelf().AsImplementedInterfaces()
+                   .InstancePerLifetimeScope();
+
+
+            foreach (var serviceType in v1Svcs)
+            {
+                
+                builder.RegisterType(serviceType)
+                       .AsSelf()
+                       .AsImplementedInterfaces()
+                       .InstancePerLifetimeScope()
+                       .OnActivated(e =>
+                       {
+                           //var svc = (Ecube.Ssgu.Api.Common.Services.IService) e.Instance;
+                           //svc.Initialize();
+
+                       })
+                       .PropertiesAutowired(PropertyWiringOptions.AllowCircularDependencies);
+            }
 
         }
     }

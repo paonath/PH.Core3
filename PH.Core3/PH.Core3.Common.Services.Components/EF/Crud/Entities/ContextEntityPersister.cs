@@ -56,6 +56,12 @@ namespace PH.Core3.Common.Services.Components.EF.Crud.Entities
         /// </summary>
         public SettingVariable<bool> DeleteValidationEnabled => _crudSettings.DeleteValidationEnabled;
 
+        /// <summary>
+        /// Get or Set se Number of items retrieved by a LoadAll, or other paginated method.
+        /// -1 For disabling pagination
+        /// </summary>
+        public SettingVariable<int> ItemsPaginationSize => _crudSettings.ItemsPaginationSize;
+
 
         /// <summary>
         /// Init new instance of Service for CRUD Entity

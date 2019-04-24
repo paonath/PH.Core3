@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
@@ -94,9 +95,74 @@ namespace PH.Core3.Common.Services.Components.EF.Crud
         public  virtual async Task<IResult<TDto[]>> LoadAllAsync()
         {
             var all = await Set.ToArrayAsync();
+            
             var res = all.Select(ToDto).ToArray();
             return ResultFactory.Ok(Identifier, res);
         }
+
+        /// <summary>
+        /// Load Items as Paged Result using default pagination setting
+        /// </summary>
+        /// <param name="pageNumber">page number</param>
+        /// <returns><see cref="PagedResult{TContent}"/> instance</returns>
+        public async Task<IPagedResult<TDto>> LoadAsync(int pageNumber = 0)
+        {
+            if (ItemsPaginationSize.Value == -1)
+                return await LoadAsync(-1, -1);
+
+            var itemsToSkip = pageNumber * ItemsPaginationSize.Value;
+            return await LoadAsync(itemsToSkip, ItemsPaginationSize.Value);
+        }
+
+        /// <summary>
+        /// Load Items as Paged Result
+        /// </summary>
+        /// <param name="skipItems">number of items to skip</param>
+        /// <param name="itemsToLoad">number of items to load</param>
+        /// <returns><see cref="PagedResult{TContent}"/> instance</returns>
+        public async Task<IPagedResult<TDto>> LoadAsync(int skipItems, int itemsToLoad)
+        {
+            var c = await Set.LongCountAsync();
+            if (c == 0)
+                return ResultFactory.PagedEmpty<TDto>(Identifier);
+
+
+
+            TEntity[] all = null;
+            int pageNumber = 0;
+
+            if (skipItems == -1 && itemsToLoad == -1)
+            {
+                all = await Set.ToArrayAsync();
+                pageNumber = -1;
+            }
+            else
+            {
+                if (skipItems == 0)
+                    pageNumber = 0;
+                else
+                    pageNumber = (int) (c / skipItems);
+
+            }
+
+            var res = all?.Select(ToDto).ToArray();
+            return ResultFactory.PagedOk(Identifier, res, c, pageNumber, itemsToLoad);
+        }
+
+        protected async Task<IPagedResult<TDto>> QueryPagedAsync(Expression<Func<TEntity, bool>> query,
+                                                                 int pageNumber = 0)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected async Task<IPagedResult<TDto>> QueryPagedAsync(Expression<Func<TEntity, bool>> query,int skipItems, int itemsToLoad)
+        {
+            throw new NotImplementedException();
+            //ResultFactory.ChainAsync(Identifier, a )
+        }
+
+
+
 
         /// <summary>
         /// Async Add new <see cref="TNewDto">item</see>

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Text;
@@ -41,10 +40,10 @@ namespace PH.Core3.Common.Result
         /// </summary>
         /// <param name="identifier">Identifier</param>
         /// <param name="errors">errors </param>
-        internal Result([NotNull] IIdentifier identifier, [NotNull] IEnumerable<IError> errors)
+        internal Result([NotNull] IIdentifier identifier, IEnumerable<IError> errors)
         {
             Identifier = identifier;
-            Errors = errors.ToList();
+            Errors = errors?.ToList() ?? new List<IError>();
         }
 
 
@@ -64,4 +63,27 @@ namespace PH.Core3.Common.Result
         /// </summary>
         public TContent Content { get; protected set; }
     }
+
+    /*
+    internal class PagedResult<TContent[]> : Result<TContent[]>
+    {
+        /// <summary>
+        /// Init new instance of result with no error
+        /// </summary>
+        /// <param name="identifier">Identifier</param>
+        /// <param name="content">Content</param>
+        internal PagedResult([NotNull] IIdentifier identifier, [NotNull] TContent[] content) : base(identifier, content)
+        {
+        }
+
+        /// <summary>
+        /// Init new instance of result with errors
+        /// </summary>
+        /// <param name="identifier">Identifier</param>
+        /// <param name="errors">errors </param>
+        internal PagedResult([NotNull] IIdentifier identifier, [NotNull] IEnumerable<IError> errors) : base(identifier, errors)
+        {
+        }
+    }*/
+
 }

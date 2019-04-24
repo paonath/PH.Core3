@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.ApiExplorer;
+﻿using System;
+using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Swashbuckle.AspNetCore.Swagger;
@@ -17,7 +18,16 @@ namespace PH.Core3.Test.WebApp
         {
             foreach ( var description in provider.ApiVersionDescriptions )
             {
-                options.SwaggerDoc(description.GroupName, CreateInfoForApiVersion(description));
+                try
+                {
+                    options.SwaggerDoc(description.GroupName, CreateInfoForApiVersion(description));
+                }
+                catch (Exception e)
+                {
+                    //Console.WriteLine(e);
+                   // throw;
+                }
+               
             }
         }
 
