@@ -12,7 +12,7 @@ namespace PH.Core3.Common.Result
     /// </summary>
     public static class ResultFactory
     {
-       
+
 
 
 
@@ -64,43 +64,45 @@ namespace PH.Core3.Common.Result
         //}
 
 
-        ///  <summary>
-        ///  Begin a chain of async functions that accept an incoming <see cref="IResult{TContent}"/>  as argument
-        ///  
-        /// <para>Use <see cref="LazyEvaluatorAsync{T}.ResolveAsync"/> to resolve chain of functions</para>
-        /// 
-        ///  <example>
+        /// <summary>
+        /// Begin a chain of async functions that accept an incoming <see cref="IResult{TContent}"/>  as argument
+        /// <para>Use <see cref="LazyEvaluatorAsync{T}.ResolveAsync"/> to resolve chain of functions</para><div class="LW_CollapsibleArea_Container"><div class="LW_CollapsibleArea_TitleDiv"><h2 class="LW_CollapsibleArea_Title">Examples<a class="IconAddEncoded" href="add:code"></a><a class="IconDeleteEncoded" href="remove:example"></a></h2><div class="LW_CollapsibleArea_HrDiv"><hr class="LW_CollapsibleArea_Hr"></div></div><a id="exampleSection"><!----></a><div class="summary contenteditable" id="div_example" contentEditable="true">
         ///  Example:
-        /// <code>
-        /// var id = new Identifier(...);
-        ///  var chain = await ResultFactory.ChainAsync(id, async () => await SomeMethodTestAsync(ResultFactory.Ok&lt;int&lt;(new Identifier("wer"), 1)))
-        ///              .Next(async (evaluator,result) => await SomeOtherMethodTestAsync(result))
-        ///              .Next(async (evaluator,result) => await SomeOtherMethod2TestAsync(result))
-        ///              .Next(async (evaluator,result) => await MethodTestAsync(result))
+        /// </div><div class="code"><span id="cbc_1" codeLanguage="CSharp" x-lang="CSharp"><div class="highlight-title"><span tabIndex="0" class="highlight-copycode"></span>C# <a title="Edit <c> tag" class="IconEditEncoded" href="edit:code:div_example_e11f4a8fe4594c9aa61c02ca78f7c5ac"></a><a title="Delete <c> tag" class="IconDeleteEncoded" href="remove:code:div_example_e11f4a8fe4594c9aa61c02ca78f7c5ac"></a></div><div id="div_example_e11f4a8fe4594c9aa61c02ca78f7c5ac" name="div_example"><pre xml:space="preserve"><span class="highlight-keyword">var</span> id = <span class="highlight-keyword">new</span> Identifier(...);
+        /// <span class="highlight-keyword">var</span> chain = <span class="highlight-keyword">await</span> ResultFactory.ChainAsync(id, <span class="highlight-keyword">async</span> () =&gt; <span class="highlight-keyword">await</span> SomeMethodTestAsync(ResultFactory.Ok&lt;<span class="highlight-keyword">int</span>&lt;(<span class="highlight-keyword">new</span> Identifier("wer"), <span class="highlight-number">1</span>)))
+        ///             .Next(<span class="highlight-keyword">async</span> (evaluator,result) =&gt; <span class="highlight-keyword">await</span> SomeOtherMethodTestAsync(result))
+        ///             .Next(<span class="highlight-keyword">async</span> (evaluator,result) =&gt; <span class="highlight-keyword">await</span> SomeOtherMethod2TestAsync(result))
+        ///             .Next(<span class="highlight-keyword">async</span> (evaluator,result) =&gt; <span class="highlight-keyword">await</span> MethodTestAsync(result))
+        ///             .ResolveAsync();
+        /// <span class="highlight-keyword">if</span>(chain.OnError)
+        /// {
+        /// }</pre></div></span></div></div><para>
+        ///  see <see cref="IResult{TContent}"/>
+        ///  </para><para>
+        ///  see <see cref="LazyEvaluatorAsync{T}"/>
+        ///  </para><para>
+        ///  see <see cref="LazyEvaluatedError"/>
+        ///  </para>
+        /// </summary>
+        /// <typeparam name="TContent">Type of content result</typeparam>
+        /// <param name="identifier"></param>
+        /// <param name="asyncFnc">async function to lazy evaluate</param>
+        /// <param name="onErrorFunc"></param>
+        /// <returns>Result</returns>
+        /// <example>
+        /// Example:
+        /// <code>var id = new Identifier(...);
+        ///  var chain = await ResultFactory.ChainAsync(id, async () =&gt; await SomeMethodTestAsync(ResultFactory.Ok&lt;int&lt;(new Identifier("wer"), 1)))
+        ///              .Next(async (evaluator,result) =&gt; await SomeOtherMethodTestAsync(result))
+        ///              .Next(async (evaluator,result) =&gt; await SomeOtherMethod2TestAsync(result))
+        ///              .Next(async (evaluator,result) =&gt; await MethodTestAsync(result))
         ///              .ResolveAsync();
-        /// 
+        ///
         ///  if(chain.OnError)
         ///  {
         ///      //...
-        ///  }
-        ///  
-        ///  </code>
-        ///  </example>
-        ///  <para>
-        ///  see <see cref="IResult{TContent}"/>
-        ///  </para>
-        ///  <para>
-        ///  see <see cref="LazyEvaluatorAsync{T}"/>
-        ///  </para>
-        ///  <para>
-        ///  see <see cref="LazyEvaluatedError"/>
-        ///  </para>
-        ///  </summary>
-        ///  <typeparam name="TContent">Type of content result</typeparam>
-        ///  <param name="identifier"></param>
-        ///  <param name="asyncFnc">async function to lazy evaluate</param>
-        ///  <param name="onErrorFunc"></param>
-        ///  <returns>Result</returns>
+        ///  }</code>
+        /// </example>
         [NotNull]
         public static LazyEvaluatorAsync<TContent> ChainAsync<TContent>([NotNull] IIdentifier identifier ,Func<Task<IResult<TContent>>> asyncFnc 
                                                                         ,[CanBeNull] Func<IResult<TContent>, Task<IResult<TContent>>> onErrorFunc = null)
