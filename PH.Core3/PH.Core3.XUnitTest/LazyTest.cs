@@ -139,29 +139,29 @@ namespace PH.Core3.XUnitTest
 
             #endregion
 
-        [Fact]
-        [TestBeforeAfter]
-        public void TExample()
-        {
-            var id = new Identifier("some id");
+        //[Fact]
+        //[TestBeforeAfter]
+        //public void TExample()
+        //{
+        //    var id = new Identifier("some id");
 
-            var lastResult = ResultFactory.Chain(id, () => ResultFactory.Ok(id, 7))
-                                          .Next(r => ResultFactory.Ok(r.Identifier,
-                                                                      DateTime.UtcNow.AddDays(r.Content)))
-                                          .Next(r => ResultFactory.Ok(r.Identifier,
-                                                                      $"Added 7 days to '{DateTime.Now:D}': '{r.Content:D}' "))
-                                          .Resolve();
-            if (lastResult.OnError)
-            {
-                //...
-            }
-            else
-            {
-                //...
-            }
+        //    var lastResult = ResultFactory.Chain(id, () => ResultFactory.Ok(id, 7))
+        //                                  .Next(r => ResultFactory.Ok(r.Identifier,
+        //                                                              DateTime.UtcNow.AddDays(r.Content)))
+        //                                  .Next(r => ResultFactory.Ok(r.Identifier,
+        //                                                              $"Added 7 days to '{DateTime.Now:D}': '{r.Content:D}' "))
+        //                                  .Resolve();
+        //    if (lastResult.OnError)
+        //    {
+        //        //...
+        //    }
+        //    else
+        //    {
+        //        //...
+        //    }
 
-            Assert.True(lastResult.OnError == false);
-        }
+        //    Assert.True(lastResult.OnError == false);
+        //}
 
 
         [Fact]
@@ -506,156 +506,156 @@ namespace PH.Core3.XUnitTest
             Assert.True(chain.OnError == false);
         }
 
-        [Fact]
-        [TestBeforeAfter]
-        public void Test2()
-        {
-            var id = new Identifier("wer");
-            var initData = ResultFactory.Ok<int>(id
-                                                 , 1);
+        //[Fact]
+        //[TestBeforeAfter]
+        //public void Test2()
+        //{
+        //    var id = new Identifier("wer");
+        //    var initData = ResultFactory.Ok<int>(id
+        //                                         , 1);
 
-            var chain = ResultFactory
-                        .Chain(id, () => MethodTest(initData), onError =>
-                        {
-                            _testOutputHelper
-                                .WriteLine($"On Error {onError.Errors.FirstOrDefault()};");
-                            return onError;
-                        })
-                        .Next(result => MethodTest(result), onError =>
-                        {
-                            _testOutputHelper
-                                .WriteLine($"On Error {onError.Errors.FirstOrDefault()};");
-                            return onError;
-                        })
-                        .Next(result => MethodTest(result), onError =>
-                        {
-                            _testOutputHelper
-                                .WriteLine($"On Error {onError.Errors.FirstOrDefault()};");
-                            return onError;
-                        })
-                        .Next(result => MethodTest(result), onError =>
-                        {
-                            _testOutputHelper
-                                .WriteLine($"On Error {onError.Errors.FirstOrDefault()};");
-                            return onError;
-                        })
-                        .Next(result => MethodTest(result), onError =>
-                        {
-                            _testOutputHelper
-                                .WriteLine($"On Error {onError.Errors.FirstOrDefault()};");
-                            return onError;
-                        })
-                        .Next(result => MethodTest(result), onError =>
-                        {
-                            _testOutputHelper
-                                .WriteLine($"On Error {onError.Errors.FirstOrDefault()};");
-                            return onError;
-                        })
-                        .Next(MethodTest, onError =>
-                        {
-                            _testOutputHelper
-                                .WriteLine($"On Error {onError.Errors.FirstOrDefault()};");
-                            return onError;
-                        })
-                        .Next(MethodTest, onError =>
-                        {
-                            _testOutputHelper
-                                .WriteLine($"On Error {onError.Errors.FirstOrDefault()}");
-                            return onError;
-                        })
-                        .Resolve();
-
-
-            Assert.True(chain.OnError);
-        }
+        //    var chain = ResultFactory
+        //                .Chain(id, () => MethodTest(initData), onError =>
+        //                {
+        //                    _testOutputHelper
+        //                        .WriteLine($"On Error {onError.Errors.FirstOrDefault()};");
+        //                    return onError;
+        //                })
+        //                .Next(result => MethodTest(result), onError =>
+        //                {
+        //                    _testOutputHelper
+        //                        .WriteLine($"On Error {onError.Errors.FirstOrDefault()};");
+        //                    return onError;
+        //                })
+        //                .Next(result => MethodTest(result), onError =>
+        //                {
+        //                    _testOutputHelper
+        //                        .WriteLine($"On Error {onError.Errors.FirstOrDefault()};");
+        //                    return onError;
+        //                })
+        //                .Next(result => MethodTest(result), onError =>
+        //                {
+        //                    _testOutputHelper
+        //                        .WriteLine($"On Error {onError.Errors.FirstOrDefault()};");
+        //                    return onError;
+        //                })
+        //                .Next(result => MethodTest(result), onError =>
+        //                {
+        //                    _testOutputHelper
+        //                        .WriteLine($"On Error {onError.Errors.FirstOrDefault()};");
+        //                    return onError;
+        //                })
+        //                .Next(result => MethodTest(result), onError =>
+        //                {
+        //                    _testOutputHelper
+        //                        .WriteLine($"On Error {onError.Errors.FirstOrDefault()};");
+        //                    return onError;
+        //                })
+        //                .Next(MethodTest, onError =>
+        //                {
+        //                    _testOutputHelper
+        //                        .WriteLine($"On Error {onError.Errors.FirstOrDefault()};");
+        //                    return onError;
+        //                })
+        //                .Next(MethodTest, onError =>
+        //                {
+        //                    _testOutputHelper
+        //                        .WriteLine($"On Error {onError.Errors.FirstOrDefault()}");
+        //                    return onError;
+        //                })
+        //                .Resolve();
 
 
-        [Fact]
-        [TestBeforeAfter]
-        public void Test1()
-        {
-            var id = new Identifier("c");
-            var c = ResultFactory.Chain(id, () => ResultFactory.Ok(id, 3))
-                                 .Next(result => ResultFactory.Ok(result.Identifier,
-                                                                  DateTime.Now.AddDays(result.Content)))
-                                 .Next(result => ResultFactory.Ok(result.Identifier, $"Step 3 => {result.Content}"))
-                                 .Next(result => MethodTest(ResultFactory.Ok(result.Identifier, 78)), onError =>
-                                 {
-                                     _testOutputHelper
-                                         .WriteLine($"On Error {onError.Errors.FirstOrDefault()};");
-                                     return onError;
-                                 }).Next(MethodTest, onError =>
-                                 {
-                                     _testOutputHelper
-                                         .WriteLine($"On Error {onError.Errors.FirstOrDefault()};");
-                                     return onError;
-                                 }).Next(MethodTest, onError =>
-                                 {
-                                     _testOutputHelper
-                                         .WriteLine($"On Error {onError.Errors.FirstOrDefault()};");
-                                     return onError;
-                                 }).Next(MethodTest, onError =>
-                                 {
-                                     _testOutputHelper
-                                         .WriteLine($"On Error {onError.Errors.FirstOrDefault()};");
-                                     return onError;
-                                 }).Next(MethodTest, onError =>
-                                 {
-                                     _testOutputHelper
-                                         .WriteLine($"On Error {onError.Errors.FirstOrDefault()};");
-                                     return onError;
-                                 }).Next(MethodTest, onError =>
-                                 {
-                                     _testOutputHelper
-                                         .WriteLine($"On Error {onError.Errors.FirstOrDefault()};");
-                                     return onError;
-                                 }).Next(MethodTest, onError =>
-                                 {
-                                     _testOutputHelper
-                                         .WriteLine($"On Error {onError.Errors.FirstOrDefault()};");
-                                     return onError;
-                                 }).Next(MethodTest, onError =>
-                                 {
-                                     _testOutputHelper
-                                         .WriteLine($"On Error {onError.Errors.FirstOrDefault()};");
-                                     return onError;
-                                 }).Next(MethodTest, onError =>
-                                 {
-                                     _testOutputHelper
-                                         .WriteLine($"On Error {onError.Errors.FirstOrDefault()};");
-                                     return onError;
-                                 }).Next(MethodTest, onError =>
-                                 {
-                                     _testOutputHelper
-                                         .WriteLine($"On Error {onError.Errors.FirstOrDefault()};");
-                                     return onError;
-                                 }).Next(MethodTest, onError =>
-                                 {
-                                     _testOutputHelper
-                                         .WriteLine($"On Error {onError.Errors.FirstOrDefault()};");
-                                     return onError;
-                                 }).Next(MethodTest, onError =>
-                                 {
-                                     _testOutputHelper
-                                         .WriteLine($"On Error {onError.Errors.FirstOrDefault()};");
-                                     return onError;
-                                 }).Next(MethodTest, onError =>
-                                 {
-                                     _testOutputHelper
-                                         .WriteLine($"On Error {onError.Errors.FirstOrDefault()};");
-                                     return onError;
-                                 }).Next(MethodTest, onError =>
-                                 {
-                                     _testOutputHelper
-                                         .WriteLine($"On Error {onError.Errors.FirstOrDefault()};");
-                                     return onError;
-                                 });
+        //    Assert.True(chain.OnError);
+        //}
 
-            var x = c.Resolve();
+
+        //[Fact]
+        //[TestBeforeAfter]
+        //public void Test1()
+        //{
+        //    var id = new Identifier("c");
+        //    var c = ResultFactory.Chain(id, () => ResultFactory.Ok(id, 3))
+        //                         .Next(result => ResultFactory.Ok(result.Identifier,
+        //                                                          DateTime.Now.AddDays(result.Content)))
+        //                         .Next(result => ResultFactory.Ok(result.Identifier, $"Step 3 => {result.Content}"))
+        //                         .Next(result => MethodTest(ResultFactory.Ok(result.Identifier, 78)), onError =>
+        //                         {
+        //                             _testOutputHelper
+        //                                 .WriteLine($"On Error {onError.Errors.FirstOrDefault()};");
+        //                             return onError;
+        //                         }).Next(MethodTest, onError =>
+        //                         {
+        //                             _testOutputHelper
+        //                                 .WriteLine($"On Error {onError.Errors.FirstOrDefault()};");
+        //                             return onError;
+        //                         }).Next(MethodTest, onError =>
+        //                         {
+        //                             _testOutputHelper
+        //                                 .WriteLine($"On Error {onError.Errors.FirstOrDefault()};");
+        //                             return onError;
+        //                         }).Next(MethodTest, onError =>
+        //                         {
+        //                             _testOutputHelper
+        //                                 .WriteLine($"On Error {onError.Errors.FirstOrDefault()};");
+        //                             return onError;
+        //                         }).Next(MethodTest, onError =>
+        //                         {
+        //                             _testOutputHelper
+        //                                 .WriteLine($"On Error {onError.Errors.FirstOrDefault()};");
+        //                             return onError;
+        //                         }).Next(MethodTest, onError =>
+        //                         {
+        //                             _testOutputHelper
+        //                                 .WriteLine($"On Error {onError.Errors.FirstOrDefault()};");
+        //                             return onError;
+        //                         }).Next(MethodTest, onError =>
+        //                         {
+        //                             _testOutputHelper
+        //                                 .WriteLine($"On Error {onError.Errors.FirstOrDefault()};");
+        //                             return onError;
+        //                         }).Next(MethodTest, onError =>
+        //                         {
+        //                             _testOutputHelper
+        //                                 .WriteLine($"On Error {onError.Errors.FirstOrDefault()};");
+        //                             return onError;
+        //                         }).Next(MethodTest, onError =>
+        //                         {
+        //                             _testOutputHelper
+        //                                 .WriteLine($"On Error {onError.Errors.FirstOrDefault()};");
+        //                             return onError;
+        //                         }).Next(MethodTest, onError =>
+        //                         {
+        //                             _testOutputHelper
+        //                                 .WriteLine($"On Error {onError.Errors.FirstOrDefault()};");
+        //                             return onError;
+        //                         }).Next(MethodTest, onError =>
+        //                         {
+        //                             _testOutputHelper
+        //                                 .WriteLine($"On Error {onError.Errors.FirstOrDefault()};");
+        //                             return onError;
+        //                         }).Next(MethodTest, onError =>
+        //                         {
+        //                             _testOutputHelper
+        //                                 .WriteLine($"On Error {onError.Errors.FirstOrDefault()};");
+        //                             return onError;
+        //                         }).Next(MethodTest, onError =>
+        //                         {
+        //                             _testOutputHelper
+        //                                 .WriteLine($"On Error {onError.Errors.FirstOrDefault()};");
+        //                             return onError;
+        //                         }).Next(MethodTest, onError =>
+        //                         {
+        //                             _testOutputHelper
+        //                                 .WriteLine($"On Error {onError.Errors.FirstOrDefault()};");
+        //                             return onError;
+        //                         });
+
+        //    var x = c.Resolve();
             
-            _testOutputHelper.WriteLine(x.ToString());
+        //    _testOutputHelper.WriteLine(x.ToString());
             
-        }
+        //}
         
 
         [Fact]
@@ -764,15 +764,15 @@ namespace PH.Core3.XUnitTest
 
         [Fact]
         [TestBeforeAfter]
-        public void Test()
+        public async void Test()
         {
             var id = new Identifier("c");
-            var c = ResultFactory.Chain(id,() => ResultFactory.Ok(id,"step 1"))
-                .Next(result => ResultFactory.Ok(result.Identifier, $"Step 2 => {result.Content}"))
-                .Next(result => ResultFactory.Ok(result.Identifier, $"Step 3 => {result.Content}"));
+            var c = ResultFactory.ChainAsync(id, () => Task.FromResult(ResultFactory.Ok(id,"step 1")))
+                .Next(  (v,result) => Task.FromResult(ResultFactory.Ok(result.Identifier, $"Step 2 => {result.Content}")))
+                .Next(  (v,result) => Task.FromResult(ResultFactory.Ok(result.Identifier, $"Step 3 => {result.Content}")));
 
 
-            var x = c.Resolve();
+            var x = await c.ResolveAsync();
             
             Console.WriteLine(x);
             

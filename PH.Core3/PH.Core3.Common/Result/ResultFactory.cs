@@ -16,65 +16,67 @@ namespace PH.Core3.Common.Result
 
 
 
-        /// <summary>
-        /// Begin a chain of functions that accept an incoming <see cref="IResult{TContent}"/>  as argument
-        ///
-        /// <para>Use <see cref="LazyEvaluator{T}.Resolve"/> to resolve chain of functions</para>
-        ///
-        ///<para>
-        ///<example>
-        /// Example:
-        /// <code>
-        ///var lastResult = ResultFactory.Chain(() => ResultFactory.Ok(new Identifier("some Id"), 7))
-        ///                             .Next(r => ResultFactory.Ok(r.Identifier,DateTime.UtcNow.AddDays(r.Content)))
-        ///                             .Next(r => ResultFactory.Ok(r.Identifier,$"Added 7 days to '{DateTime.Now:D}': '{r.Content:D}' "))
-        ///                             .Resolve();
-        /// if (lastResult.OnError)
-        /// {
-        ///     //...
-        /// }
-        /// else
-        /// {
-        ///     //...
-        /// }
-        /// </code>
-        /// </example>
-        /// </para>
-        /// 
-        /// <para>
-        /// see <see cref="IResult{TContent}"/>
-        /// </para>
-        /// <para>
-        /// see <see cref="LazyEvaluator{T}"/>
-        /// </para>
-        /// <para>
-        /// see <see cref="LazyEvaluatedError"/>
-        /// </para>
-        /// 
-        /// 
-        /// </summary>
-        /// <typeparam name="TContent">Type of content result</typeparam>
-        /// <param name="fnc">function to lazy evaluate</param>
-        /// <returns>Result</returns>
-        [NotNull]
-        public static LazyEvaluator<TContent> Chain<TContent>([NotNull] IIdentifier identifier ,[NotNull] Func<IResult<TContent>> fnc
-                                                              ,[CanBeNull] Func<IResult<TContent>,IResult<TContent>> onErrorFunc = null)
-        {
-            return new LazyEvaluator<TContent>(fnc, identifier,onErrorFunc);
-        }
+        ///// <summary>
+        ///// Begin a chain of functions that accept an incoming <see cref="IResult{TContent}"/>  as argument
+        /////
+        ///// <para>Use <see cref="LazyEvaluator{T}.Resolve"/> to resolve chain of functions</para>
+        /////
+        /////<para>
+        /////<example>
+        ///// Example:
+        ///// <code>
+        /////var lastResult = ResultFactory.Chain(() => ResultFactory.Ok(new Identifier("some Id"), 7))
+        /////                             .Next(r => ResultFactory.Ok(r.Identifier,DateTime.UtcNow.AddDays(r.Content)))
+        /////                             .Next(r => ResultFactory.Ok(r.Identifier,$"Added 7 days to '{DateTime.Now:D}': '{r.Content:D}' "))
+        /////                             .Resolve();
+        ///// if (lastResult.OnError)
+        ///// {
+        /////     //...
+        ///// }
+        ///// else
+        ///// {
+        /////     //...
+        ///// }
+        ///// </code>
+        ///// </example>
+        ///// </para>
+        ///// 
+        ///// <para>
+        ///// see <see cref="IResult{TContent}"/>
+        ///// </para>
+        ///// <para>
+        ///// see <see cref="LazyEvaluator{T}"/>
+        ///// </para>
+        ///// <para>
+        ///// see <see cref="LazyEvaluatedError"/>
+        ///// </para>
+        ///// 
+        ///// 
+        ///// </summary>
+        ///// <typeparam name="TContent">Type of content result</typeparam>
+        ///// <param name="fnc">function to lazy evaluate</param>
+        ///// <returns>Result</returns>
+        //[NotNull]
+        //public static LazyEvaluator<TContent> Chain<TContent>([NotNull] IIdentifier identifier ,[NotNull] Func<IResult<TContent>> fnc
+        //                                                      ,[CanBeNull] Func<IResult<TContent>,IResult<TContent>> onErrorFunc = null)
+        //{
+        //    return new LazyEvaluator<TContent>(fnc, identifier,onErrorFunc);
+        //}
+
 
         ///  <summary>
         ///  Begin a chain of async functions that accept an incoming <see cref="IResult{TContent}"/>  as argument
         ///  
-        /// <para>Use <see cref="LazyEvaluator{T}.Resolve"/> to resolve chain of functions</para>
+        /// <para>Use <see cref="LazyEvaluatorAsync{T}.ResolveAsync"/> to resolve chain of functions</para>
         /// 
         ///  <example>
         ///  Example:
         /// <code>
-        ///  var chain = await ResultFactory.Chain(async () => await SomeMethodTestAsync(ResultFactory.Ok&lt;int&lt;(new Identifier("wer"), 1)))
-        ///              .Next(async result => await SomeOtherMethodTestAsync(result))
-        ///              .Next(async result => await SomeOtherMethod2TestAsync(result))
-        ///              .Next(async result => await MethodTestAsync(result))
+        /// var id = new Identifier(...);
+        ///  var chain = await ResultFactory.ChainAsync(id, async () => await SomeMethodTestAsync(ResultFactory.Ok&lt;int&lt;(new Identifier("wer"), 1)))
+        ///              .Next(async (evaluator,result) => await SomeOtherMethodTestAsync(result))
+        ///              .Next(async (evaluator,result) => await SomeOtherMethod2TestAsync(result))
+        ///              .Next(async (evaluator,result) => await MethodTestAsync(result))
         ///              .ResolveAsync();
         /// 
         ///  if(chain.OnError)
