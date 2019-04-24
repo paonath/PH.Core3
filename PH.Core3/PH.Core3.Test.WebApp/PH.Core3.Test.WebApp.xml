@@ -118,6 +118,11 @@
             <param name="entity">Entity</param>
             <returns>dto</returns>
         </member>
+        <member name="P:PH.Core3.Test.WebApp.Services.AlberoService.ServiceIdentifier">
+            <summary>
+            Service Identifier (a int value representing the service and the service name)
+            </summary>
+        </member>
         <member name="M:PH.Core3.Test.WebApp.PerRouteApiVersionSelector.SelectVersion(Microsoft.AspNetCore.Http.HttpRequest,Microsoft.AspNetCore.Mvc.Versioning.ApiVersionModel)">
             <summary>
             Selects an API version given the specified HTTP request and API version information.

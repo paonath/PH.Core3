@@ -1,5 +1,6 @@
 ﻿using JetBrains.Annotations;
 using Microsoft.Extensions.Logging;
+using PH.Core3.Common.Identifiers.Services;
 using PH.Core3.Common.Settings;
 
 namespace PH.Core3.Common.Services.Components.EF
@@ -73,5 +74,10 @@ namespace PH.Core3.Common.Services.Components.EF
         /// -1 For disabling pagination
         /// </summary>
         public SettingVariable<int> ItemsPaginationSize { get; set; }
+
+        /// <summary>
+        /// Service Identifier (a int value representing the service and the service name)
+        /// </summary>
+        public override ServiceIdentifier ServiceIdentifier => ConstSettings.TransientCrudConsts.ServiceIdentifier;
     }
 }

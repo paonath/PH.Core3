@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Microsoft.Extensions.Logging;
 using PH.Core3.Common;
+using PH.Core3.Common.Identifiers.Services;
 using PH.Core3.Common.Models.ViewModels;
 using PH.Core3.Common.Services.Components.EF;
 using PH.Core3.Common.Services.Components.EF.Crud;
@@ -119,5 +120,10 @@ namespace PH.Core3.Test.WebApp.Services
         {
             return AlberoDTo.ToAlberoDTo(entity);
         }
+
+        /// <summary>
+        /// Service Identifier (a int value representing the service and the service name)
+        /// </summary>
+        public override ServiceIdentifier ServiceIdentifier => new ServiceIdentifier(73, nameof(AlberoService));
     }
 }

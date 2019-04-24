@@ -8,7 +8,7 @@ using PH.Core3.Common.Models.Entities;
 
 namespace PH.Core3.Common.Services.Components.EF.Crud.Entities
 {
-    public class ContextEntityReader<TContext, TEntity, TKey> : ContextServiceBase<TContext> 
+    public abstract class ContextEntityReader<TContext, TEntity, TKey> : ContextServiceBase<TContext> 
         where TContext : DbContext
         where TEntity : class, IEntity<TKey>
         where TKey : IEquatable<TKey>
