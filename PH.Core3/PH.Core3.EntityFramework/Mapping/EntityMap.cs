@@ -19,6 +19,50 @@ namespace PH.Core3.EntityFramework.Mapping
     }
 
     /// <summary>
+    /// 
+    /// </summary>
+    /// <typeparam name="TEnum"></typeparam>
+    /// <typeparam name="TEnumEntity"></typeparam>
+    public class EntityEnumMap<TEnum,TEnumEntity> : EntityMap, IEntityEnumMap<TEnumEntity>
+        where TEnumEntity : EntityEnum, IEntityEnum
+    {
+        /// <summary>Gets the type of the entity.</summary>
+        /// <returns></returns>
+        [NotNull]
+        public override Type GetEntityType()
+        {
+            return Activator.CreateInstance(typeof(TEnum)).GetType();
+        }
+
+        /// <summary>
+        ///     Configures the entity of type <typeparamref name="TEnumEntity" />.
+        /// </summary>
+        /// <param name="builder"> The builder to be used to configure the entity type. </param>
+        public void Configure([NotNull] EntityTypeBuilder<TEnumEntity> builder)
+        {
+            if (builder is null)
+            {
+                throw new ArgumentNullException(nameof(builder));
+            }
+
+            builder.Property(x => x.Timestamp)
+                   .HasColumnName("Timestamp")
+                   .IsConcurrencyToken()
+                   .IsRowVersion();
+
+            builder
+                .HasIndex(i => new
+                {
+                    i.Id,
+                    i.Value,
+                    i.Description
+                }).IsUnique(false);
+
+        }
+    }
+
+
+    /// <summary>
     /// Allows configuration for an entity type to be factored into a separate class
     /// </summary>
     /// <typeparam name="TEntity">The type of the entity.</typeparam>
@@ -57,12 +101,14 @@ namespace PH.Core3.EntityFramework.Mapping
         public virtual void Configure([NotNull] EntityTypeBuilder<TEntity> builder)
         {
             
-            if (builder is null) 
+            if (builder is null)
+            {
                 throw new ArgumentNullException(nameof(builder));
+            }
 
             builder.Property(x => x.Deleted)
                    .HasColumnName("Deleted")
-                   .IsRequired(true);
+                   .IsRequired();
             
             builder.Property(x => x.DeletedTransactionId)
                    .HasColumnName("DeletedTransactionId");
@@ -81,7 +127,7 @@ namespace PH.Core3.EntityFramework.Mapping
 
             builder.Property(x => x.Timestamp)
                    .HasColumnName("Timestamp")
-                   .IsConcurrencyToken(true)
+                   .IsConcurrencyToken()
                    .IsRowVersion();
 
             builder

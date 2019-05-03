@@ -15,6 +15,12 @@ namespace PH.Core3.EntityFramework.Mapping
 
     }
 
+    public interface IEntityEnumMap<TEnum> : IEntityTypeConfiguration<TEnum>, IEntityMap
+        where TEnum : EntityEnum, IEntityEnum
+    {
+
+    }
+
     /// <summary>
     /// Allows configuration for an entity type to be factored into a separate class,
     /// rather than in-line in Microsoft.EntityFrameworkCore.DbContext.OnModelCreating(Microsoft.EntityFrameworkCore.ModelBuilder).

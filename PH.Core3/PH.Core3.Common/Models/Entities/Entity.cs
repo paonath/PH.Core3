@@ -4,6 +4,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PH.Core3.Common.Models.Entities
 {
+
+
     /// <summary>
     /// Entity Base Class to Persist on Db
     ///

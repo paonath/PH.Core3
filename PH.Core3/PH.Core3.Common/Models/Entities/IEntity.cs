@@ -5,6 +5,23 @@ using PH.Core3.Common.CoreSystem;
 
 namespace PH.Core3.Common.Models.Entities
 {
+    public interface IEntityEnum : IIdentifiable<int>
+    {
+
+        string Value { get; set; }
+        string Description { get; set; }
+        
+
+        /// <summary>
+        /// Row Version and Concurrency Check Token
+        /// </summary>
+        [Timestamp]
+        byte[] Timestamp { get; set; }
+
+    }
+
+
+
     /// <summary>
     /// Entity Base Interface to Persist on Db
     ///
