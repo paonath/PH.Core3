@@ -4,12 +4,15 @@ using FluentValidation.Results;
 using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using PH.Core3.Common;
 using PH.Core3.Common.Models.Entities;
 using PH.Core3.Common.Result;
+using PH.Core3.Common.Services.Components.Crud;
+using PH.Core3.Common.Services.Components.Crud.Entities;
 using PH.Core3.Common.Services.Crud;
 using PH.Core3.Common.Settings;
 
-namespace PH.Core3.Common.Services.Components.EF.Crud.Entities
+namespace PH.Core3.EntityFramework.Services.Components.Crud.Entities
 {
 
     /// <summary>
@@ -56,12 +59,7 @@ namespace PH.Core3.Common.Services.Components.EF.Crud.Entities
         /// </summary>
         public SettingVariable<bool> DeleteValidationEnabled => _crudSettings.DeleteValidationEnabled;
 
-        /// <summary>
-        /// Get or Set se Number of items retrieved by a LoadAll, or other paginated method.
-        /// -1 For disabling pagination
-        /// </summary>
-        public SettingVariable<int> ItemsPaginationSize => _crudSettings.ItemsPaginationSize;
-
+        
 
         /// <summary>
         /// Init new instance of Service for CRUD Entity
@@ -77,7 +75,7 @@ namespace PH.Core3.Common.Services.Components.EF.Crud.Entities
                                          , [NotNull] TContext ctx
                                          ,[NotNull] TransientCrudSettings settings
                                          , [NotNull] string tenantId)
-            : base(coreIdentifier,  ctx, tenantId, logger)
+            : base(coreIdentifier,  ctx, settings, tenantId, logger)
         {
             _crudSettings = settings ?? throw new ArgumentNullException(nameof(settings));
             _logger       = logger;

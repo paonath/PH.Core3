@@ -1,8 +1,14 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using PH.Core3.Common;
 using PH.Core3.Common.CoreSystem;
 
-namespace PH.Core3.Common.Services.Components.EF
+namespace PH.Core3.EntityFramework.Services.Components.Crud
 {
+    /// <summary>
+    /// Flush Changes Scope
+    /// On Disposing scope perform a save changes on db.
+    /// </summary>
+    /// <seealso cref="PH.Core3.Common.CoreSystem.CoreDisposable" />
     public class FlushChangesScope : CoreDisposable
     {
         private readonly DbContext _dbContext;
@@ -14,6 +20,10 @@ namespace PH.Core3.Common.Services.Components.EF
             _dbContext = dbContext;
         }
 
+        /// <summary>Begins the scope.</summary>
+        /// <param name="identifier">The identifier.</param>
+        /// <param name="dbContext">The database context.</param>
+        /// <returns></returns>
         public static FlushChangesScope BeginScope(IIdentifier identifier, DbContext dbContext)
         {
             return new FlushChangesScope(identifier,dbContext);

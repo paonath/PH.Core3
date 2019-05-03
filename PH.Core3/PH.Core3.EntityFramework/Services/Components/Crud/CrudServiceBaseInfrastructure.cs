@@ -4,13 +4,15 @@ using FluentValidation.Results;
 using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using PH.Core3.Common;
 using PH.Core3.Common.CoreSystem;
 using PH.Core3.Common.Models.Entities;
 using PH.Core3.Common.Models.ViewModels;
 using PH.Core3.Common.Result;
-using PH.Core3.Common.Services.Components.EF.Crud.Entities;
+using PH.Core3.Common.Services.Components.Crud;
+using PH.Core3.EntityFramework.Services.Components.Crud.Entities;
 
-namespace PH.Core3.Common.Services.Components.EF.Crud
+namespace PH.Core3.EntityFramework.Services.Components.Crud
 {
     /// <summary>
     /// CRUD Service Infrastructure
@@ -56,17 +58,19 @@ namespace PH.Core3.Common.Services.Components.EF.Crud
             DtoTypeName = dt?.GetType()?.Name;
         }
 
-
+        /// <summary>Parses the dto asynchronous.</summary>
+        /// <param name="dto">The dto.</param>
+        /// <returns></returns>
         protected abstract Task<TEntity> ParseDtoAsync(TNewDto dto);
 
         /// <summary>
-        /// Parse <see cref="TNewDto">dto</see> and return new <see cref="TEntity">entity</see> for insert.
+        /// Parse dto and return new entity for insert.
         ///
         /// This method do not perform Update on Db: just made changes on entity and check if is valid for insert.
         /// </summary>
         /// <param name="dto">dto to add</param>
         /// <returns>Entity for insert</returns>
-        protected internal virtual async 
+        protected virtual async 
             Task<(TEntity EntityToInsert, ValidationResult InsertValidationResult)>
             ParseDtoAndValidateAsync(TNewDto dto)
         {
@@ -84,6 +88,10 @@ namespace PH.Core3.Common.Services.Components.EF.Crud
         /// <returns>Entity with changed properties</returns>
         protected abstract Task<TEntity> MergeWithDtoAsync(TEntity e, TEditDto d);
 
+        /// <summary>Merges the with interface dto asynchronous.</summary>
+        /// <param name="e">The entity.</param>
+        /// <param name="d">The dto.</param>
+        /// <returns>entity with properties merged from dto</returns>
         protected internal async Task<TEntity> MergeWithInterfaceDtoAsync(TEntity e, TEditDto d)
         {
             return await MergeWithDtoAsync(e, d);
@@ -91,13 +99,13 @@ namespace PH.Core3.Common.Services.Components.EF.Crud
 
 
         /// <summary>
-        /// Merge changes between <see cref="TEditDto">dto</see> and <see cref="TEntity">entity</see> for update.
+        /// Merge changes between dto and entity for update.
         /// This method do not perform Update on Db: just made changes on entity and check if is valid for updating.
         /// </summary>
         /// <param name="e">entity to update</param>
         /// <param name="d">dto</param>
         /// <returns>entity ready for update</returns>
-        protected internal virtual async 
+        protected virtual async 
             Task<(TEntity EntityToUpdate, ValidationResult UpdateValidationResult)>
             MergeWithDtoAndValidateAsync(TEntity e, TEditDto d)
         {
@@ -114,7 +122,7 @@ namespace PH.Core3.Common.Services.Components.EF.Crud
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        protected internal virtual async
+        protected virtual async
             Task<(TEntity EntityToDelete, ValidationResult DeleteValidationResult)>
             GetEntityForDeleteAsync([NotNull] TKey id)
         {
@@ -125,14 +133,22 @@ namespace PH.Core3.Common.Services.Components.EF.Crud
         }
 
         /// <summary>
-        /// Transform a <see cref="TEntity">entity</see> to a <see cref="TDto">dto</see> to return to consuming services.
+        /// Transform a entity to a dto to return to consuming services.
         /// </summary>
         /// <param name="entity">Entity</param>
         /// <returns>dto</returns>
-        protected internal abstract TDto ToDto(TEntity entity);
+        protected abstract TDto ToDto(TEntity entity);
+
+        /// <summary>Converts to dto async.</summary>
+        /// <param name="entity">The entity.</param>
+        /// <returns>dto</returns>
+        protected virtual Task<TDto> ToDtoAsync(TEntity entity)
+        {
+            return Task.FromResult(ToDto(entity));
+        }
 
         /// <summary>
-        /// Wrap a <see cref="TEntity">entity</see> to a <see cref=" Result{TDto}">dto</see> to return to consuming services.
+        /// Wrap a entity to a dto to return to consuming services.
         /// </summary>
         /// <param name="entity">entity</param>
         /// <returns>Result </returns>

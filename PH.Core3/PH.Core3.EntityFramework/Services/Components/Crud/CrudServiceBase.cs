@@ -5,24 +5,30 @@ using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using PH.Core3.Common;
 using PH.Core3.Common.CoreSystem;
 using PH.Core3.Common.Extensions;
 using PH.Core3.Common.Models.Entities;
 using PH.Core3.Common.Models.ViewModels;
 using PH.Core3.Common.Result;
+using PH.Core3.Common.Services.Components.Crud;
 using PH.Core3.Common.Services.Crud;
 
-namespace PH.Core3.Common.Services.Components.EF.Crud
+namespace PH.Core3.EntityFramework.Services.Components.Crud
 {
+  
+
     /// <summary>
     /// CRUD Service
     /// </summary>
-    /// <typeparam name="TContext">Type of DbContext</typeparam>
-    /// <typeparam name="TEntity">Type Of Entity</typeparam>
-    /// <typeparam name="TDto">Type of Result Dto</typeparam>
-    /// <typeparam name="TNewDto">Type of Insert Dto</typeparam>
-    /// <typeparam name="TEditDto">Type of Edit Dto</typeparam>
-    /// <typeparam name="TKey">Type of Id Property of bot Entity and Dto</typeparam>
+    /// <typeparam name="TContext">The type of the context.</typeparam>
+    /// <typeparam name="TEntity">The type of the entity.</typeparam>
+    /// <typeparam name="TDto">The type of the dto.</typeparam>
+    /// <typeparam name="TNewDto">The type of the new dto.</typeparam>
+    /// <typeparam name="TEditDto">The type of the edit dto.</typeparam>
+    /// <typeparam name="TKey">The type of the key.</typeparam>
+    /// <seealso cref="PH.Core3.EntityFramework.Services.Components.Crud.CrudServiceBaseInfrastructure{TContext, TEntity, TDto, TNewDto, TEditDto, TKey}" />
+    /// <seealso cref="PH.Core3.Common.Services.Crud.ICrudService{TDto, TNewDto, TEditDto, TKey}" />
     public abstract class CrudServiceBase<TContext, TEntity, TDto, TNewDto, TEditDto, TKey>
         : CrudServiceBaseInfrastructure<TContext, TEntity, TDto, TNewDto, TEditDto, TKey>
           , ICrudService<TDto, TNewDto, TEditDto, TKey>
@@ -60,7 +66,7 @@ namespace PH.Core3.Common.Services.Components.EF.Crud
 
 
         /// <summary>
-        /// Wrap a <see cref="TEntity">entity</see> to a <see cref=" Result{TDto}">dto</see> to return to consuming services.
+        /// Wrap a entity to a <see cref=" Result{TDto}">dto</see> to return to consuming services.
         /// </summary>
         /// <param name="entity">entity</param>
         /// <returns>Result </returns>
@@ -72,7 +78,7 @@ namespace PH.Core3.Common.Services.Components.EF.Crud
         }
 
         /// <summary>
-        /// Find <see cref="TDto"/> by Id
+        /// Find Dto by Id
         /// </summary>
         /// <param name="id">Id</param>
         /// <returns><see cref="Result{TDto}"/> instance</returns>
@@ -88,7 +94,7 @@ namespace PH.Core3.Common.Services.Components.EF.Crud
 
 
         /// <summary>
-        /// Load All <see cref="TDto"/> Items
+        /// Load All Dto Items
         /// </summary>
         /// <returns><see cref="Result{ToDto}"/> instance</returns>
         [ItemNotNull]
@@ -105,13 +111,22 @@ namespace PH.Core3.Common.Services.Components.EF.Crud
         /// </summary>
         /// <param name="pageNumber">page number</param>
         /// <returns><see cref="PagedResult{TContent}"/> instance</returns>
+        [ItemNotNull]
         public async Task<IPagedResult<TDto>> LoadAsync(int pageNumber = 0)
         {
-            if (ItemsPaginationSize.Value == -1)
-                return await LoadAsync(-1, -1);
 
-            var itemsToSkip = pageNumber * ItemsPaginationSize.Value;
-            return await LoadAsync(itemsToSkip, ItemsPaginationSize.Value);
+
+            var b = await EntityPagedLoadAllAsync(pageNumber);
+            if (b.OnError)
+            {
+                return ResultFactory.PagedFail<TDto>(Identifier, b.Errors);
+            }
+            else
+            {
+                return ResultFactory.PagedOk(Identifier, b.Content.Select(x => ToDto(x)).ToArray(), b.Count,
+                                             b.PageNumber, b.PageSize);
+            }
+
         }
 
         /// <summary>
@@ -120,52 +135,40 @@ namespace PH.Core3.Common.Services.Components.EF.Crud
         /// <param name="skipItems">number of items to skip</param>
         /// <param name="itemsToLoad">number of items to load</param>
         /// <returns><see cref="PagedResult{TContent}"/> instance</returns>
+        [ItemNotNull]
         public async Task<IPagedResult<TDto>> LoadAsync(int skipItems, int itemsToLoad)
         {
-            var c = await Set.LongCountAsync();
-            if (c == 0)
-                return ResultFactory.PagedEmpty<TDto>(Identifier);
 
-
-
-            TEntity[] all = null;
-            int pageNumber = 0;
-
-            if (skipItems == -1 && itemsToLoad == -1)
+            var b = await EntityLoadAsync(skipItems, itemsToLoad);
+            if (b.OnError)
             {
-                all = await Set.ToArrayAsync();
-                pageNumber = -1;
+                return ResultFactory.PagedFail<TDto>(Identifier, b.Errors);
             }
             else
             {
-                if (skipItems == 0)
-                    pageNumber = 0;
-                else
-                    pageNumber = (int) (c / skipItems);
-
+                return ResultFactory.PagedOk(Identifier, b.Content.Select(x => ToDto(x)).ToArray(), b.Count,
+                                             b.PageNumber, b.PageSize);
             }
-
-            var res = all?.Select(ToDto).ToArray();
-            return ResultFactory.PagedOk(Identifier, res, c, pageNumber, itemsToLoad);
         }
 
-        protected async Task<IPagedResult<TDto>> QueryPagedAsync(Expression<Func<TEntity, bool>> query,
+        /*
+        protected Task<IPagedResult<TDto>> QueryPagedAsync(Expression<Func<TEntity, bool>> query,
                                                                  int pageNumber = 0)
         {
             throw new NotImplementedException();
         }
 
-        protected async Task<IPagedResult<TDto>> QueryPagedAsync(Expression<Func<TEntity, bool>> query,int skipItems, int itemsToLoad)
+        protected Task<IPagedResult<TDto>> QueryPagedAsync(Expression<Func<TEntity, bool>> query,int skipItems, int itemsToLoad)
         {
             throw new NotImplementedException();
             //ResultFactory.ChainAsync(Identifier, a )
         }
-
+        */
 
 
 
         /// <summary>
-        /// Async Add new <see cref="TNewDto">item</see>
+        /// Async Add new Dto item
         /// </summary>
         /// <param name="entity">Item to Add</param>
         /// <returns><see cref="Result{TDto}"/> containing added Item or error</returns>
@@ -187,10 +190,10 @@ namespace PH.Core3.Common.Services.Components.EF.Crud
 
 
         /// <summary>
-        /// Async remove a <see cref="TDto">dto</see>
+        /// Async remove a Dto
         /// </summary>
         /// <param name="entity">Content to delete</param>
-        /// <returns><see cref="Result"/> containing True or error</returns>
+        /// <returns><see cref="PH.Core3.Common.Result"/> containing True or error</returns>
         [ItemNotNull]
         public  virtual async Task<IResult> RemoveAsync([NotNull] TDto entity)
         {
@@ -207,7 +210,7 @@ namespace PH.Core3.Common.Services.Components.EF.Crud
 
 
         /// <summary>
-        /// Async update a <see cref="TEditDto">dto</see>
+        /// Async update a dto
         /// </summary>
         /// <param name="entity">Content to Update</param>
         /// <returns><see cref="Result{TDto}"/> result</returns>

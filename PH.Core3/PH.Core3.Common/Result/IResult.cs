@@ -9,8 +9,9 @@ namespace PH.Core3.Common.Result
     public interface IResult
     {
         /// <summary>
-        /// True if On Error
+        /// Gets a value indicating whether on error.
         /// </summary>
+        /// <value><c>true</c> if on error; otherwise, <c>false</c>.</value>
         bool OnError { get; }
 
         /// <summary>
@@ -18,6 +19,8 @@ namespace PH.Core3.Common.Result
         /// </summary>
         List<IError> Errors { get; }
 
+        /// <summary>Gets the identifier.</summary>
+        /// <value>The identifier.</value>
         IIdentifier Identifier { get; }
 
 
@@ -64,6 +67,12 @@ namespace PH.Core3.Common.Result
         /// </summary>
         /// <returns></returns>
         Lazy<long> PageCount{ get;  }
+
+
+        /// <summary>
+        /// Result Content
+        /// </summary>
+        new TContent[] Content { get; }
 
     }
 }

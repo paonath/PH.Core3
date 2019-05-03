@@ -55,12 +55,12 @@ namespace PH.Core3.Test.WebApp.HostedService
         /// Triggered when the application host is ready to start the service.
         /// </summary>
         /// <param name="cancellationToken">Indicates that the start process has been aborted.</param>
-        public async Task StartAsync(CancellationToken cancellationToken)
+        public Task StartAsync(CancellationToken cancellationToken)
         {
             _cancellationTokenSource = new CancellationTokenSource();
             //The StartAsync method just needs to start a background task (or a timer)
             _sendTask = Send(_cancellationTokenSource.Token);
-            
+            return _sendTask;
         }
 
         /// <summary>
@@ -83,7 +83,7 @@ namespace PH.Core3.Test.WebApp.HostedService
                     await Task.WhenAny(_sendTask, Task.Delay(Timeout.Infinite, cancellationToken));
 
             }
-            catch (Exception e)
+            catch 
             {
                 //
                 if(null != _smtpClient && _smtpClient.IsConnected)
@@ -183,7 +183,7 @@ namespace PH.Core3.Test.WebApp.HostedService
 
                         await _smtpClient.AuthenticateAsync("noreply@estrobit.com","EstrobitSPA2016!");
                     }
-                    catch (Exception e)
+                    catch 
                     {
 
                         throw;
@@ -217,7 +217,7 @@ namespace PH.Core3.Test.WebApp.HostedService
 
                 //_logger.Debug($"Sent Email with {EmailContants.XEmailId}: '{mailId?.Value}'");
             }
-            catch (Exception e)
+            catch 
             {
                 //_logger.Fatal(e, $"Unable to send email");
             }

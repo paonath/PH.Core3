@@ -4,6 +4,7 @@ using Autofac.Multitenant;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Http;
 using PH.Core3.Common;
+#pragma warning disable 1591
 
 namespace PH.Core3.Test.WebApp
 {
@@ -50,7 +51,7 @@ namespace PH.Core3.Test.WebApp
                     }
                 }
             }
-            catch (Exception e)
+            catch 
             {
                 return false;
             }

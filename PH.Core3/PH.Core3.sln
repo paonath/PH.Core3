@@ -32,10 +32,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PH.Core3.Test.CreateUser", 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BuildPackages", "BuildPackages", "{BA24B0B9-83C1-495D-954F-AC5877A9D297}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Entity Framework", "Entity Framework", "{F7C8DB15-E871-42FC-AC48-359ACB1BFB9B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PH.Core3.MongoDb", "PH.Core3.MongoDb\PH.Core3.MongoDb.csproj", "{ADF630E6-4546-4DC8-9731-D73D424051BE}"
+EndProject
 Global
-	GlobalSection(Performance) = preSolution
-		HasPerformanceSessions = true
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
@@ -81,17 +82,25 @@ Global
 		{6EB2D1CA-1464-4086-8C4F-97FCCBFF0ED3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6EB2D1CA-1464-4086-8C4F-97FCCBFF0ED3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6EB2D1CA-1464-4086-8C4F-97FCCBFF0ED3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ADF630E6-4546-4DC8-9731-D73D424051BE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ADF630E6-4546-4DC8-9731-D73D424051BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ADF630E6-4546-4DC8-9731-D73D424051BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ADF630E6-4546-4DC8-9731-D73D424051BE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{A97CBDFA-E505-4112-8D33-C1C35C243E28} = {047BB74E-4167-4AA1-A9B3-51EAF4DA4911}
-		{066D87AF-F849-479A-A6EB-E90E186B2AB8} = {047BB74E-4167-4AA1-A9B3-51EAF4DA4911}
-		{2CD19379-C9C9-47F9-99E8-E4F76601220C} = {047BB74E-4167-4AA1-A9B3-51EAF4DA4911}
-		{6EB2D1CA-1464-4086-8C4F-97FCCBFF0ED3} = {047BB74E-4167-4AA1-A9B3-51EAF4DA4911}
+		{066D87AF-F849-479A-A6EB-E90E186B2AB8} = {F7C8DB15-E871-42FC-AC48-359ACB1BFB9B}
+		{2CD19379-C9C9-47F9-99E8-E4F76601220C} = {F7C8DB15-E871-42FC-AC48-359ACB1BFB9B}
+		{6EB2D1CA-1464-4086-8C4F-97FCCBFF0ED3} = {F7C8DB15-E871-42FC-AC48-359ACB1BFB9B}
+		{F7C8DB15-E871-42FC-AC48-359ACB1BFB9B} = {047BB74E-4167-4AA1-A9B3-51EAF4DA4911}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {9753D9C4-D58F-4A20-B23B-C41C86E74DF3}
+	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
 	EndGlobalSection
 EndGlobal

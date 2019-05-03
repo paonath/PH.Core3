@@ -11,6 +11,14 @@ namespace PH.Core3.Common.Result
     /// </summary>
     public class Error : IError
     {
+
+        /// <summary>Initializes a new instance of the <see cref="Error"/> class.</summary>
+        /// <param name="errorMessage">The error message.</param>
+        public Error([NotNull] string errorMessage):this(errorMessage,null,null)
+        {
+            
+        }
+
         /// <summary>
         /// Init new instance of Error
         /// </summary>

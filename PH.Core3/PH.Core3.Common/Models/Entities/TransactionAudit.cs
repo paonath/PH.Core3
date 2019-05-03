@@ -37,7 +37,7 @@ namespace PH.Core3.Common.Models.Entities
 
 
         /// <summary>
-        /// Row Version & Concurrency Check Token
+        /// Row Version and Concurrency Check Token
         /// </summary>
         [Timestamp]
         public byte[] Timestamp { get; set; }
@@ -62,7 +62,7 @@ namespace PH.Core3.Common.Models.Entities
         public string Scopes { get; set; }
 
         /// <summary>
-        /// A Custom LogMessage related to this transaction (set by <see cref="PH.Core2.AbstractionBase.UnitOfWork.IUnitOfWork"/>)
+        /// A Custom LogMessage related to this transaction (set by IUnitOfWork)
         /// </summary>
         [StringLength(500)]
         public string CommitMessage { get; set; }

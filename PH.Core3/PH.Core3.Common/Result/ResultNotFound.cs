@@ -8,7 +8,7 @@ namespace PH.Core3.Common.Result
     /// Can be on error or a good result.
     /// </summary>
     /// <typeparam name="TContent"></typeparam>
-    internal class ResultNotFound<TContent> : Result<TContent> , IResult
+    internal class ResultNotFound<TContent> : Result<TContent> , IResult, IResult<TContent>
     {
         /// <summary>
         /// Init new instance with no error

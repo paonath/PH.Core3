@@ -13,7 +13,7 @@ namespace PH.Core3.Common.Models.Entities
     public interface IEntity 
     {
         /// <summary>
-        /// Row Version & Concurrency Check Token
+        /// Row Version and Concurrency Check Token
         /// </summary>
         [Timestamp]
         byte[] Timestamp { get; set; }

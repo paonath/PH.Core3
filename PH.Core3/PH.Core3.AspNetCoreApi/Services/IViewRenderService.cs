@@ -2,6 +2,9 @@
 
 namespace PH.Core3.AspNetCoreApi.Services
 {
+    /// <summary>
+    /// Service for render view with given model as a html formatted string
+    /// </summary>
     public interface IViewRenderService
     {
         /// <summary>

@@ -1,9 +1,47 @@
 ﻿using System;
+using System.Threading.Tasks;
+using JetBrains.Annotations;
 using PH.Core3.Common.CoreSystem;
 using PH.Core3.Common.Models.ViewModels;
+using PH.Core3.Common.Result;
 
 namespace PH.Core3.Common.Services.Crud
 {
+    
+    /// <summary>
+    /// Simple Remove Service
+    /// </summary>
+    /// <typeparam name="T">The Entity Type</typeparam>
+    /// <typeparam name="TKey">The type of the key.</typeparam>
+    public interface ISimpleRemoveService<T, in TKey> : ISimpleReadService<T, TKey>
+        where TKey : IEquatable<TKey>
+    {
+        /// <summary>
+        /// Async Remove existing Item
+        /// </summary>
+        /// <param name="id">value of the Id property</param>
+        /// <returns></returns>
+        Task<IResult> EntityRemoveByIdAsync([NotNull] TKey id);
+
+    }
+
+    /// <summary>
+    /// Simple Crud Service
+    /// </summary>
+    /// <typeparam name="T">The Entity Type</typeparam>
+    /// <typeparam name="TKey">The type of the key.</typeparam>
+    public interface ICrudSimpleService<T, in TKey> : ISimpleReadService<T,TKey>
+    ,  ISimpleAddService<T, TKey>, ISimpleUpdateService<T,TKey>, ISimpleRemoveService<T,TKey>
+        where TKey : IEquatable<TKey>
+    {
+        
+
+        
+
+
+
+    }
+
     /// <summary>
     /// Service for CRUD (Create/Read/Update/Delete) Operations.
     ///

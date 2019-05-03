@@ -14,6 +14,12 @@
             Controller V1
             </summary>
         </member>
+        <member name="T:PH.Core3.Test.WebApp.AutofacModules.MainwebModule">
+            <summary>
+            Main autofac module
+            </summary>
+            <seealso cref="T:Autofac.Module" />
+        </member>
         <member name="M:PH.Core3.Test.WebApp.AutofacModules.MainwebModule.Load(Autofac.ContainerBuilder)">
             <summary>Override to add registrations to the container.</summary>
             <remarks>
@@ -21,6 +27,12 @@
             </remarks>
             <param name="builder">The builder through which components can be
             registered.</param>
+        </member>
+        <member name="T:PH.Core3.Test.WebApp.AutofacModules.LoggingModule">
+            <summary>
+            
+            </summary>
+            <seealso cref="T:Autofac.Module" />
         </member>
         <member name="M:PH.Core3.Test.WebApp.HostedService.MailSenderService.#ctor(PH.Core3.AspNetCoreApi.Services.IViewRenderService)">
             <summary>
@@ -69,7 +81,7 @@
             
             </summary>
         </member>
-        <member name="M:PH.Core3.Test.WebApp.Services.AlberoService.#ctor(PH.Core3.Common.IIdentifier,Microsoft.Extensions.Logging.ILogger{PH.Core3.Common.Services.Components.EF.Crud.CrudServiceBase{PH.Core3.TestContext.MyContext,PH.Core3.TestContext.Albero,PH.Core3.Test.WebApp.Services.AlberoDTo,PH.Core3.Test.WebApp.Services.NewAlberoDTo,PH.Core3.Test.WebApp.Services.EditAlberoDTo,System.Guid}},PH.Core3.TestContext.MyContext,PH.Core3.Common.Services.Components.EF.TransientCrudSettings)">
+        <member name="M:PH.Core3.Test.WebApp.Services.AlberoService.#ctor(PH.Core3.Common.IIdentifier,Microsoft.Extensions.Logging.ILogger{PH.Core3.EntityFramework.Services.Components.Crud.CrudServiceBase{PH.Core3.TestContext.MyContext,PH.Core3.TestContext.Albero,PH.Core3.Test.WebApp.Services.AlberoDTo,PH.Core3.Test.WebApp.Services.NewAlberoDTo,PH.Core3.Test.WebApp.Services.EditAlberoDTo,System.Guid}},PH.Core3.TestContext.MyContext,PH.Core3.Common.Services.Components.Crud.TransientCrudSettings)">
             <summary>
             Init new CRUD Service for Insert/Update/Delete 
             </summary>
@@ -77,9 +89,8 @@
             <param name="logger">Logger</param>
             <param name="ctx">Entity Framework DbContext</param>
             <param name="settings">CRUD settings</param>
-            <param name="tenantId">Tenant Identifier</param>
         </member>
-        <member name="M:PH.Core3.Test.WebApp.Services.AlberoService.ValidatePreDelete(PH.Core3.TestContext.Albero,PH.Core3.Common.Services.Components.EF.Crud.Entities.EntityValidationContext)">
+        <member name="M:PH.Core3.Test.WebApp.Services.AlberoService.ValidatePreDelete(PH.Core3.TestContext.Albero,PH.Core3.Common.Services.Components.Crud.Entities.EntityValidationContext)">
             <summary>
             Async Validation for Delete Entity
             </summary>
@@ -87,7 +98,7 @@
             <param name="c">Custom Validation Context</param>
             <returns>Task</returns>
         </member>
-        <member name="M:PH.Core3.Test.WebApp.Services.AlberoService.ValidatePreUpdate(PH.Core3.TestContext.Albero,PH.Core3.Common.Services.Components.EF.Crud.Entities.EntityValidationContext)">
+        <member name="M:PH.Core3.Test.WebApp.Services.AlberoService.ValidatePreUpdate(PH.Core3.TestContext.Albero,PH.Core3.Common.Services.Components.Crud.Entities.EntityValidationContext)">
             <summary>
             Async Validation for Update Entity
             </summary>
@@ -95,7 +106,7 @@
             <param name="c">Custom Validation Context</param>
             <returns>Task</returns>
         </member>
-        <member name="M:PH.Core3.Test.WebApp.Services.AlberoService.ValidatePreInsert(PH.Core3.TestContext.Albero,PH.Core3.Common.Services.Components.EF.Crud.Entities.EntityValidationContext)">
+        <member name="M:PH.Core3.Test.WebApp.Services.AlberoService.ValidatePreInsert(PH.Core3.TestContext.Albero,PH.Core3.Common.Services.Components.Crud.Entities.EntityValidationContext)">
             <summary>
             Async Validation for Insert new Entity
             </summary>
@@ -113,7 +124,7 @@
         </member>
         <member name="M:PH.Core3.Test.WebApp.Services.AlberoService.ToDto(PH.Core3.TestContext.Albero)">
             <summary>
-            Transform a <see cref="!:TEntity">entity</see> to a <see cref="!:TDto">dto</see> to return to consuming services.
+            Transform a entity to a dto to return to consuming services.
             </summary>
             <param name="entity">Entity</param>
             <returns>dto</returns>

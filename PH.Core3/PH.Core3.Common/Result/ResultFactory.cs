@@ -13,9 +13,10 @@ namespace PH.Core3.Common.Result
     public static class ResultFactory
     {
 
+        
 
 
-
+        /*
         ///// <summary>
         ///// Begin a chain of functions that accept an incoming <see cref="IResult{TContent}"/>  as argument
         /////
@@ -103,6 +104,30 @@ namespace PH.Core3.Common.Result
         ///      //...
         ///  }</code>
         /// </example>
+        */
+
+            /*
+        public static async Task<IResult<TOutput>> ApplyAsync<TInput, TOutput>(this IResult<TInput> r, Func<TInput, Task<TOutput>> transform)
+        {
+            if (r.OnError)
+            {
+                return ResultFactory.Fail<TOutput>(r.Identifier, r.Errors);
+            }
+            else
+            {
+                var internalResult = await transform.Invoke(r.Content);
+                return ResultFactory.Ok(r.Identifier, internalResult);
+            }
+        }
+        */
+
+
+        /// <summary>Chains the asynchronous.</summary>
+        /// <typeparam name="TContent">The type of the content.</typeparam>
+        /// <param name="identifier">The identifier.</param>
+        /// <param name="asyncFnc">The asynchronous FNC.</param>
+        /// <param name="onErrorFunc">The on error function.</param>
+        /// <returns></returns>
         [NotNull]
         public static LazyEvaluatorAsync<TContent> ChainAsync<TContent>([NotNull] IIdentifier identifier ,Func<Task<IResult<TContent>>> asyncFnc 
                                                                         ,[CanBeNull] Func<IResult<TContent>, Task<IResult<TContent>>> onErrorFunc = null)
@@ -115,7 +140,16 @@ namespace PH.Core3.Common.Result
         //    LazyResult<TExit>.Parse<TExit,TContent>()
         //}
 
-        public static IResult<T> FailFromException<T>([NotNull] IIdentifier identifier, Exception ex, EventId? eventId = null, string errorMessage = null, string outputMessage = null)
+        /// <summary>Fails from exception.</summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="identifier">The identifier.</param>
+        /// <param name="ex">The ex.</param>
+        /// <param name="eventId">The event identifier.</param>
+        /// <param name="errorMessage">The error message.</param>
+        /// <param name="outputMessage">The output message.</param>
+        /// <returns></returns>
+        [NotNull]
+        public static IResult<T> FailFromException<T>([NotNull] IIdentifier identifier, Exception ex, EventId? eventId = null, [CanBeNull] string errorMessage = null, [CanBeNull] string outputMessage = null)
         {
             var msg = string.IsNullOrEmpty(errorMessage) ? ex.Message : errorMessage;
             var err = new Error(msg, outputMessage, eventId) {Exception = ex};
@@ -179,19 +213,35 @@ namespace PH.Core3.Common.Result
         }
 
 
-
+        /// <summary>Ok result for paged content </summary>
+        /// <typeparam name="TContent">The type of the content.</typeparam>
+        /// <param name="identifier">The identifier.</param>
+        /// <param name="content">The content.</param>
+        /// <param name="count">The count.</param>
+        /// <param name="pageNumber">The page number.</param>
+        /// <param name="pageSize">Size of the page.</param>
+        /// <returns></returns>
         [NotNull]
         public static IPagedResult<TContent> PagedOk<TContent>([NotNull] IIdentifier identifier, [NotNull] TContent[] content, long count, int pageNumber, int pageSize)
         {
             return new PagedResult<TContent>(identifier, content, count, pageNumber, pageSize);
         }
 
+        /// <summary>Empty result for paged content. The result is not on error</summary>
+        /// <typeparam name="TContent">The type of the content.</typeparam>
+        /// <param name="identifier">The identifier.</param>
+        /// <returns></returns>
         [NotNull]
         public static IPagedResult<TContent> PagedEmpty<TContent>([NotNull] IIdentifier identifier)
         {
             return new PagedResult<TContent>(identifier, new TContent[0], 0, -1, -1);
         }
 
+        /// <summary>Fail result for paged content</summary>
+        /// <typeparam name="TContent">The type of the content.</typeparam>
+        /// <param name="identifier">The identifier.</param>
+        /// <param name="errors">The errors.</param>
+        /// <returns></returns>
         [NotNull]
         public static IPagedResult<TContent> PagedFail<TContent>([NotNull] IIdentifier identifier, [NotNull] IEnumerable<IError> errors)
         {
@@ -208,7 +258,7 @@ namespace PH.Core3.Common.Result
         /// <param name="identifier">Identifier</param>
         /// <returns>Good result</returns>
         [NotNull]
-        public static IResult NotFoundOk<TContent>([NotNull] IIdentifier identifier)
+        public static IResult<TContent> NotFoundOk<TContent>([NotNull] IIdentifier identifier)
         {
             return new ResultNotFound<TContent>(identifier);
         }
@@ -221,12 +271,21 @@ namespace PH.Core3.Common.Result
         /// <param name="errors">errors </param>
         /// <returns>Bad Result</returns>
         [NotNull]
-        public static IResult NotFound<TContent>([NotNull] IIdentifier identifier,[NotNull] IEnumerable<IError> errors)
+        public static IResult<TContent> NotFound<TContent>([NotNull] IIdentifier identifier,[NotNull] IEnumerable<IError> errors)
         {
             return new ResultNotFound<TContent>(identifier,errors);
         }
 
-
+        /// <summary>Return an instance of Result with a Not Found content (NULL): this is intended as error: a "bad empty result"</summary>
+        /// <typeparam name="TContent">The type of the content.</typeparam>
+        /// <param name="identifier">The identifier.</param>
+        /// <param name="error">The error.</param>
+        /// <returns>Bad Result</returns>
+        [NotNull]
+        public static IResult<TContent> NotFound<TContent>([NotNull] IIdentifier identifier,[NotNull] IError error)
+        {
+            return new ResultNotFound<TContent>(identifier,new IError[]{error});
+        }
 
         /// <summary>
         /// Bad Result
@@ -289,17 +348,18 @@ namespace PH.Core3.Common.Result
             return Fail<TContent>(identifier, l.OrderBy(x => x.ProgrId).ToArray());
         }
 
-        /// <summary>
-        /// Bad Result
-        /// </summary>
-        /// <typeparam name="TContent">Type of object on error</typeparam>
-        /// <param name="progrId">Int id of LazyEvaluator</param>
-        /// <param name="identifier">Identifier</param>
-        /// <param name="exception"></param>
-        /// <returns>bad result</returns>
+        /// <summary>Fails the lazy evaluated function from exception.</summary>
+        /// <typeparam name="TContent">The type of the content.</typeparam>
+        /// <param name="progrId">The progr identifier.</param>
+        /// <param name="identifier">The identifier.</param>
+        /// <param name="exception">The exception.</param>
+        /// <param name="eventId">The event identifier.</param>
+        /// <param name="errorMessage">The error message.</param>
+        /// <param name="outputMessage">The output message.</param>
+        /// <returns></returns>
         [NotNull]
         internal static IResult<TContent> FailLazyEvaluatedFunctionFromException<TContent>(int progrId,[NotNull] IIdentifier identifier
-                                                                                           , Exception exception, EventId? eventId = null, string errorMessage = null, string outputMessage = null)
+                                                                                           , Exception exception, EventId? eventId = null, [CanBeNull] string errorMessage = null, [CanBeNull] string outputMessage = null)
         {
             
             var msg = string.IsNullOrEmpty(errorMessage) ? exception.Message : errorMessage;

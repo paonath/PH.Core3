@@ -7,7 +7,6 @@ namespace PH.Core3.Common.Result
     /// <summary>
     /// Error instance related to a lazy-evaluated function
     ///
-    /// <see cref="ResultFactory.Chain{TContent}(Microsoft.Extensions.Logging.ILogger,System.Func{PH.Core3.Common.Result.IResult{TContent}})"/>
     /// <see cref="ResultFactory.FailLazyEvaluatedFunction{TContent}"/>
     /// </summary>
     internal class LazyEvaluatedError : Error

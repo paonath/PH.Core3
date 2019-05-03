@@ -8,6 +8,20 @@ namespace PH.Core3.Common.Settings
     /// <summary>Constants</summary>
     public static class ConstSettings
     {
+
+
+        
+
+        /// <summary>
+        ///   <para>Constants Settings for TransientCrudService</para>
+        /// </summary>
+        public static class TransientReadConsts
+        {
+
+            /// <summary>The service identifier</summary>
+            public static ServiceIdentifier ServiceIdentifier = new ServiceIdentifier(-2, "TransientReadSettings");
+        }
+
         /// <summary>
         ///   <para>Constants Settings for TransientCrudService</para>
         /// </summary>

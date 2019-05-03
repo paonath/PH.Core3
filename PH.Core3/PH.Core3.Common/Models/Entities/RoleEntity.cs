@@ -3,6 +3,11 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PH.Core3.Common.Models.Entities
 {
+    /// <summary>
+    /// Role
+    /// </summary>
+    /// <seealso cref="Microsoft.AspNetCore.Identity.IdentityRole{String}" />
+    /// <seealso cref="PH.Core3.Common.Models.Entities.IEntity{String}" />
     public abstract class RoleEntity : Microsoft.AspNetCore.Identity.IdentityRole<string>, IEntity<string>
     {
         /// <summary>

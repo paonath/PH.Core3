@@ -6,8 +6,14 @@ using PH.Core3.UnitOfWork;
 [assembly: ApiConventionType(typeof(DefaultApiConventions))]
 namespace PH.Core3.AspNetCoreApi.Controllers
 {
+    /// <summary>
+    /// Base Common Controller
+    /// </summary>
     public abstract class BaseCommonController: Controller
     {
+        /// <summary>
+        /// Unit Of Work
+        /// </summary>
         protected readonly IUnitOfWork Uow;
 
         /// <summary>
@@ -20,12 +26,21 @@ namespace PH.Core3.AspNetCoreApi.Controllers
         /// </summary>
         protected readonly ILogger<BaseCommonController> Logger;
 
+        /// <summary>
+        /// Init new instance of controller
+        /// </summary>
+        /// <param name="uow">unit of work</param>
+        /// <param name="logger">logger</param>
         public BaseCommonController(IUnitOfWork uow, ILogger<BaseCommonController> logger)
         {
             Uow = uow;
             Logger = logger;
         }
 
+        /// <summary>
+        /// Commit
+        /// </summary>
+        /// <param name="commitMessage">commit message</param>
         protected virtual void Commit(string commitMessage = "")
         {
             if(AlreadyCommitted)
@@ -44,6 +59,9 @@ namespace PH.Core3.AspNetCoreApi.Controllers
             }
         }
 
+        /// <summary>
+        /// Rollback
+        /// </summary>
         protected virtual void Rollback()
         {
             AlreadyCommitted = false;

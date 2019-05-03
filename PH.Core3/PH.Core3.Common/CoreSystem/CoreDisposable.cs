@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using JetBrains.Annotations;
 
 namespace PH.Core3.Common.CoreSystem
 {
@@ -10,12 +11,21 @@ namespace PH.Core3.Common.CoreSystem
     /// </summary>
     public abstract class CoreDisposable : ICoreDisposable
     {
+        /// <summary>
+        /// Init new instance of ICoreDisposable
+        /// </summary>
+        /// <param name="identifier">Identifier</param>
+        /// <returns>ICoreDisposable</returns>
+        [NotNull]
         public static ICoreDisposable Instance(IIdentifier identifier)
         {
             return new CoreDisposableInstance(identifier);
         }
 
-        protected IIdentifier _identifier;
+        /// <summary>
+        /// IDentifier
+        /// </summary>
+        protected readonly IIdentifier _identifier;
 
         /// <summary>
         /// Initialize a new instance of <see cref="CoreDisposable"/>
@@ -42,6 +52,10 @@ namespace PH.Core3.Common.CoreSystem
             GC.SuppressFinalize(this);
         }
 
+        /// <summary>
+        /// On Disposed 
+        /// </summary>
+        /// <param name="e"></param>
         protected virtual void OnDisposed(CoreDisposableEventArgs e)
         {
             DisposedEvt?.Invoke(this, e);
@@ -52,9 +66,11 @@ namespace PH.Core3.Common.CoreSystem
         /// </summary>
         public bool Disposed { get; protected set; }
 
+        /// <inheritdoc />
         public event EventHandler<CoreDisposableEventArgs> DisposedEvt;
     }
 
+    /// <inheritdoc />
     internal class CoreDisposableInstance : CoreDisposable
     {
         /// <summary>

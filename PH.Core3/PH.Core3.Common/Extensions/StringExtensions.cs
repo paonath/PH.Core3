@@ -3,6 +3,9 @@ using JetBrains.Annotations;
 
 namespace PH.Core3.Common.Extensions
 {
+    /// <summary>
+    /// String extensions
+    /// </summary>
     public static class StringExtensions
     {
         /// <summary>

@@ -4,24 +4,43 @@ using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace PH.Core3.EntityFramework
+namespace PH.Core3.EntityFramework.Extensions
 {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <seealso cref="Microsoft.EntityFrameworkCore.Infrastructure.RelationalOptionsExtension" />
     public sealed class Core3DbOptionsExtension : RelationalOptionsExtension
     {
         private long? _serviceProviderHash;
         private string _logFragment;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Core3DbOptionsExtension"/> class.
+        /// </summary>
         public Core3DbOptionsExtension()
         {
             
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Core3DbOptionsExtension"/> class.
+        /// </summary>
+        /// <param name="bs">The bs.</param>
         public Core3DbOptionsExtension(Core3DbOptionsExtension bs)
         {
             Tenant = bs.Tenant;
 
         }
 
+        /// <summary>Withes the tenant.</summary>
+        /// <param name="tenant">The tenant.</param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentException">
+        /// Value cannot be null or empty. - tenant
+        /// or
+        /// Value cannot be null or whitespace. - tenant
+        /// </exception>
         [NotNull]
         public Core3DbOptionsExtension WithTenant([NotNull] string tenant)
         {
@@ -78,6 +97,8 @@ namespace PH.Core3.EntityFramework
             }
         }
 
+        /// <summary>Gets the tenant.</summary>
+        /// <value>The tenant.</value>
         public string Tenant { get; private set; }
 
         /// <summary>

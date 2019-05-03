@@ -6,27 +6,43 @@ using PH.Core3.Common.Models.Entities;
 
 namespace PH.Core3.EntityFramework.Mapping
 {
+    /// <summary>
+    /// Allows configuration for an entity type to be factored into a separate class
+    /// </summary>
+    /// <seealso cref="PH.Core3.EntityFramework.Mapping.IEntityMap" />
     public abstract class EntityMap : IEntityMap
     {
+        /// <summary>Gets the type of the entity.</summary>
+        /// <returns></returns>
         public abstract Type GetEntityType();
         
     }
 
-     /// <inheritdoc cref="IEntityMap{TEntity,TKey}" />
+    /// <summary>
+    /// Allows configuration for an entity type to be factored into a separate class
+    /// </summary>
+    /// <typeparam name="TEntity">The type of the entity.</typeparam>
+    /// <typeparam name="TKey">The type of the key.</typeparam>
+    /// <seealso cref="PH.Core3.EntityFramework.Mapping.IEntityMap" />
     public abstract class EntityMap<TEntity, TKey> : EntityMap, IEntityMap<TEntity, TKey>, IEntityTypeConfiguration<TEntity>
         where TEntity : class, IEntity<TKey> 
         where TKey : IEquatable<TKey>
     {
+        /// <summary>Gets the type of the entity.</summary>
+        /// <value>The type of the entity.</value>
         public Type EntityType { get; }
 
-        /// <inheritdoc />
+        /// <summary>
+        /// Initializes a new instance of the <see cref="EntityMap{TEntity, TKey}"/> class.
+        /// </summary>
         protected EntityMap()
         {
             EntityType = Activator.CreateInstance(typeof(TEntity)).GetType();
         }
 
-       
 
+        /// <summary>Gets the type of the entity.</summary>
+        /// <returns></returns>
         public override Type GetEntityType()
         {
             return EntityType;

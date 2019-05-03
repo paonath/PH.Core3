@@ -5,13 +5,15 @@ using FluentValidation.Results;
 using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using PH.Core3.Common;
 using PH.Core3.Common.Models.Entities;
 using PH.Core3.Common.Models.ViewModels;
 using PH.Core3.Common.Models.ViewModels.Tree;
 using PH.Core3.Common.Result;
+using PH.Core3.Common.Services.Components.Crud;
 using PH.Core3.Common.Services.Crud;
 
-namespace PH.Core3.Common.Services.Components.EF.Crud
+namespace PH.Core3.EntityFramework.Services.Components.Crud
 {
     /// <summary>
     /// 
@@ -55,13 +57,13 @@ namespace PH.Core3.Common.Services.Components.EF.Crud
 
 
         /// <summary>
-        /// Parse <see cref="TNewDto">dto</see> and return new <see cref="TEntity">entity</see> for insert.
+        /// Parse dto and return new entity for insert.
         ///
         /// This method do not perform Update on Db: just made changes on entity and check if is valid for insert.
         /// </summary>
         /// <param name="dto">dto to add</param>
         /// <returns>Entity for insert</returns>
-        protected internal override async Task<(TEntity EntityToInsert, ValidationResult InsertValidationResult)> ParseDtoAndValidateAsync(TNewDto dto)
+        protected override async Task<(TEntity EntityToInsert, ValidationResult InsertValidationResult)> ParseDtoAndValidateAsync(TNewDto dto)
         {
             var e = await ParseDtoAsync(dto);
             e.EntityLevel = 0;
@@ -82,7 +84,7 @@ namespace PH.Core3.Common.Services.Components.EF.Crud
         }
 
         /// <summary>
-        /// Load All <see cref="TDto">Items</see> as Tree
+        /// Load All Items as Tree
         /// </summary>
         /// <returns><see cref="Result{TContent}"/> instance</returns>
         public async Task<IResult<TDto[]>> LoadAllAsTreeAsync()

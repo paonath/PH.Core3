@@ -3,6 +3,9 @@ using JetBrains.Annotations;
 
 namespace PH.Core3.Common.Identifiers
 {
+    /// <summary>
+    /// Unique Identifier across Scope based on ClaimsPrincipal identity 
+    /// </summary>
     public class ClaimsPrincipalIdentifier : Identifier, IIdentifier
     {
         /// <summary>
@@ -15,7 +18,11 @@ namespace PH.Core3.Common.Identifiers
         /// </summary>
         public ClaimsPrincipal Principal { get; }
 
-
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ClaimsPrincipalIdentifier"/> class.
+        /// </summary>
+        /// <param name="uid">The uid.</param>
+        /// <param name="principal">The principal.</param>
         public ClaimsPrincipalIdentifier([NotNull] string uid, [CanBeNull] ClaimsPrincipal principal) 
             : base(uid)
         {

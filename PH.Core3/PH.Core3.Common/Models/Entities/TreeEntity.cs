@@ -9,6 +9,7 @@ namespace PH.Core3.Common.Models.Entities
     /// Entity abstraction for Tree Items
     /// </summary>
     /// <typeparam name="TKey">struct type of Id Property</typeparam>
+    /// <typeparam name="TEntity">Entity vtype</typeparam>
     public abstract class TreeEntity<TEntity, TKey> : Entity<TKey> , ITreeEntity<TEntity, TKey>
         where TEntity : ITreeEntity<TKey> , IEntity<TKey>
         where TKey : struct, IEquatable<TKey>

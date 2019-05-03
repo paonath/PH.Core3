@@ -21,6 +21,11 @@ namespace PH.Core3.Common.Scope
             return Instance(name, null);
         }
 
+        /// <summary>Initialize a new instance of a <see cref="NamedScope"/></summary>
+        /// <param name="name">The name.</param>
+        /// <param name="logger">The logger.</param>
+        /// <returns>IDisposable scope</returns>
+        [NotNull]
         public static NamedScope Instance([NotNull] string name, ILogger logger)
         {
             return new NamedScope(name, logger);

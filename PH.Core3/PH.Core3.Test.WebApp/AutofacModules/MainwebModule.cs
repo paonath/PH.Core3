@@ -11,7 +11,7 @@ using NLog;
 using PH.Core3.AspNetCoreApi.Services.Components;
 using PH.Core3.Common;
 using PH.Core3.Common.Identifiers;
-using PH.Core3.Common.Services.Components.EF;
+using PH.Core3.Common.Services.Components.Crud;
 using PH.Core3.Common.Services.Path;
 using PH.Core3.EntityFramework;
 using PH.Core3.Test.WebApp.HostedService;
@@ -22,6 +22,10 @@ using ILogger = Microsoft.Extensions.Logging.ILogger;
 
 namespace PH.Core3.Test.WebApp.AutofacModules
 {
+    /// <summary>
+    /// Main autofac module
+    /// </summary>
+    /// <seealso cref="Autofac.Module" />
     public class MainwebModule : Autofac.Module
     {
         private string _connectionString;
@@ -138,6 +142,10 @@ namespace PH.Core3.Test.WebApp.AutofacModules
     }
 
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <seealso cref="Autofac.Module" />
     public class LoggingModule : Autofac.Module
     {
         private static void InjectLoggerProperties(object instance)

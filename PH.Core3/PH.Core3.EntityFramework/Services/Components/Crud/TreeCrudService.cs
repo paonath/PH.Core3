@@ -3,11 +3,13 @@ using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using PH.Core3.Common;
 using PH.Core3.Common.Models.Entities;
 using PH.Core3.Common.Models.ViewModels;
 using PH.Core3.Common.Models.ViewModels.Tree;
+using PH.Core3.Common.Services.Components.Crud;
 
-namespace PH.Core3.Common.Services.Components.EF.Crud
+namespace PH.Core3.EntityFramework.Services.Components.Crud
 {
     /// <summary>
     /// Service Simplified for CRUD (Create/Read/Update/Delete) Operations on Tree Items.

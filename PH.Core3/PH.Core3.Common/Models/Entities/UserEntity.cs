@@ -6,6 +6,11 @@ using System.Text;
 
 namespace PH.Core3.Common.Models.Entities
 {
+    /// <summary>
+    /// User entity
+    /// </summary>
+    /// <seealso cref="Microsoft.AspNetCore.Identity.IdentityUser{String}" />
+    /// <seealso cref="PH.Core3.Common.Models.Entities.IEntity{String}" />
     public abstract class UserEntity : Microsoft.AspNetCore.Identity.IdentityUser<string> , IEntity<string>
     {
         /// <summary>

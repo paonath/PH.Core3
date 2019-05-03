@@ -50,6 +50,7 @@ namespace PH.Core3.Common.Result
         /// Init new instance of result with no error
         /// </summary>
         /// <param name="identifier">Identifier</param>
+        /// <param name="progrId">progr id</param>
         /// <param name="content">Content</param>
         internal LazyResult([NotNull] IIdentifier identifier, int progrId, [NotNull] T content)
             : this(identifier, progrId, content, false)
@@ -86,6 +87,7 @@ namespace PH.Core3.Common.Result
         /// Init new instance of result with errors
         /// </summary>
         /// <param name="identifier">Identifier</param>
+        /// <param name="progrId">progr id</param>
         /// <param name="errors">errors </param>
         internal LazyResult([NotNull] IIdentifier identifier, int progrId, [NotNull] IEnumerable<IError> errors) 
             : base(identifier, errors)
@@ -102,6 +104,10 @@ namespace PH.Core3.Common.Result
 
     }
 
+    /// <summary>
+    /// Lazy evaluator for functions
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public class LazyEvaluatorAsync<T>
     {
         internal readonly int ProgrId;
@@ -165,7 +171,8 @@ namespace PH.Core3.Common.Result
         }
 
 
-
+        /// <summary>Raises the exit asynchronous.</summary>
+        /// <returns>Result</returns>
         public async Task<IResult<T>> RaiseExitAsync()
         {
             if (!_evaluated)
@@ -176,6 +183,11 @@ namespace PH.Core3.Common.Result
 
         }
 
+        /// <summary>Add the specified next function.</summary>
+        /// <typeparam name="TOther">The type of the next exit result.</typeparam>
+        /// <param name="nextFunction">The next function.</param>
+        /// <param name="onErrorFunc">The on error function.</param>
+        /// <returns></returns>
         [NotNull]
         public LazyEvaluatorAsync<TOther> Next<TOther>([NotNull] Func<LazyEvaluatorAsync<T>, IResult<T>,  Task<IResult<TOther>>> nextFunction,Func<IResult<TOther>,Task<IResult<TOther>>> onErrorFunc = null)
         {
@@ -259,6 +271,8 @@ namespace PH.Core3.Common.Result
             
         }
 
+        /// <summary>Tries the resolve asynchronous.</summary>
+        /// <returns></returns>
         public async Task<(bool Ok, IResult<T> result)> TryResolveAsync()
         {
             try

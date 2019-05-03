@@ -8,8 +8,16 @@ using PH.Core3.UnitOfWork;
 
 namespace PH.Core3.AspNetCoreApi.Controllers
 {
+    /// <summary>
+    /// Base Api Controller
+    /// </summary>
     public abstract class BaseApiController : BaseCommonController
     {
+        /// <summary>
+        /// Init new instance of controller
+        /// </summary>
+        /// <param name="uow">unit of work</param>
+        /// <param name="logger">logger</param>
         protected BaseApiController(IUnitOfWork uow, ILogger<BaseCommonController> logger) : base(uow, logger)
         {
         }

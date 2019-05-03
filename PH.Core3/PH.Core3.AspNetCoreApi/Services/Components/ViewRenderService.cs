@@ -14,6 +14,9 @@ using PH.Core3.Common.Services.Path;
 
 namespace PH.Core3.AspNetCoreApi.Services.Components
 {
+    /// <summary>
+    /// Service for render view with given model as a html formatted string
+    /// </summary>
     public class ViewRenderService : IViewRenderService
     {
         private readonly IRazorViewEngine _razorViewEngine;
@@ -24,6 +27,14 @@ namespace PH.Core3.AspNetCoreApi.Services.Components
         private readonly ILogger<ViewRenderService> _logger;
 
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="razorViewEngine"></param>
+        /// <param name="tempDataProvider"></param>
+        /// <param name="serviceProvider"></param>
+        /// <param name="webPathTranslator"></param>
+        /// <param name="logger"></param>
         public ViewRenderService(IRazorViewEngine razorViewEngine,
                                  ITempDataProvider tempDataProvider,
                                  IServiceProvider serviceProvider, IWebPathTranslator webPathTranslator, ILogger<ViewRenderService> logger = null)
@@ -38,7 +49,7 @@ namespace PH.Core3.AspNetCoreApi.Services.Components
         /// <summary>
         /// Render a string from CSHTML View and Model
         /// </summary>
-        /// <param name="viewName">View Name</param>
+        /// <param name="viewWebPath">View Name</param>
         /// <param name="model">Model instance</param>
         /// <returns>string</returns>
         public async Task<string> RenderToStringAsync(string viewWebPath, object model)
@@ -92,6 +103,13 @@ namespace PH.Core3.AspNetCoreApi.Services.Components
             }
         }
 
+        /// <summary>
+        /// Render as string
+        /// </summary>
+        /// <param name="viewName"></param>
+        /// <param name="model"></param>
+        /// <typeparam name="TModel"></typeparam>
+        /// <returns></returns>
         public Task<string> RenderToStringAsync<TModel>(string viewName, TModel model) where TModel : class
         {
             return RenderToStringAsync(viewName, model as object);

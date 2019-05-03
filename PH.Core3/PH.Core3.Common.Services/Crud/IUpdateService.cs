@@ -22,7 +22,7 @@ namespace PH.Core3.Common.Services.Crud
         where TKey : IEquatable<TKey>
     {
         /// <summary>
-        /// Async update a <see cref="TEditDto"/>
+        /// Async update a Dto
         /// </summary>
         /// <param name="entity">Content to Update</param>
         /// <returns><see cref="PH.Core3.Common.Result"/> result</returns>

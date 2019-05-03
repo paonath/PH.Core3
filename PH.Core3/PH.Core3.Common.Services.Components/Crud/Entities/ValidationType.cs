@@ -1,4 +1,4 @@
-﻿namespace PH.Core3.Common.Services.Components.EF.Crud.Entities
+﻿namespace PH.Core3.Common.Services.Components.Crud.Entities
 {
     /// <summary>
     /// Type Of Crud Validations

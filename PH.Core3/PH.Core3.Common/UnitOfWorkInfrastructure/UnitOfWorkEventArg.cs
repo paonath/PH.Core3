@@ -3,7 +3,7 @@
 namespace PH.Core3.Common.UnitOfWorkInfrastructure
 {
     /// <summary>
-    /// Event Argument fired on Commit a <see cref="IUnitOfWork"/>
+    /// Event Argument fired on Commit a IUnitOfWork
     /// </summary>
     public class UnitOfWorkEventArg : Core3.Common.CoreSystem.CoreEventArgs 
     {

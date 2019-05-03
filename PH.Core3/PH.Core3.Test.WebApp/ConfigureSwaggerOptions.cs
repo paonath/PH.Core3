@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Swashbuckle.AspNetCore.Swagger;
 using Swashbuckle.AspNetCore.SwaggerGen;
+#pragma warning disable 1591
 
 namespace PH.Core3.Test.WebApp
 {
@@ -22,7 +23,7 @@ namespace PH.Core3.Test.WebApp
                 {
                     options.SwaggerDoc(description.GroupName, CreateInfoForApiVersion(description));
                 }
-                catch (Exception e)
+                catch 
                 {
                     //Console.WriteLine(e);
                    // throw;

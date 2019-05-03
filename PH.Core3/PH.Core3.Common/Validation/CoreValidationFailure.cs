@@ -3,8 +3,14 @@ using Microsoft.Extensions.Logging;
 
 namespace PH.Core3.Common.Validation
 {
+    /// <summary>
+    /// Validation Failure Core
+    /// </summary>
+    /// <seealso cref="FluentValidation.Results.ValidationFailure" />
     public class CoreValidationFailure : ValidationFailure
     {
+        /// <summary>Gets the event identifier.</summary>
+        /// <value>The event identifier.</value>
         public EventId? EventId { get; }
 
         /// <summary>Creates a new validation failure.</summary>

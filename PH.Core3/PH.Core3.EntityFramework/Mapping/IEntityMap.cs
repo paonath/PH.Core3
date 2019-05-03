@@ -4,8 +4,13 @@ using PH.Core3.Common.Models.Entities;
 
 namespace PH.Core3.EntityFramework.Mapping
 {
+    /// <summary>
+    /// Allows configuration for an entity type to be factored into a separate class
+    /// </summary>
     public interface IEntityMap
     {
+        /// <summary>Gets the type of the entity.</summary>
+        /// <returns></returns>
         Type GetEntityType();
 
     }

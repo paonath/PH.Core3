@@ -1,11 +1,10 @@
 ﻿using System;
-using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
-using Microsoft.Extensions.Logging;
+using PH.Core3.Common;
+using PH.Core3.Common.Services.Components;
 
-namespace PH.Core3.Common.Services.Components.EF
+namespace PH.Core3.EntityFramework.Services.Components
 {
     /// <summary>
     /// Abstract service class for work with <see cref="DbContext"/>

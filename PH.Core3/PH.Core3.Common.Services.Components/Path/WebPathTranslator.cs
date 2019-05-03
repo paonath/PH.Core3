@@ -7,12 +7,22 @@ using PH.Core3.Common.Services.Path;
 
 namespace PH.Core3.Common.Services.Components.Path
 {
+    
+    /// <summary>
+    /// Translate Web and FileSystem Path
+    /// </summary>
     public class WebPathTranslator : IWebPathTranslator
     {
         private readonly string _webRootPath;
         private const string Root = "~/";
         private readonly ILogger<WebPathTranslator> _logger;
 
+        /// <summary>
+        /// Init new instance
+        /// </summary>
+        /// <param name="webRootPath">Root filesystem path of web root</param>
+        /// <param name="logger">logger</param>
+        /// <exception cref="ArgumentException"></exception>
         public WebPathTranslator([NotNull] string webRootPath, [CanBeNull] ILogger<WebPathTranslator> logger = null)
         {
             if (string.IsNullOrEmpty(webRootPath))
@@ -29,7 +39,11 @@ namespace PH.Core3.Common.Services.Components.Path
 
         #region Implementation of IWebPathTranslator
 
-         
+        /// <summary>
+        /// Translate a Web-Relative Path to FileSystem Path
+        /// </summary>
+        /// <param name="webrelativePath">Web Path relative to the Root directory ~/ </param>
+        /// <returns>File System Path</returns>
         [NotNull]
         public string ToFileSystemPath(string webrelativePath)
         {
@@ -49,12 +63,22 @@ namespace PH.Core3.Common.Services.Components.Path
 
         }
 
+        /// <summary>
+        /// Translate a FileSystem FileInfo to Web-Relative Path string 
+        /// </summary>
+        /// <param name="file">FileInfo</param>
+        /// <returns>Web Path relative to the Root directory</returns>
         [NotNull]
         public string ToWebRelativePath([NotNull] FileInfo file)
         {
             return ToWeb(file.FullName);
         }
 
+        /// <summary>
+        /// Translate a FileSystem DirectoryInfo to Web-Relative Path string 
+        /// </summary>
+        /// <param name="directory">DirectoryInfo</param>
+        /// <returns>Web Path relative to the Root directory</returns>
         [NotNull]
         public string ToWebRelativePath([NotNull] DirectoryInfo directory)
         {
@@ -72,12 +96,22 @@ namespace PH.Core3.Common.Services.Components.Path
             return r;
         }
 
+        /// <summary>
+        /// Get FileInfo from Web-Relative Path string 
+        /// </summary>
+        /// <param name="webrelativePath"></param>
+        /// <returns>FileInfo</returns>
         [NotNull]
         public FileInfo GetFile([NotNull] string webrelativePath)
         {
             return new FileInfo(ToFileSystemPath(webrelativePath));
         }
 
+        /// <summary>
+        /// Get DirectoryInfo from Web-Relative Path string 
+        /// </summary>
+        /// <param name="webrelativePath"></param>
+        /// <returns>DirectoryInfo</returns>
         [NotNull]
         public DirectoryInfo GetDirectory([NotNull] string webrelativePath)
         {

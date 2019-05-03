@@ -9,17 +9,35 @@ using PH.Core3.Common;
 
 namespace PH.Core3.AspNetCoreApi.Filters
 {
+    /// <summary>
+    /// Action filter for logging executing action
+    /// </summary>
     public class InterceptionAttributeFilter: ActionFilterAttribute
     {
+        /// <summary>
+        /// Id
+        /// </summary>
         protected readonly IIdentifier Identifier;
+        /// <summary>
+        /// Logger
+        /// </summary>
         protected readonly ILogger<InterceptionAttributeFilter> Logger;
 
+        /// <summary>
+        /// Init new instance
+        /// </summary>
+        /// <param name="identifier">identifier</param>
+        /// <param name="logger">logger</param>
         public InterceptionAttributeFilter(IIdentifier identifier, ILogger<InterceptionAttributeFilter> logger)
         {
             Identifier = identifier;
             Logger = logger;
         }
 
+        /// <summary>
+        /// log executing action if not marked with SkipInterceptionLogAttribute
+        /// </summary>
+        /// <param name="context">action context</param>
         protected virtual void LogExecuting([CanBeNull] ActionExecutingContext context)
         {
             if(null == context)
@@ -51,6 +69,11 @@ namespace PH.Core3.AspNetCoreApi.Filters
             Logger.LogDebug(msg);
         }
 
+        /// <summary>
+        /// Get caller ip
+        /// </summary>
+        /// <param name="ctx">http context</param>
+        /// <returns>ip adress as string</returns>
         [CanBeNull]
         protected virtual string GetIp([CanBeNull] HttpContext ctx)
         {
@@ -62,6 +85,10 @@ namespace PH.Core3.AspNetCoreApi.Filters
         }
 
 
+        /// <summary>
+        /// Log Action Executing
+        /// </summary>
+        /// <param name="context"></param>
         public override void OnActionExecuting(ActionExecutingContext context)
         {
                 LogExecuting(context);

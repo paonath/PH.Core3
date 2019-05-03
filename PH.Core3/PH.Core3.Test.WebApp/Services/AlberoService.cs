@@ -5,9 +5,9 @@ using Microsoft.Extensions.Logging;
 using PH.Core3.Common;
 using PH.Core3.Common.Identifiers.Services;
 using PH.Core3.Common.Models.ViewModels;
-using PH.Core3.Common.Services.Components.EF;
-using PH.Core3.Common.Services.Components.EF.Crud;
-using PH.Core3.Common.Services.Components.EF.Crud.Entities;
+using PH.Core3.Common.Services.Components.Crud;
+using PH.Core3.Common.Services.Components.Crud.Entities;
+using PH.Core3.EntityFramework.Services.Components.Crud;
 using PH.Core3.TestContext;
 
 namespace PH.Core3.Test.WebApp.Services
@@ -56,7 +56,7 @@ namespace PH.Core3.Test.WebApp.Services
         /// <param name="logger">Logger</param>
         /// <param name="ctx">Entity Framework DbContext</param>
         /// <param name="settings">CRUD settings</param>
-        /// <param name="tenantId">Tenant Identifier</param>
+        
         public AlberoService([NotNull] IIdentifier coreIdentifier, [NotNull] ILogger<CrudServiceBase<MyContext, Albero, AlberoDTo, NewAlberoDTo, EditAlberoDTo, Guid>> logger
                              , [NotNull] MyContext ctx, [NotNull] TransientCrudSettings settings) : base(coreIdentifier, logger, ctx, settings, ctx.TenantId)
         {
@@ -68,9 +68,10 @@ namespace PH.Core3.Test.WebApp.Services
         /// <param name="ent">Entity to Delete</param>
         /// <param name="c">Custom Validation Context</param>
         /// <returns>Task</returns>
-        protected override async Task ValidatePreDelete(Albero ent, EntityValidationContext c)
+        protected override Task ValidatePreDelete(Albero ent, EntityValidationContext c)
         {
             //throw new NotImplementedException();
+            return Task.CompletedTask;
         }
 
         /// <summary>
@@ -79,9 +80,10 @@ namespace PH.Core3.Test.WebApp.Services
         /// <param name="ent">Entity to Edit</param>
         /// <param name="c">Custom Validation Context</param>
         /// <returns>Task</returns>
-        protected override async Task ValidatePreUpdate(Albero ent, EntityValidationContext c)
+        protected override  Task ValidatePreUpdate(Albero ent, EntityValidationContext c)
         {
             //throw new NotImplementedException();
+            return Task.CompletedTask;
         }
 
         /// <summary>
@@ -90,14 +92,16 @@ namespace PH.Core3.Test.WebApp.Services
         /// <param name="ent">Entity to Add</param>
         /// <param name="c">Custom Validation Context</param>
         /// <returns>Task</returns>
-        protected override async Task ValidatePreInsert(Albero ent, EntityValidationContext c)
+        protected override Task ValidatePreInsert(Albero ent, EntityValidationContext c)
         {
            // throw new NotImplementedException();
+           return Task.CompletedTask;
         }
 
-        protected override async Task<Albero> ParseDtoAsync(NewAlberoDTo dto)
+        protected override  Task<Albero> ParseDtoAsync(NewAlberoDTo dto)
         {
             throw new NotImplementedException();
+            //return Task.CompletedTask;
         }
 
         /// <summary>
@@ -106,13 +110,13 @@ namespace PH.Core3.Test.WebApp.Services
         /// <param name="e">Entity</param>
         /// <param name="d">Dto</param>
         /// <returns>Entity with changed properties</returns>
-        protected override async Task<Albero> MergeWithDtoAsync(Albero e, EditAlberoDTo d)
+        protected override  Task<Albero> MergeWithDtoAsync(Albero e, EditAlberoDTo d)
         {
             throw new NotImplementedException();
         }
 
         /// <summary>
-        /// Transform a <see cref="TEntity">entity</see> to a <see cref="TDto">dto</see> to return to consuming services.
+        /// Transform a entity to a dto to return to consuming services.
         /// </summary>
         /// <param name="entity">Entity</param>
         /// <returns>dto</returns>

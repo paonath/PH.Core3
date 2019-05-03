@@ -5,8 +5,14 @@ using PH.Core3.Common.UnitOfWorkInfrastructure;
 
 namespace PH.Core3.UnitOfWork
 {
+    /// <summary>
+    /// Unit Of Work
+    /// </summary>
+    /// <seealso cref="PH.Core3.Common.CoreSystem.ICoreDisposable" />
     public interface IUnitOfWork : ICoreDisposable 
     {
+        /// <summary>Gets the identifier.</summary>
+        /// <value>The identifier.</value>
         IIdentifier Identifier { get; }
 
         /// <summary>
@@ -34,6 +40,9 @@ namespace PH.Core3.UnitOfWork
         /// </summary>
         event EventHandler<UnitOfWorkEventArg> Committed;
 
+        /// <summary>Begins the scope.</summary>
+        /// <param name="scopeName">Name of the scope.</param>
+        /// <returns></returns>
         IDisposable BeginScope(string scopeName);
     }
 

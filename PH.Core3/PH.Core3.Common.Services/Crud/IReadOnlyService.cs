@@ -18,14 +18,14 @@ namespace PH.Core3.Common.Services.Crud
         where TKey : IEquatable<TKey>
     {
         /// <summary>
-        /// Find <see cref="TDto"/> by Id
+        /// Find  by Id
         /// </summary>
         /// <param name="id">Id</param>
         /// <returns><see cref="PH.Core3.Common.Result"/> instance</returns>
         Task<IResult<TDto>> FindByIdAsync(TKey id);
         
         /// <summary>
-        /// Load All <see cref="TDto"/> Items
+        /// Load All Items
         /// </summary>
         /// <returns><see cref="Result{TDto}"/> instance</returns>
         Task<IResult<TDto[]>> LoadAllAsync();

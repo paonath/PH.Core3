@@ -23,7 +23,7 @@ namespace PH.Core3.Common.Services.Crud
         where TDto :   TEditDto, IDtoResult<TKey>
     {
         /// <summary>
-        /// Load All <see cref="TDto">Items</see> as Tree
+        /// Load All Items as Tree
         /// </summary>
         /// <returns><see cref="Result{TContent}"/> instance</returns>
         Task<IResult<TDto[]>> LoadAllAsTreeAsync();

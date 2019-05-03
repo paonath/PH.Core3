@@ -1,0 +1,44 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+
+    <!-- Generate XML docs -->
+    <DocumentationFile>bin\$(Configuration)\PH.Core3.MongoDb.xml</DocumentationFile>
+
+
+
+
+
+    <!--NUGET PKG-->
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    
+    <PackageId>PH.Core3.MongoDb</PackageId>
+    
+    <Description>
+      NetStandard2.0 and NetCoreApp2.2 Utilities for Crud API System - DAL Abstraction: should be referenced by API web Project
+    </Description>
+
+    <PackageReleaseNotes>
+      First release.
+    </PackageReleaseNotes>
+    
+    <PackageTags>
+      asp.net core, netcore, csharp, services, di, DAL, data access layer, Microsoft.AspNetCore.Identity.MongoDB, mongo
+    </PackageTags>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.MongoDB" Version="1.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\PH.Core3.Common.Services.Components\PH.Core3.Common.Services.Components.csproj" />
+    <ProjectReference Include="..\PH.Core3.Common.Services\PH.Core3.Common.Services.csproj" />
+    <ProjectReference Include="..\PH.Core3.Common\PH.Core3.Common.csproj" />
+    <ProjectReference Include="..\PH.Core3.UnitOfWork\PH.Core3.UnitOfWork.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -4,17 +4,18 @@
 ## Contents
 
 - [AlberoService](#T-PH-Core3-Test-WebApp-Services-AlberoService 'PH.Core3.Test.WebApp.Services.AlberoService')
-  - [#ctor(coreIdentifier,logger,ctx,settings,tenantId)](#M-PH-Core3-Test-WebApp-Services-AlberoService-#ctor-PH-Core3-Common-IIdentifier,Microsoft-Extensions-Logging-ILogger{PH-Core3-Common-Services-Components-EF-Crud-CrudServiceBase{PH-Core3-TestContext-MyContext,PH-Core3-TestContext-Albero,PH-Core3-Test-WebApp-Services-AlberoDTo,PH-Core3-Test-WebApp-Services-NewAlberoDTo,PH-Core3-Test-WebApp-Services-EditAlberoDTo,System-Guid}},PH-Core3-TestContext-MyContext,PH-Core3-Common-Services-Components-EF-TransientCrudSettings- 'PH.Core3.Test.WebApp.Services.AlberoService.#ctor(PH.Core3.Common.IIdentifier,Microsoft.Extensions.Logging.ILogger{PH.Core3.Common.Services.Components.EF.Crud.CrudServiceBase{PH.Core3.TestContext.MyContext,PH.Core3.TestContext.Albero,PH.Core3.Test.WebApp.Services.AlberoDTo,PH.Core3.Test.WebApp.Services.NewAlberoDTo,PH.Core3.Test.WebApp.Services.EditAlberoDTo,System.Guid}},PH.Core3.TestContext.MyContext,PH.Core3.Common.Services.Components.EF.TransientCrudSettings)')
+  - [#ctor(coreIdentifier,logger,ctx,settings)](#M-PH-Core3-Test-WebApp-Services-AlberoService-#ctor-PH-Core3-Common-IIdentifier,Microsoft-Extensions-Logging-ILogger{PH-Core3-EntityFramework-Services-Components-Crud-CrudServiceBase{PH-Core3-TestContext-MyContext,PH-Core3-TestContext-Albero,PH-Core3-Test-WebApp-Services-AlberoDTo,PH-Core3-Test-WebApp-Services-NewAlberoDTo,PH-Core3-Test-WebApp-Services-EditAlberoDTo,System-Guid}},PH-Core3-TestContext-MyContext,PH-Core3-Common-Services-Components-Crud-TransientCrudSettings- 'PH.Core3.Test.WebApp.Services.AlberoService.#ctor(PH.Core3.Common.IIdentifier,Microsoft.Extensions.Logging.ILogger{PH.Core3.EntityFramework.Services.Components.Crud.CrudServiceBase{PH.Core3.TestContext.MyContext,PH.Core3.TestContext.Albero,PH.Core3.Test.WebApp.Services.AlberoDTo,PH.Core3.Test.WebApp.Services.NewAlberoDTo,PH.Core3.Test.WebApp.Services.EditAlberoDTo,System.Guid}},PH.Core3.TestContext.MyContext,PH.Core3.Common.Services.Components.Crud.TransientCrudSettings)')
   - [ServiceIdentifier](#P-PH-Core3-Test-WebApp-Services-AlberoService-ServiceIdentifier 'PH.Core3.Test.WebApp.Services.AlberoService.ServiceIdentifier')
   - [MergeWithDtoAsync(e,d)](#M-PH-Core3-Test-WebApp-Services-AlberoService-MergeWithDtoAsync-PH-Core3-TestContext-Albero,PH-Core3-Test-WebApp-Services-EditAlberoDTo- 'PH.Core3.Test.WebApp.Services.AlberoService.MergeWithDtoAsync(PH.Core3.TestContext.Albero,PH.Core3.Test.WebApp.Services.EditAlberoDTo)')
   - [ToDto(entity)](#M-PH-Core3-Test-WebApp-Services-AlberoService-ToDto-PH-Core3-TestContext-Albero- 'PH.Core3.Test.WebApp.Services.AlberoService.ToDto(PH.Core3.TestContext.Albero)')
-  - [ValidatePreDelete(ent,c)](#M-PH-Core3-Test-WebApp-Services-AlberoService-ValidatePreDelete-PH-Core3-TestContext-Albero,PH-Core3-Common-Services-Components-EF-Crud-Entities-EntityValidationContext- 'PH.Core3.Test.WebApp.Services.AlberoService.ValidatePreDelete(PH.Core3.TestContext.Albero,PH.Core3.Common.Services.Components.EF.Crud.Entities.EntityValidationContext)')
-  - [ValidatePreInsert(ent,c)](#M-PH-Core3-Test-WebApp-Services-AlberoService-ValidatePreInsert-PH-Core3-TestContext-Albero,PH-Core3-Common-Services-Components-EF-Crud-Entities-EntityValidationContext- 'PH.Core3.Test.WebApp.Services.AlberoService.ValidatePreInsert(PH.Core3.TestContext.Albero,PH.Core3.Common.Services.Components.EF.Crud.Entities.EntityValidationContext)')
-  - [ValidatePreUpdate(ent,c)](#M-PH-Core3-Test-WebApp-Services-AlberoService-ValidatePreUpdate-PH-Core3-TestContext-Albero,PH-Core3-Common-Services-Components-EF-Crud-Entities-EntityValidationContext- 'PH.Core3.Test.WebApp.Services.AlberoService.ValidatePreUpdate(PH.Core3.TestContext.Albero,PH.Core3.Common.Services.Components.EF.Crud.Entities.EntityValidationContext)')
+  - [ValidatePreDelete(ent,c)](#M-PH-Core3-Test-WebApp-Services-AlberoService-ValidatePreDelete-PH-Core3-TestContext-Albero,PH-Core3-Common-Services-Components-Crud-Entities-EntityValidationContext- 'PH.Core3.Test.WebApp.Services.AlberoService.ValidatePreDelete(PH.Core3.TestContext.Albero,PH.Core3.Common.Services.Components.Crud.Entities.EntityValidationContext)')
+  - [ValidatePreInsert(ent,c)](#M-PH-Core3-Test-WebApp-Services-AlberoService-ValidatePreInsert-PH-Core3-TestContext-Albero,PH-Core3-Common-Services-Components-Crud-Entities-EntityValidationContext- 'PH.Core3.Test.WebApp.Services.AlberoService.ValidatePreInsert(PH.Core3.TestContext.Albero,PH.Core3.Common.Services.Components.Crud.Entities.EntityValidationContext)')
+  - [ValidatePreUpdate(ent,c)](#M-PH-Core3-Test-WebApp-Services-AlberoService-ValidatePreUpdate-PH-Core3-TestContext-Albero,PH-Core3-Common-Services-Components-Crud-Entities-EntityValidationContext- 'PH.Core3.Test.WebApp.Services.AlberoService.ValidatePreUpdate(PH.Core3.TestContext.Albero,PH.Core3.Common.Services.Components.Crud.Entities.EntityValidationContext)')
 - [EditAlberoDTo](#T-PH-Core3-Test-WebApp-Services-EditAlberoDTo 'PH.Core3.Test.WebApp.Services.EditAlberoDTo')
   - [Id](#P-PH-Core3-Test-WebApp-Services-EditAlberoDTo-Id 'PH.Core3.Test.WebApp.Services.EditAlberoDTo.Id')
 - [HttpTenantIdentificationStrategy](#T-PH-Core3-Test-WebApp-HttpTenantIdentificationStrategy 'PH.Core3.Test.WebApp.HttpTenantIdentificationStrategy')
   - [TryIdentifyTenant(tenantId)](#M-PH-Core3-Test-WebApp-HttpTenantIdentificationStrategy-TryIdentifyTenant-System-Object@- 'PH.Core3.Test.WebApp.HttpTenantIdentificationStrategy.TryIdentifyTenant(System.Object@)')
+- [LoggingModule](#T-PH-Core3-Test-WebApp-AutofacModules-LoggingModule 'PH.Core3.Test.WebApp.AutofacModules.LoggingModule')
 - [MailSenderService](#T-PH-Core3-Test-WebApp-HostedService-MailSenderService 'PH.Core3.Test.WebApp.HostedService.MailSenderService')
   - [#ctor()](#M-PH-Core3-Test-WebApp-HostedService-MailSenderService-#ctor-PH-Core3-AspNetCoreApi-Services-IViewRenderService- 'PH.Core3.Test.WebApp.HostedService.MailSenderService.#ctor(PH.Core3.AspNetCoreApi.Services.IViewRenderService)')
   - [Dispose(disposing)](#M-PH-Core3-Test-WebApp-HostedService-MailSenderService-Dispose-System-Boolean- 'PH.Core3.Test.WebApp.HostedService.MailSenderService.Dispose(System.Boolean)')
@@ -41,8 +42,8 @@ PH.Core3.Test.WebApp.Services
 
 
 
-<a name='M-PH-Core3-Test-WebApp-Services-AlberoService-#ctor-PH-Core3-Common-IIdentifier,Microsoft-Extensions-Logging-ILogger{PH-Core3-Common-Services-Components-EF-Crud-CrudServiceBase{PH-Core3-TestContext-MyContext,PH-Core3-TestContext-Albero,PH-Core3-Test-WebApp-Services-AlberoDTo,PH-Core3-Test-WebApp-Services-NewAlberoDTo,PH-Core3-Test-WebApp-Services-EditAlberoDTo,System-Guid}},PH-Core3-TestContext-MyContext,PH-Core3-Common-Services-Components-EF-TransientCrudSettings-'></a>
-### #ctor(coreIdentifier,logger,ctx,settings,tenantId) `constructor`
+<a name='M-PH-Core3-Test-WebApp-Services-AlberoService-#ctor-PH-Core3-Common-IIdentifier,Microsoft-Extensions-Logging-ILogger{PH-Core3-EntityFramework-Services-Components-Crud-CrudServiceBase{PH-Core3-TestContext-MyContext,PH-Core3-TestContext-Albero,PH-Core3-Test-WebApp-Services-AlberoDTo,PH-Core3-Test-WebApp-Services-NewAlberoDTo,PH-Core3-Test-WebApp-Services-EditAlberoDTo,System-Guid}},PH-Core3-TestContext-MyContext,PH-Core3-Common-Services-Components-Crud-TransientCrudSettings-'></a>
+### #ctor(coreIdentifier,logger,ctx,settings) `constructor`
 
 ##### Summary
 
@@ -53,9 +54,9 @@ Init new CRUD Service for Insert/Update/Delete
 | Name | Type | Description |
 | ---- | ---- | ----------- |
 | coreIdentifier | [PH.Core3.Common.IIdentifier](#T-PH-Core3-Common-IIdentifier 'PH.Core3.Common.IIdentifier') | Cross Scope Identifier |
-| logger | [Microsoft.Extensions.Logging.ILogger{PH.Core3.Common.Services.Components.EF.Crud.CrudServiceBase{PH.Core3.TestContext.MyContext,PH.Core3.TestContext.Albero,PH.Core3.Test.WebApp.Services.AlberoDTo,PH.Core3.Test.WebApp.Services.NewAlberoDTo,PH.Core3.Test.WebApp.Services.EditAlberoDTo,System.Guid}}](#T-Microsoft-Extensions-Logging-ILogger{PH-Core3-Common-Services-Components-EF-Crud-CrudServiceBase{PH-Core3-TestContext-MyContext,PH-Core3-TestContext-Albero,PH-Core3-Test-WebApp-Services-AlberoDTo,PH-Core3-Test-WebApp-Services-NewAlberoDTo,PH-Core3-Test-WebApp-Services-EditAlberoDTo,System-Guid}} 'Microsoft.Extensions.Logging.ILogger{PH.Core3.Common.Services.Components.EF.Crud.CrudServiceBase{PH.Core3.TestContext.MyContext,PH.Core3.TestContext.Albero,PH.Core3.Test.WebApp.Services.AlberoDTo,PH.Core3.Test.WebApp.Services.NewAlberoDTo,PH.Core3.Test.WebApp.Services.EditAlberoDTo,System.Guid}}') | Logger |
+| logger | [Microsoft.Extensions.Logging.ILogger{PH.Core3.EntityFramework.Services.Components.Crud.CrudServiceBase{PH.Core3.TestContext.MyContext,PH.Core3.TestContext.Albero,PH.Core3.Test.WebApp.Services.AlberoDTo,PH.Core3.Test.WebApp.Services.NewAlberoDTo,PH.Core3.Test.WebApp.Services.EditAlberoDTo,System.Guid}}](#T-Microsoft-Extensions-Logging-ILogger{PH-Core3-EntityFramework-Services-Components-Crud-CrudServiceBase{PH-Core3-TestContext-MyContext,PH-Core3-TestContext-Albero,PH-Core3-Test-WebApp-Services-AlberoDTo,PH-Core3-Test-WebApp-Services-NewAlberoDTo,PH-Core3-Test-WebApp-Services-EditAlberoDTo,System-Guid}} 'Microsoft.Extensions.Logging.ILogger{PH.Core3.EntityFramework.Services.Components.Crud.CrudServiceBase{PH.Core3.TestContext.MyContext,PH.Core3.TestContext.Albero,PH.Core3.Test.WebApp.Services.AlberoDTo,PH.Core3.Test.WebApp.Services.NewAlberoDTo,PH.Core3.Test.WebApp.Services.EditAlberoDTo,System.Guid}}') | Logger |
 | ctx | [PH.Core3.TestContext.MyContext](#T-PH-Core3-TestContext-MyContext 'PH.Core3.TestContext.MyContext') | Entity Framework DbContext |
-| settings | [PH.Core3.Common.Services.Components.EF.TransientCrudSettings](#T-PH-Core3-Common-Services-Components-EF-TransientCrudSettings 'PH.Core3.Common.Services.Components.EF.TransientCrudSettings') | CRUD settings |
+| settings | [PH.Core3.Common.Services.Components.Crud.TransientCrudSettings](#T-PH-Core3-Common-Services-Components-Crud-TransientCrudSettings 'PH.Core3.Common.Services.Components.Crud.TransientCrudSettings') | CRUD settings |
 
 <a name='P-PH-Core3-Test-WebApp-Services-AlberoService-ServiceIdentifier'></a>
 ### ServiceIdentifier `property`
@@ -87,7 +88,7 @@ Entity with changed properties
 
 ##### Summary
 
-Transform a [](#!-TEntity 'TEntity') to a [](#!-TDto 'TDto') to return to consuming services.
+Transform a entity to a dto to return to consuming services.
 
 ##### Returns
 
@@ -99,7 +100,7 @@ dto
 | ---- | ---- | ----------- |
 | entity | [PH.Core3.TestContext.Albero](#T-PH-Core3-TestContext-Albero 'PH.Core3.TestContext.Albero') | Entity |
 
-<a name='M-PH-Core3-Test-WebApp-Services-AlberoService-ValidatePreDelete-PH-Core3-TestContext-Albero,PH-Core3-Common-Services-Components-EF-Crud-Entities-EntityValidationContext-'></a>
+<a name='M-PH-Core3-Test-WebApp-Services-AlberoService-ValidatePreDelete-PH-Core3-TestContext-Albero,PH-Core3-Common-Services-Components-Crud-Entities-EntityValidationContext-'></a>
 ### ValidatePreDelete(ent,c) `method`
 
 ##### Summary
@@ -115,9 +116,9 @@ Task
 | Name | Type | Description |
 | ---- | ---- | ----------- |
 | ent | [PH.Core3.TestContext.Albero](#T-PH-Core3-TestContext-Albero 'PH.Core3.TestContext.Albero') | Entity to Delete |
-| c | [PH.Core3.Common.Services.Components.EF.Crud.Entities.EntityValidationContext](#T-PH-Core3-Common-Services-Components-EF-Crud-Entities-EntityValidationContext 'PH.Core3.Common.Services.Components.EF.Crud.Entities.EntityValidationContext') | Custom Validation Context |
+| c | [PH.Core3.Common.Services.Components.Crud.Entities.EntityValidationContext](#T-PH-Core3-Common-Services-Components-Crud-Entities-EntityValidationContext 'PH.Core3.Common.Services.Components.Crud.Entities.EntityValidationContext') | Custom Validation Context |
 
-<a name='M-PH-Core3-Test-WebApp-Services-AlberoService-ValidatePreInsert-PH-Core3-TestContext-Albero,PH-Core3-Common-Services-Components-EF-Crud-Entities-EntityValidationContext-'></a>
+<a name='M-PH-Core3-Test-WebApp-Services-AlberoService-ValidatePreInsert-PH-Core3-TestContext-Albero,PH-Core3-Common-Services-Components-Crud-Entities-EntityValidationContext-'></a>
 ### ValidatePreInsert(ent,c) `method`
 
 ##### Summary
@@ -133,9 +134,9 @@ Task
 | Name | Type | Description |
 | ---- | ---- | ----------- |
 | ent | [PH.Core3.TestContext.Albero](#T-PH-Core3-TestContext-Albero 'PH.Core3.TestContext.Albero') | Entity to Add |
-| c | [PH.Core3.Common.Services.Components.EF.Crud.Entities.EntityValidationContext](#T-PH-Core3-Common-Services-Components-EF-Crud-Entities-EntityValidationContext 'PH.Core3.Common.Services.Components.EF.Crud.Entities.EntityValidationContext') | Custom Validation Context |
+| c | [PH.Core3.Common.Services.Components.Crud.Entities.EntityValidationContext](#T-PH-Core3-Common-Services-Components-Crud-Entities-EntityValidationContext 'PH.Core3.Common.Services.Components.Crud.Entities.EntityValidationContext') | Custom Validation Context |
 
-<a name='M-PH-Core3-Test-WebApp-Services-AlberoService-ValidatePreUpdate-PH-Core3-TestContext-Albero,PH-Core3-Common-Services-Components-EF-Crud-Entities-EntityValidationContext-'></a>
+<a name='M-PH-Core3-Test-WebApp-Services-AlberoService-ValidatePreUpdate-PH-Core3-TestContext-Albero,PH-Core3-Common-Services-Components-Crud-Entities-EntityValidationContext-'></a>
 ### ValidatePreUpdate(ent,c) `method`
 
 ##### Summary
@@ -151,7 +152,7 @@ Task
 | Name | Type | Description |
 | ---- | ---- | ----------- |
 | ent | [PH.Core3.TestContext.Albero](#T-PH-Core3-TestContext-Albero 'PH.Core3.TestContext.Albero') | Entity to Edit |
-| c | [PH.Core3.Common.Services.Components.EF.Crud.Entities.EntityValidationContext](#T-PH-Core3-Common-Services-Components-EF-Crud-Entities-EntityValidationContext 'PH.Core3.Common.Services.Components.EF.Crud.Entities.EntityValidationContext') | Custom Validation Context |
+| c | [PH.Core3.Common.Services.Components.Crud.Entities.EntityValidationContext](#T-PH-Core3-Common-Services-Components-Crud-Entities-EntityValidationContext 'PH.Core3.Common.Services.Components.Crud.Entities.EntityValidationContext') | Custom Validation Context |
 
 <a name='T-PH-Core3-Test-WebApp-Services-EditAlberoDTo'></a>
 ## EditAlberoDTo `type`
@@ -191,6 +192,21 @@ if not.
 | Name | Type | Description |
 | ---- | ---- | ----------- |
 | tenantId | [System.Object@](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Object@ 'System.Object@') | The current tenant identifier. |
+
+<a name='T-PH-Core3-Test-WebApp-AutofacModules-LoggingModule'></a>
+## LoggingModule `type`
+
+##### Namespace
+
+PH.Core3.Test.WebApp.AutofacModules
+
+##### Summary
+
+
+
+##### See Also
+
+- [Autofac.Module](#T-Autofac-Module 'Autofac.Module')
 
 <a name='T-PH-Core3-Test-WebApp-HostedService-MailSenderService'></a>
 ## MailSenderService `type`
@@ -267,6 +283,14 @@ Triggered when the application host is performing a graceful shutdown.
 ##### Namespace
 
 PH.Core3.Test.WebApp.AutofacModules
+
+##### Summary
+
+Main autofac module
+
+##### See Also
+
+- [Autofac.Module](#T-Autofac-Module 'Autofac.Module')
 
 <a name='M-PH-Core3-Test-WebApp-AutofacModules-MainwebModule-Load-Autofac-ContainerBuilder-'></a>
 ### Load(builder) `method`

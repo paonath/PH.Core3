@@ -2,8 +2,18 @@
 
 namespace PH.Core3.Common.Identifiers
 {
+    /// <summary>
+    /// Tenant Identifier across scope
+    /// </summary>
+    /// <seealso cref="PH.Core3.Common.Identifiers.Identifier" />
+    /// <seealso cref="PH.Core3.Common.IPerTenantIdentifier" />
     public class TenantIdentifier : Identifier, IPerTenantIdentifier
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TenantIdentifier"/> class.
+        /// </summary>
+        /// <param name="uid">The uid.</param>
+        /// <param name="tenantId">The tenant identifier.</param>
         public TenantIdentifier([NotNull] string uid, [NotNull] string tenantId) 
             : base(uid)
         {

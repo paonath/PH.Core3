@@ -3,7 +3,7 @@ using JetBrains.Annotations;
 using Microsoft.Extensions.Logging;
 using PH.Core3.Common.CoreSystem;
 
-namespace PH.Core3.Common.Services.Components.EF
+namespace PH.Core3.Common.Services.Components.Crud
 {
     /// <summary>
     /// Event fired on Disposing a <see cref="NoValidationScope"/>
@@ -27,7 +27,7 @@ namespace PH.Core3.Common.Services.Components.EF
     {
         private readonly ILogger _logger;
         private IDisposable _disposable;
-        private readonly IIdentifier _identifier;
+        private new readonly IIdentifier _identifier;
 
 
         /// <summary>

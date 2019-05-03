@@ -15,7 +15,7 @@ namespace PH.Core3.Common.Services.Crud
     public interface IRemoveService<TDto, in TKey> :
         IReadOnlyService<TDto, TKey>
         , ICrudAbstractionBase
-        where TDto : /*class,*/ IDtoResult<TKey>, IDto<TKey>, IIdentifiable<TKey> 
+        where TDto : IDtoResult<TKey>, IDto<TKey>, IIdentifiable<TKey> 
         where TKey : IEquatable<TKey>
     {
         

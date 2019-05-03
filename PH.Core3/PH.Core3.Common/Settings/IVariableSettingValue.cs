@@ -15,12 +15,9 @@
         /// True if changed during scope life.
         /// </summary>
         bool Changed { get; }
-        
-        /// <summary>
-        /// Set Value for Setting
-        /// </summary>
-        /// <param name="currentValue"></param>
-        /// <typeparam name="T">Type of the setting value</typeparam>
+
+        /// <summary>Sets the value.</summary>
+        /// <param name="currentValue">The current value.</param>
         void SetValue(T currentValue);
         
         /// <summary>

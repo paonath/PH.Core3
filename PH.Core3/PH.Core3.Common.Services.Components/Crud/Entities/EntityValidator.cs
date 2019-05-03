@@ -7,7 +7,8 @@ using Microsoft.Extensions.Logging;
 using PH.Core3.Common.Models.Entities;
 using PH.Core3.Common.Settings;
 
-namespace PH.Core3.Common.Services.Components.EF.Crud.Entities
+
+namespace PH.Core3.Common.Services.Components.Crud.Entities
 {
     /// <summary>
     /// </summary>
@@ -34,8 +35,27 @@ namespace PH.Core3.Common.Services.Components.EF.Crud.Entities
 
         private readonly TransientCrudSettings _crudSettings;
 
-        
-        internal EntityValidator([NotNull] IIdentifier identifier
+        /// <summary>
+        /// Initializes a new instance of the <see cref="EntityValidator{TEntity, TKey}"/> class.
+        /// </summary>
+        /// <param name="identifier">The identifier.</param>
+        /// <param name="funcOnCreateValidation">The function on create validation.</param>
+        /// <param name="funcOnUpdateValidation">The function on update validation.</param>
+        /// <param name="funcOnDeleteValidation">The function on delete validation.</param>
+        /// <param name="logger">The logger.</param>
+        /// <param name="settings">The settings.</param>
+        /// <exception cref="ArgumentNullException">
+        /// funcOnCreateValidation
+        /// or
+        /// funcOnUpdateValidation
+        /// or
+        /// funcOnDeleteValidation
+        /// or
+        /// logger
+        /// or
+        /// settings
+        /// </exception>
+        public EntityValidator([NotNull] IIdentifier identifier
                                  , [NotNull] Func<TEntity, EntityValidationContext, Task<ValidationResult>> funcOnCreateValidation
                                  , [NotNull] Func<TEntity, EntityValidationContext, Task<ValidationResult>> funcOnUpdateValidation
                                  , [NotNull] Func<TEntity, EntityValidationContext, Task<ValidationResult>> funcOnDeleteValidation
@@ -141,7 +161,8 @@ namespace PH.Core3.Common.Services.Components.EF.Crud.Entities
             return GetNotPerformedValidation(ValidationType.OnDelete);
         }
 
-       
+        /// <summary>Gets the core identifier.</summary>
+        /// <value>The core identifier.</value>
         public IIdentifier CoreIdentifier { get; }
     }
 }

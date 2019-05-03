@@ -8,13 +8,18 @@ using PH.Core3.UnitOfWork;
 
 namespace PH.Core3.EntityFramework
 {
+    /// <summary>
+    /// Entity Framework based Unit Of Work
+    /// </summary>
+    /// <seealso cref="PH.Core3.Common.CoreSystem.CoreDisposable" />
+    /// <seealso cref="PH.Core3.UnitOfWork.IUnitOfWork" />
     public sealed class  EntityFrameworkUnitOfWork : CoreDisposable , IUnitOfWork
     {
         private IDbContextUnitOfWork _dbUow;
         private readonly ILogger _logger;
 
         /// <summary>
-        /// Initialize a new instance of <see cref="CoreDisposable"/>
+        /// Initialize a new instance of <see cref="EntityFrameworkUnitOfWork"/>
         /// </summary>
         public EntityFrameworkUnitOfWork([NotNull] IDbContextUnitOfWork efContextUnitOfWork, [NotNull] ILogger logger) 
             : base(efContextUnitOfWork.Identifier)
@@ -48,6 +53,8 @@ namespace PH.Core3.EntityFramework
             }
         }
 
+        /// <summary>Gets the identifier.</summary>
+        /// <value>The identifier.</value>
         public IIdentifier Identifier => _dbUow.Identifier;
 
         /// <summary>
@@ -83,6 +90,10 @@ namespace PH.Core3.EntityFramework
         /// Fired On Committed Unit Of Work
         /// </summary>
         public event EventHandler<UnitOfWorkEventArg> Committed;
+
+        /// <summary>Begins the unit of work scope.</summary>
+        /// <param name="scopeName">Name of the scope.</param>
+        /// <returns>IDisposable scope</returns>
         public IDisposable BeginScope(string scopeName)
         {
             return _dbUow.BeginScope(scopeName);
