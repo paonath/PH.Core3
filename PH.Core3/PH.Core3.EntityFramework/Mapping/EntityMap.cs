@@ -57,8 +57,10 @@ namespace PH.Core3.EntityFramework.Mapping
         public virtual void Configure([NotNull] EntityTypeBuilder<TEntity> builder)
         {
             
-            if (builder is null) 
+            if (builder is null)
+            {
                 throw new ArgumentNullException(nameof(builder));
+            }
 
             builder.Property(x => x.Deleted)
                    .HasColumnName("Deleted")
@@ -102,4 +104,47 @@ namespace PH.Core3.EntityFramework.Mapping
         }
     }
 
+
+    /// <summary>
+    ///     Configures the entity of type <typeparamref name="TEntity" />.
+    ///
+    /// Override Configure Method calling base!
+    /// </summary>
+    /// <typeparam name="TEntity">The type of the entity.</typeparam>
+    /// <typeparam name="TKey">The type of the key.</typeparam>
+    /// <seealso cref="PH.Core3.EntityFramework.Mapping.EntityMap{TEntity, TKey}" />
+    public abstract class StatusEntityMap<TEntity, TKey> : EntityMap<TEntity, TKey>
+        where TEntity : class, IStatusEntity<TKey>
+        where TKey : IEquatable<TKey>
+    {
+        /// <summary>
+        ///     Configures the entity of type <typeparamref name="TEntity" />.
+        ///
+        /// Override Configure Method calling base!
+        /// </summary>
+        /// <param name="builder"> The builder to be used to configure the entity type. </param>
+        public override void Configure(EntityTypeBuilder<TEntity> builder)
+        {
+            if (builder is null)
+            {
+                throw new ArgumentNullException(nameof(builder));
+            }
+
+            base.Configure(builder);
+
+            builder.Property(x => x.UtcValidFrom)
+                   .HasColumnName("UtcValidFrom")
+                   .IsRequired(true);
+
+
+            builder
+                .HasIndex(i => new
+                {
+                    i.Id,
+                    i.UtcValidFrom,
+                    i.UtcValidUntil
+                }).IsUnique(true);
+
+        }
+    }
 }

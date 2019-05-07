@@ -65,9 +65,11 @@ namespace PH.Core3.Common.Identifiers.Services
         /// <returns>The result of the operator.</returns>
         public static ServiceIdentifier operator +(ServiceIdentifier a, ServiceIdentifier b)
         {
-            var name = $"{a.Name} [{b.Name}]";
+            var name = $"{a.Name} [{b.Name} - {b.Id}]";
             if (a.Id < b.Id)
-                name = $"{b.Name} [{a.Name}]";
+            {
+                name = $"{b.Name} [{a.Name} - {a.Id}]";
+            }
 
             return new ServiceIdentifier(a.Id + b.Id, name);
         }
@@ -97,9 +99,11 @@ namespace PH.Core3.Common.Identifiers.Services
         /// <returns>The result of the operator.</returns>
         public static ServiceIdentifier operator -(ServiceIdentifier a, ServiceIdentifier b)
         {
-            var name = $"{a.Name} [{b.Name}]";
+            var name = $"{a.Name} [{b.Name} - {b.Id}]";
             if (a.Id > b.Id)
-                name = $"{b.Name} [{a.Name}]";
+            {
+                name = $"{b.Name} [{a.Name} - {a.Id}]";
+            }
 
             return new ServiceIdentifier(a.Id - b.Id, name);
         }

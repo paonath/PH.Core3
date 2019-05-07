@@ -16,12 +16,12 @@ namespace PH.Core3.EntityFramework
     public sealed class  EntityFrameworkUnitOfWork : CoreDisposable , IUnitOfWork
     {
         private IDbContextUnitOfWork _dbUow;
-        private readonly ILogger _logger;
+        private readonly ILogger<EntityFrameworkUnitOfWork> _logger;
 
         /// <summary>
         /// Initialize a new instance of <see cref="EntityFrameworkUnitOfWork"/>
         /// </summary>
-        public EntityFrameworkUnitOfWork([NotNull] IDbContextUnitOfWork efContextUnitOfWork, [NotNull] ILogger logger) 
+        public EntityFrameworkUnitOfWork([NotNull] IDbContextUnitOfWork efContextUnitOfWork, [NotNull] ILogger<EntityFrameworkUnitOfWork> logger) 
             : base(efContextUnitOfWork.Identifier)
         {
             if (efContextUnitOfWork is null) 
@@ -33,6 +33,7 @@ namespace PH.Core3.EntityFramework
             _dbUow = efContextUnitOfWork.Initialize();
             
             _dbUow.Committed += _dbUow_Committed;
+            _logger.LogTrace("EntityFrameworkUnitOfWork ctor");
         }
 
         private void _dbUow_Committed(object sender, UnitOfWorkEventArg e)
