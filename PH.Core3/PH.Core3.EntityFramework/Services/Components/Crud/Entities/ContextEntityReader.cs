@@ -112,6 +112,7 @@ namespace PH.Core3.EntityFramework.Services.Components.Crud.Entities
         /// Load All Items
         /// </summary>
         /// <returns><see cref="Result{T}"/> instance</returns>
+        [ItemNotNull]
         public async Task<IResult<TEntity[]>> EntityLoadAllAsync()
         {
             var c = await EntityLoadAsync(-1, -1);
@@ -122,10 +123,13 @@ namespace PH.Core3.EntityFramework.Services.Components.Crud.Entities
         /// Load All Items
         /// </summary>
         /// <returns><see cref="IPagedResult{T}"/> instance</returns>
+        [ItemNotNull]
         public async Task<IPagedResult<TEntity>> EntityPagedLoadAllAsync(int pageNumber = 0)
         {
             if (ItemsPaginationSize.Value == -1)
+            {
                 return await EntityLoadAsync(-1, -1);
+            }
 
             var itemsToSkip = pageNumber * ItemsPaginationSize.Value;
             return await EntityLoadAsync(itemsToSkip, ItemsPaginationSize.Value);

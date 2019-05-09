@@ -50,10 +50,10 @@ namespace PH.Core3.EntityFramework
 
         
 
-        /// <summary>
-        /// Identifier
-        /// </summary>
-        public IIdentifier Identifier { get; set; }
+        ///// <summary>
+        ///// Identifier
+        ///// </summary>
+        //public IIdentifier Identifier { get; set; }
 
         /// <summary>Gets or sets the author.</summary>
         /// <value>The author.</value>
@@ -93,7 +93,9 @@ namespace PH.Core3.EntityFramework
             : base(options)
         {
             if (options is null)
+            {
                 throw new ArgumentNullException(nameof(options));
+            }
 
             Disposed                = false;
             Initialized             = false;
@@ -420,7 +422,9 @@ namespace PH.Core3.EntityFramework
 
                 transactionCommitMessage = logMessage.Trim();
                 if (transactionCommitMessage.Length > 500)
+                {
                     transactionCommitMessage = transactionCommitMessage.Substring(0, 499);
+                }
             }
 
             if (Changecount == 0)
@@ -434,14 +438,19 @@ namespace PH.Core3.EntityFramework
 
 
             if (transactionCommitMessage != "")
+            {
                 _transactionAudit.CommitMessage = transactionCommitMessage;
+            }
 
             if (ScopeDictionary.Count > 0)
             {
                 var s = string.Join(" => "
                                     , ScopeDictionary.OrderBy(x => x.Key).Select(x => x.Value).ToArray());
                 if (s.Length > 500)
+                {
                     s = $"{s.Substring(0, 497)}...";
+                }
+
                 _transactionAudit.Scopes = s;
             }
 

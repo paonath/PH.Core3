@@ -1,4 +1,5 @@
 ﻿using System;
+using JetBrains.Annotations;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -32,7 +33,8 @@ namespace PH.Core3.Test.WebApp
             }
         }
 
-        static Info CreateInfoForApiVersion( ApiVersionDescription description )
+        [NotNull]
+        static Info CreateInfoForApiVersion( [NotNull] ApiVersionDescription description )
         {
             var info = new Info()
             {

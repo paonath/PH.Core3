@@ -27,7 +27,7 @@ namespace PH.Core3.EntityFramework.Extensions
         /// Initializes a new instance of the <see cref="Core3DbOptionsExtension"/> class.
         /// </summary>
         /// <param name="bs">The bs.</param>
-        public Core3DbOptionsExtension(Core3DbOptionsExtension bs)
+        public Core3DbOptionsExtension([NotNull] Core3DbOptionsExtension bs)
         {
             Tenant = bs.Tenant;
 
@@ -45,9 +45,14 @@ namespace PH.Core3.EntityFramework.Extensions
         public Core3DbOptionsExtension WithTenant([NotNull] string tenant)
         {
             if (string.IsNullOrEmpty(tenant))
+            {
                 throw new ArgumentException("Value cannot be null or empty.", nameof(tenant));
+            }
+
             if (string.IsNullOrWhiteSpace(tenant))
+            {
                 throw new ArgumentException("Value cannot be null or whitespace.", nameof(tenant));
+            }
 
             var clone = (Core3DbOptionsExtension)Clone();
             clone.Tenant = tenant;
@@ -73,6 +78,7 @@ namespace PH.Core3.EntityFramework.Extensions
         ///     This API supports the Entity Framework Core infrastructure and is not intended to be used
         ///     directly from your code. This API may change or be removed in future releases.
         /// </summary>
+        [NotNull]
         public override string LogFragment
         {
             get
@@ -105,6 +111,7 @@ namespace PH.Core3.EntityFramework.Extensions
         ///     Override this method in a derived class to ensure that any clone created is also of that class.
         /// </summary>
         /// <returns> A clone of this instance, which can be modified before being returned as immutable. </returns>
+        [NotNull]
         protected override RelationalOptionsExtension Clone() => new Core3DbOptionsExtension(this);
         
 

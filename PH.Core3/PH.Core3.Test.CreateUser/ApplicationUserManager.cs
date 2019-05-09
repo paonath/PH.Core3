@@ -26,7 +26,7 @@ namespace PH.Core3.Test.CreateUser
         /// <param name="user">The user whose password is to be hashed.</param>
         /// <param name="password">The password to hash.</param>
         /// <returns>A hashed representation of the supplied <paramref name="password" /> for the specified <paramref name="user" />.</returns>
-        public string HashPassword(User user, string password)
+        public string HashPassword([NotNull] User user, string password)
         {
             return HashPwd(user.UserName, password);
         }
@@ -47,11 +47,13 @@ namespace PH.Core3.Test.CreateUser
         /// <param name="providedPassword">The password supplied for comparison.</param>
         /// <returns>A <see cref="T:Microsoft.AspNetCore.Identity.PasswordVerificationResult" /> indicating the result of a password hash comparison.</returns>
         /// <remarks>Implementations of this method should be time consistent.</remarks>
-        public PasswordVerificationResult VerifyHashedPassword(User user, string hashedPassword, string providedPassword)
+        public PasswordVerificationResult VerifyHashedPassword([NotNull] User user, string hashedPassword, string providedPassword)
         {
             var hashed = HashPwd(user.UserName, providedPassword); //_crypt.EncryptUtf8(providedPassword, user.UserName);
             if (hashed == hashedPassword)
+            {
                 return PasswordVerificationResult.Success;
+            }
 
             return PasswordVerificationResult.Failed;
         }
@@ -93,7 +95,7 @@ namespace PH.Core3.Test.CreateUser
             return base.CheckPasswordAsync(user, password);
         }
 
-        public override async Task<IdentityResult> CreateAsync(User user)
+        public override async Task<IdentityResult> CreateAsync([NotNull] User user)
         {
             user.Deleted = false;
             
@@ -111,7 +113,7 @@ namespace PH.Core3.Test.CreateUser
             }
         }
 
-        public override async Task<IdentityResult> CreateAsync(User user, string password)
+        public override async Task<IdentityResult> CreateAsync([NotNull] User user, string password)
         {
             user.Deleted = false;
             try

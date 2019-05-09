@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
+using JetBrains.Annotations;
 using MailKit.Security;
 using Microsoft.Extensions.Hosting;
 using MimeKit;
@@ -55,6 +56,7 @@ namespace PH.Core3.Test.WebApp.HostedService
         /// Triggered when the application host is ready to start the service.
         /// </summary>
         /// <param name="cancellationToken">Indicates that the start process has been aborted.</param>
+        [NotNull]
         public Task StartAsync(CancellationToken cancellationToken)
         {
             _cancellationTokenSource = new CancellationTokenSource();
@@ -75,20 +77,24 @@ namespace PH.Core3.Test.WebApp.HostedService
                 CancelSendTask();
 
                 if(null != _smtpClient && _smtpClient.IsConnected)
+                {
                     await _smtpClient.DisconnectAsync(true);
+                }
 
 
                 //Next, we wait for sendTask to end, but no longer than what the web host allows
                 if(null != _sendTask)
+                {
                     await Task.WhenAny(_sendTask, Task.Delay(Timeout.Infinite, cancellationToken));
-
+                }
             }
             catch 
             {
                 //
                 if(null != _smtpClient && _smtpClient.IsConnected)
+                {
                     await _smtpClient.DisconnectAsync(true);
-
+                }
             }
         }
         
@@ -147,7 +153,9 @@ namespace PH.Core3.Test.WebApp.HostedService
             try
             {
                 if(null == _smtpClient)
+                {
                     _smtpClient = new MailKit.Net.Smtp.SmtpClient();
+                }
 
 
                 if (!_smtpClient.IsConnected)

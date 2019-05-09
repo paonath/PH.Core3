@@ -53,8 +53,10 @@ namespace PH.Core3.Common.Settings
         public virtual void SetValue(T value)
         {
             if(!CanSet)
+            {
                 throw new InvalidOperationException("Can't assign new value to const setting");
-            
+            }
+
             _v     = value;
             CanSet = false;
             
@@ -76,7 +78,11 @@ namespace PH.Core3.Common.Settings
         /// <returns>Value of the Setting</returns>
         public static implicit operator T([NotNull] SettingAbstraction<T> d) // implicit digit to byte conversion operator
         {
-            if (d is null) throw new ArgumentNullException(nameof(d));
+            if (d is null)
+            {
+                throw new ArgumentNullException(nameof(d));
+            }
+
             return d.GetValue();
         }
         

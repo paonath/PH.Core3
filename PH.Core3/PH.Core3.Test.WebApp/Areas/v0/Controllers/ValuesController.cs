@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 using Microsoft.AspNetCore.Mvc;
 using PH.Core3.Test.WebApp.HostedService;
 
@@ -24,6 +25,7 @@ namespace PH.Core3.Test.WebApp.Areas.v0.Controllers
 
         // GET api/values
         [HttpGet]
+        [ItemNotNull]
         public async Task<ActionResult<IEnumerable<string>>> Get()
         {
             await _mailSenderService.SendEmailAsync("pippo@gmail.com");

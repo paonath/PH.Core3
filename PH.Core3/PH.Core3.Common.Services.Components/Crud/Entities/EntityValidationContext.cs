@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using FluentValidation.Results;
 using JetBrains.Annotations;
@@ -30,6 +31,29 @@ namespace PH.Core3.Common.Services.Components.Crud.Entities
         }
 
 
+        /// <summary>Performs the data annotation validation.</summary>
+        /// <param name="objectToValidate">The object to validate.</param>
+        public void PerformDataAnnotationValidation([NotNull] object objectToValidate)
+        {
+            if (!DataAnnotationsValidator.TryValidate(objectToValidate, out var failures))
+            {
+                _failures.AddRange(failures.Select(x => CoreValidationFailure.ParseDataAnnotationFailure(x)));
+            }
+        }
+
+
+        /// <summary>Performs the data annotation validation.</summary>
+        /// <param name="objectToValidate">The object to validate.</param>
+        [NotNull]
+        public Task PerformDataAnnotationValidationAsync([NotNull] object objectToValidate)
+        {
+            PerformDataAnnotationValidation(objectToValidate);
+            return Task.CompletedTask;
+        }
+
+
+
+
         /// <summary>
         /// Add a failure
         /// </summary>
@@ -48,14 +72,13 @@ namespace PH.Core3.Common.Services.Components.Crud.Entities
         /// <param name="errorMessage">error message</param>
         /// <param name="outputMessage">output message</param>
         /// <returns>awaitable task</returns>
-        public async Task AddFailureAsync([NotNull] string propertyName, [NotNull] string errorMessage,
+        public Task AddFailureAsync([NotNull] string propertyName, [NotNull] string errorMessage,
                                           [CanBeNull] string outputMessage = null)
         {
-            await Task.Run(() =>
-            {
-                AddFailure(propertyName, errorMessage, outputMessage);
-                return Task.CompletedTask;
-            });
+        
+            AddFailure(propertyName, errorMessage, outputMessage);
+            return Task.CompletedTask;
+      
 
         }
 
@@ -67,14 +90,13 @@ namespace PH.Core3.Common.Services.Components.Crud.Entities
         /// <param name="errorMessage">error message</param>
         /// <param name="outputMessage">output message</param>
         /// <returns>awaitable task</returns>
-        public async Task AddFailureAsync(EventId eventId,[NotNull] string propertyName, [NotNull] string errorMessage,
+        public Task AddFailureAsync(EventId eventId,[NotNull] string propertyName, [NotNull] string errorMessage,
                                           [CanBeNull] string outputMessage = null)
         {
-            await Task.Run(() =>
-            {
+           
                 AddFailure(eventId,propertyName, errorMessage, outputMessage);
                 return Task.CompletedTask;
-            });
+            
 
         }
 
@@ -87,15 +109,14 @@ namespace PH.Core3.Common.Services.Components.Crud.Entities
         /// <param name="attemptedValue">attempted value on error</param>
         /// <param name="outputMessage">output message</param>
         /// <returns>awaitable task</returns>
-        public async Task AddFailureWithValueAsync([NotNull] string propertyName, [NotNull] string errorMessage,
+        public Task AddFailureWithValueAsync([NotNull] string propertyName, [NotNull] string errorMessage,
                                                    [NotNull] object attemptedValue,
                                                    [CanBeNull] string outputMessage = null)
         {
-            await Task.Run(() =>
-            {
+            
                 AddFailureWithValue(propertyName, errorMessage, attemptedValue, outputMessage);
                 return Task.CompletedTask;
-            });
+            
         }
 
         /// <summary>
@@ -107,15 +128,14 @@ namespace PH.Core3.Common.Services.Components.Crud.Entities
         /// <param name="attemptedValue">attempted value on error</param>
         /// <param name="outputMessage">output message</param>
         /// <returns>awaitable task</returns>
-        public async Task AddFailureWithValueAsync(EventId eventId,[NotNull] string propertyName, [NotNull] string errorMessage,
+        public Task AddFailureWithValueAsync(EventId eventId,[NotNull] string propertyName, [NotNull] string errorMessage,
                                                    [NotNull] object attemptedValue,
                                                    [CanBeNull] string outputMessage = null)
         {
-            await Task.Run(() =>
-            {
+            
                 AddFailureWithValue(eventId,propertyName, errorMessage, attemptedValue, outputMessage);
                 return Task.CompletedTask;
-            });
+           
         }
 
         
@@ -129,9 +149,16 @@ namespace PH.Core3.Common.Services.Components.Crud.Entities
         /// <exception cref="ArgumentNullException"></exception>
         public void AddFailure(EventId eventId,[NotNull] string propertyName, [NotNull] string errorMessage,[CanBeNull] string outputMessage = null)
         {
-            if (propertyName is null) throw new ArgumentNullException(nameof(propertyName));
-            if (errorMessage is null) throw new ArgumentNullException(nameof(errorMessage));
-            
+            if (propertyName is null)
+            {
+                throw new ArgumentNullException(nameof(propertyName));
+            }
+
+            if (errorMessage is null)
+            {
+                throw new ArgumentNullException(nameof(errorMessage));
+            }
+
 
             AddFailure(new CoreValidationFailure(eventId,propertyName,errorMessage));
         }
@@ -147,9 +174,16 @@ namespace PH.Core3.Common.Services.Components.Crud.Entities
         /// </exception>
         public void AddFailure([NotNull] string propertyName, [NotNull] string errorMessage,[CanBeNull] string outputMessage = null)
         {
-            if (propertyName is null) throw new ArgumentNullException(nameof(propertyName));
-            if (errorMessage is null) throw new ArgumentNullException(nameof(errorMessage));
-            
+            if (propertyName is null)
+            {
+                throw new ArgumentNullException(nameof(propertyName));
+            }
+
+            if (errorMessage is null)
+            {
+                throw new ArgumentNullException(nameof(errorMessage));
+            }
+
 
             AddFailure(new CoreValidationFailure(propertyName,errorMessage));
         }
@@ -166,11 +200,16 @@ namespace PH.Core3.Common.Services.Components.Crud.Entities
         /// </exception>
         public void AddFailureWithValue([NotNull] string propertyName, [NotNull] string errorMessage, [NotNull] object attemptedValue,[CanBeNull] string outputMessage = null)
         {
-            if (propertyName is null) 
+            if (propertyName is null)
+            {
                 throw new ArgumentNullException(nameof(propertyName));
-            if (errorMessage is null) 
+            }
+
+            if (errorMessage is null)
+            {
                 throw new ArgumentNullException(nameof(errorMessage));
-            
+            }
+
 
             AddFailure(new CoreValidationFailure(propertyName,errorMessage, attemptedValue));
         }
@@ -186,11 +225,16 @@ namespace PH.Core3.Common.Services.Components.Crud.Entities
         /// <exception cref="ArgumentNullException"></exception>
         public void AddFailureWithValue(EventId eventId,[NotNull] string propertyName, [NotNull] string errorMessage, [NotNull] object attemptedValue,[CanBeNull] string outputMessage = null)
         {
-            if (propertyName is null) 
+            if (propertyName is null)
+            {
                 throw new ArgumentNullException(nameof(propertyName));
-            if (errorMessage is null) 
+            }
+
+            if (errorMessage is null)
+            {
                 throw new ArgumentNullException(nameof(errorMessage));
-            
+            }
+
 
             AddFailure(new CoreValidationFailure(eventId,propertyName,errorMessage, attemptedValue));
         }
@@ -205,6 +249,7 @@ namespace PH.Core3.Common.Services.Components.Crud.Entities
         /// return validation results
         /// </summary>
         /// <returns>Validation result</returns>
+        [NotNull]
         public Task<ValidationResult> GetValidationResult()
         {
             return Task.FromResult(new ValidationResult(GetFailures()));

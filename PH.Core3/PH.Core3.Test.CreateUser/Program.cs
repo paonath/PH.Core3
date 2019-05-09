@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
+using JetBrains.Annotations;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -187,6 +188,7 @@ namespace PH.Core3.Test.CreateUser
 
      internal static class NlogConfig
     {
+        [NotNull]
         public static LoggingConfiguration GetNLogCOnfiguration(string apiVersion = "")
         {
 

@@ -40,7 +40,7 @@ namespace PH.Core3.Common.Result
         /// </summary>
         /// <param name="identifier">Identifier</param>
         /// <param name="errors">errors </param>
-        internal Result([NotNull] IIdentifier identifier, IEnumerable<IError> errors)
+        internal Result([NotNull] IIdentifier identifier, [CanBeNull] IEnumerable<IError> errors)
         {
             Identifier = identifier;
             Errors = errors?.ToList() ?? new List<IError>();

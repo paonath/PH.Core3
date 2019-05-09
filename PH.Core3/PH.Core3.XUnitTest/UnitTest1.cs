@@ -1,15 +1,15 @@
 using System;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 using PH.Core3.Common.Identifiers;
 using PH.Core3.Common.Result;
 using Xunit;
 
 namespace PH.Core3.XUnitTest
 {
-
-
     public class UnitTest1
     {
+        [NotNull]
         private IResult<int> TryTre(bool b)
         {
             var id = new Identifier("tre");
@@ -28,6 +28,7 @@ namespace PH.Core3.XUnitTest
 
 
 
+        [ItemNotNull]
         public async Task<IResult<int>> TreOk()
         {
             bool param = true;
@@ -107,10 +108,13 @@ namespace PH.Core3.XUnitTest
         }
 
 
-        public IResult<TOuput> Error<T>(IResult<T> inpurResult)
+        [NotNull]
+        public IResult<TOuput> Error<T>([NotNull] IResult<T> inpurResult)
         {
             if (inpurResult is IResult<TOuput> r)
+            {
                 return r;
+            }
 
             return ResultFactory.Fail<TOuput>(inpurResult.Identifier, inpurResult.Errors);
         }
@@ -126,12 +130,15 @@ namespace PH.Core3.XUnitTest
         {
             var r1 = await _inputFunc.Invoke();
             if (r1.OnError)
+            {
                 return Error(r1);
+            }
 
             return await _outputFunc.Invoke(r1);
         }
 
 
+        [NotNull]
         public Task<Lazy<IResult<TOuput>>> GetLazyOutput()
         {
             var lazy = new Lazy<IResult<TOuput>>(() =>

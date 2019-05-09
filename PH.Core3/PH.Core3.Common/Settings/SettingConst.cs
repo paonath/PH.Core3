@@ -1,4 +1,6 @@
-﻿namespace PH.Core3.Common.Settings
+﻿using JetBrains.Annotations;
+
+namespace PH.Core3.Common.Settings
 {
     /// <summary>
     /// Read-Only Setting
@@ -28,7 +30,7 @@
         /// </summary>
         /// <param name="d">Setting instance</param>
         /// <returns>Value of the Setting</returns>
-        public static implicit operator T(SettingConst<T> d)  
+        public static implicit operator T([NotNull] SettingConst<T> d)  
         {
             return d.GetValue();
         }

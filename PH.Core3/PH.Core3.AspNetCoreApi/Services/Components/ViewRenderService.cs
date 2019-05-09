@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Abstractions;
@@ -37,7 +38,7 @@ namespace PH.Core3.AspNetCoreApi.Services.Components
         /// <param name="logger"></param>
         public ViewRenderService(IRazorViewEngine razorViewEngine,
                                  ITempDataProvider tempDataProvider,
-                                 IServiceProvider serviceProvider, IWebPathTranslator webPathTranslator, ILogger<ViewRenderService> logger = null)
+                                 IServiceProvider serviceProvider, IWebPathTranslator webPathTranslator, [CanBeNull] ILogger<ViewRenderService> logger = null)
         {
             _razorViewEngine   = razorViewEngine;
             _tempDataProvider  = tempDataProvider;
@@ -52,7 +53,8 @@ namespace PH.Core3.AspNetCoreApi.Services.Components
         /// <param name="viewWebPath">View Name</param>
         /// <param name="model">Model instance</param>
         /// <returns>string</returns>
-        public async Task<string> RenderToStringAsync(string viewWebPath, object model)
+        [ItemNotNull]
+        public async Task<string> RenderToStringAsync([NotNull] string viewWebPath, object model)
         {
             var httpContext   = new DefaultHttpContext { RequestServices = _serviceProvider };
             var actionContext = new ActionContext(httpContext, new RouteData(), new ActionDescriptor());
@@ -110,7 +112,8 @@ namespace PH.Core3.AspNetCoreApi.Services.Components
         /// <param name="model"></param>
         /// <typeparam name="TModel"></typeparam>
         /// <returns></returns>
-        public Task<string> RenderToStringAsync<TModel>(string viewName, TModel model) where TModel : class
+        [NotNull]
+        public Task<string> RenderToStringAsync<TModel>([NotNull] string viewName, TModel model) where TModel : class
         {
             return RenderToStringAsync(viewName, model as object);
         }

@@ -11,6 +11,7 @@ using PH.Core3.Common.Settings;
 namespace PH.Core3.Common.Services.Components.Crud.Entities
 {
     /// <summary>
+    /// 
     /// </summary>
     /// <typeparam name="TEntity">Type Of Entity</typeparam>
     /// <typeparam name="TKey">Type of Entity Id Property</typeparam>
@@ -19,7 +20,7 @@ namespace PH.Core3.Common.Services.Components.Crud.Entities
         where TKey : IEquatable<TKey>
     {
         //private readonly CancellationToken _cancellationToken;
-        internal EntityValidationContext ValidationContext { get; private set; }
+        private EntityValidationContext ValidationContext { get; set; }
 
 
         private readonly

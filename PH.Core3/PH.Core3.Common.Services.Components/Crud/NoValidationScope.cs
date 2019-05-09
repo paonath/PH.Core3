@@ -65,6 +65,7 @@ namespace PH.Core3.Common.Services.Components.Crud
         /// <param name="scopename">Optional Scope Name</param>
         /// <exception cref="ArgumentNullException">On null Logger</exception>
         /// <returns>NoValidationScope</returns>
+        [NotNull]
         public static NoValidationScope Instance([NotNull] ILogger logger,[NotNull] IIdentifier identifier, [CanBeNull] string scopename = "") =>
             new NoValidationScope(logger, identifier, scopename);
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using JetBrains.Annotations;
 
 namespace PH.Core3.Common.Models.ViewModels.Tree
 {
@@ -55,6 +56,7 @@ namespace PH.Core3.Common.Models.ViewModels.Tree
         /// </summary>
         public int EntityLevel { get; set; }
 
+        [NotNull]
         private Lazy<int> GetTreeCount()
         {
            
@@ -71,10 +73,13 @@ namespace PH.Core3.Common.Models.ViewModels.Tree
         }
 
 
+        [NotNull]
         private Lazy<int> GetDeep()
         {
             if (null != Childrens && Childrens.Count == 0)
+            {
                 return new Lazy<int>(() => 1);
+            }
 
             var l = new Lazy<int>(() => 1 + (Childrens?.OrderByDescending(x => x.Deep.Value)?.Select(x => x.Deep.Value)?.FirstOrDefault()
                                        ?? 0));

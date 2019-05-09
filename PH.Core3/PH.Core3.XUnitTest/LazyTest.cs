@@ -53,6 +53,7 @@ namespace PH.Core3.XUnitTest
                               .ResolveAsync();
         }
 
+        [NotNull]
         private Task<IResult<int>> Fnc01()
         {
             var t = Task.FromResult(ResultFactory.Ok(new Identifier("abc"), 1));
@@ -77,7 +78,8 @@ namespace PH.Core3.XUnitTest
         }
 
         
-        private Task<IResult<int>> MethodTestAsync(IResult<int> input, int max = 180)
+        [NotNull]
+        private Task<IResult<int>> MethodTestAsync([NotNull] IResult<int> input, int max = 180)
         {
             var m = $"MethodTestAsync {input.Content} {Thread.CurrentThread.ManagedThreadId}";
             Debug.WriteLine(m);
@@ -85,7 +87,9 @@ namespace PH.Core3.XUnitTest
             
             var i = new Identifier("abc");
             if(input.Content == max)
+            {
                 return Task.FromResult(ResultFactory.Fail<int>(i, "some error"));
+            }
 
 
             return Task.FromResult(ResultFactory.Ok<int>(i, input.Content + 1));
@@ -97,7 +101,8 @@ namespace PH.Core3.XUnitTest
             }) ;*/
         }
 
-        private Task<IResult<int>> MethodTestAsync2(IResult<int> input)
+        [NotNull]
+        private Task<IResult<int>> MethodTestAsync2([NotNull] IResult<int> input)
         {
             var m = $"MethodTestAsync2 {input.Content} {Thread.CurrentThread.ManagedThreadId}";
             Debug.WriteLine(m);
@@ -111,7 +116,8 @@ namespace PH.Core3.XUnitTest
         }
 
 
-        private Task<IResult<object>> MethodTestAsync3(IResult<object> input)
+        [NotNull]
+        private Task<IResult<object>> MethodTestAsync3([NotNull] IResult<object> input)
         {
             var m = $"MethodTestAsync3  {Thread.CurrentThread.ManagedThreadId}";
             Debug.WriteLine(m);
@@ -125,13 +131,16 @@ namespace PH.Core3.XUnitTest
         }
 
 
-        private IResult<int> MethodTest(IResult<int> input)
+        [NotNull]
+        private IResult<int> MethodTest([NotNull] IResult<int> input)
         {
             _testOutputHelper.WriteLine($"{input.Content}");
             
             var i = new Identifier("abc");
             if(input.Content == 4)
+            {
                 return ResultFactory.Fail<int>(i, "some error");
+            }
 
             return ResultFactory.Ok<int>(i, input.Content +1);
         }

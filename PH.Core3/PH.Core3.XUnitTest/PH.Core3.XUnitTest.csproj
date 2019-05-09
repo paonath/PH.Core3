@@ -22,6 +22,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\PH.Core3.Common\PH.Core3.Common.csproj" />
+    <ProjectReference Include="..\PH.Core3.EntityFramework\PH.Core3.EntityFramework.csproj" />
+    <ProjectReference Include="..\PH.Core3.TestContext\PH.Core3.TestContext.csproj" />
   </ItemGroup>
 
 </Project>

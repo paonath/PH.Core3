@@ -11,6 +11,7 @@ namespace PH.Core3.Common.Identifiers
         /// <summary>
         /// Identity Name
         /// </summary>
+        [CanBeNull]
         public string Name => Principal?.Identity?.Name;
 
         /// <summary>

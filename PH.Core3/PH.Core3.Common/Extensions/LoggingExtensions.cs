@@ -310,7 +310,9 @@ namespace PH.Core3.Common.Extensions
             {
                 string msg = $"{failure.ErrorMessage}; ";
                 if (!StringExtensions.IsNullString(failure.PropertyName) && failure.PropertyName != "*")
+                {
                     msg = $"PropertyName '{failure.PropertyName}' - ErrorMessage '{failure.ErrorMessage}'; ";
+                }
 
                 sb.Append(msg);
                 errs.Add(Error.Parse(msg, eventId));

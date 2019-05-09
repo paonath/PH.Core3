@@ -26,9 +26,14 @@ namespace PH.Core3.Common.Services.Components.Path
         public WebPathTranslator([NotNull] string webRootPath, [CanBeNull] ILogger<WebPathTranslator> logger = null)
         {
             if (string.IsNullOrEmpty(webRootPath))
+            {
                 throw new ArgumentException("Value cannot be null or empty.", nameof(webRootPath));
+            }
+
             if (string.IsNullOrWhiteSpace(webRootPath))
+            {
                 throw new ArgumentException("Value cannot be null or whitespace.", nameof(webRootPath));
+            }
 
             _webRootPath = webRootPath;
             _logger = logger;
@@ -50,7 +55,9 @@ namespace PH.Core3.Common.Services.Components.Path
             
 
             if (webrelativePath.StartsWith(Root, StringComparison.InvariantCulture))
+            {
                 webrelativePath = webrelativePath.Replace(Root, $"{_webRootPath}{System.IO.Path.DirectorySeparatorChar}");
+            }
 
             var pt = webrelativePath.Replace("//", "/").Replace("/", $"{System.IO.Path.DirectorySeparatorChar}");
                                   

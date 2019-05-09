@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using JetBrains.Annotations;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 
 namespace PH.Core3.TestContext.Internals
@@ -7,6 +8,7 @@ namespace PH.Core3.TestContext.Internals
     {
         #region Implementation of IDesignTimeDbContextFactory<out PerTenantContext>
 
+        [NotNull]
         public MyContext CreateDbContext(string[] args)
         {
             var optionsBuilder = new DbContextOptionsBuilder<MyContext>();

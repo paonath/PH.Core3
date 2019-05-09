@@ -5,6 +5,7 @@ using System.Security.Claims;
 using System.Security.Principal;
 using Autofac;
 using Autofac.Core;
+using JetBrains.Annotations;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Logging;
 using NLog;
@@ -148,7 +149,7 @@ namespace PH.Core3.Test.WebApp.AutofacModules
     /// <seealso cref="Autofac.Module" />
     public class LoggingModule : Autofac.Module
     {
-        private static void InjectLoggerProperties(object instance)
+        private static void InjectLoggerProperties([NotNull] object instance)
         {
             var instanceType = instance.GetType();
 
@@ -166,7 +167,7 @@ namespace PH.Core3.Test.WebApp.AutofacModules
             }
         }
 
-        private static void OnComponentPreparing(object sender, PreparingEventArgs e)
+        private static void OnComponentPreparing(object sender, [NotNull] PreparingEventArgs e)
         {
             e.Parameters = e.Parameters.Union(
                                               new[]
@@ -178,7 +179,7 @@ namespace PH.Core3.Test.WebApp.AutofacModules
                                               });
         }
 
-        protected override void AttachToComponentRegistration(IComponentRegistry componentRegistry, IComponentRegistration registration)
+        protected override void AttachToComponentRegistration(IComponentRegistry componentRegistry, [NotNull] IComponentRegistration registration)
         {
             // Handle constructor parameters.
             registration.Preparing += OnComponentPreparing;

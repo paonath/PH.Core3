@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using JetBrains.Annotations;
+using Microsoft.EntityFrameworkCore;
 using PH.Core3.Common;
 using PH.Core3.Common.CoreSystem;
 
@@ -24,6 +25,7 @@ namespace PH.Core3.EntityFramework.Services.Components.Crud
         /// <param name="identifier">The identifier.</param>
         /// <param name="dbContext">The database context.</param>
         /// <returns></returns>
+        [NotNull]
         public static FlushChangesScope BeginScope(IIdentifier identifier, DbContext dbContext)
         {
             return new FlushChangesScope(identifier,dbContext);

@@ -1,5 +1,4 @@
-﻿using System;
-using JetBrains.Annotations;
+﻿using JetBrains.Annotations;
 
 namespace PH.Core3.Common.Extensions
 {
@@ -16,9 +15,14 @@ namespace PH.Core3.Common.Extensions
         public static bool IsNullString([CanBeNull] string value)
         {
             if (string.IsNullOrEmpty(value))
+            {
                 return true;
+            }
+
             if (string.IsNullOrWhiteSpace(value))
+            {
                 return true;
+            }
 
             return false;
         }

@@ -87,7 +87,9 @@ namespace PH.Core3.EntityFramework.Services.Components.Crud
         {
             var e = await FindEntityByIdAsync(id);
             if (null == e)
+            {
                 return ResultFactory.Fail<TDto>(Identifier, $"Unable to find {DtoTypeName} with id '{id}'");
+            }
 
             return ToResultOkDto(e);
         }
@@ -219,7 +221,10 @@ namespace PH.Core3.EntityFramework.Services.Components.Crud
         {
             var e = await FindEntityByIdAsync(entity.Id);
             if (null == e)
+            {
                 return _logger.CriticalAndReturnFail<TDto>(Identifier,$"Unable to find {EntityTypeName} with id {entity.Id}");
+            }
+
             var toUpdate = await MergeWithDtoAndValidateAsync(e, entity);
             if (toUpdate.UpdateValidationResult.IsValid)
             {

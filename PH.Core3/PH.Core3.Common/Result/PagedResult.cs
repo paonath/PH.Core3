@@ -51,17 +51,22 @@ namespace PH.Core3.Common.Result
         /// </summary>
         public int PageSize { get; }
 
+        [NotNull]
         public Lazy<long> PageCount => new Lazy<long>(CountPages);
       
 
         private long CountPages()
         {
             if (PaginationDisabled)
+            {
                 return 0;
+            }
 
             var m = Count / PageSize;
             if (Count % PageSize != 0)
+            {
                 m++;
+            }
 
             return m;
 

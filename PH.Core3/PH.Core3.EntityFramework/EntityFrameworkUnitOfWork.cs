@@ -24,8 +24,10 @@ namespace PH.Core3.EntityFramework
         public EntityFrameworkUnitOfWork([NotNull] IDbContextUnitOfWork efContextUnitOfWork, [NotNull] ILogger<EntityFrameworkUnitOfWork> logger) 
             : base(efContextUnitOfWork.Identifier)
         {
-            if (efContextUnitOfWork is null) 
+            if (efContextUnitOfWork is null)
+            {
                 throw new ArgumentNullException(nameof(efContextUnitOfWork));
+            }
 
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             efContextUnitOfWork.UowLogger = _logger;

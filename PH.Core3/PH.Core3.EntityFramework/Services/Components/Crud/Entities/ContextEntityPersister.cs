@@ -194,7 +194,10 @@ namespace PH.Core3.EntityFramework.Services.Components.Crud.Entities
         /// <returns>Added Entity if valid for insert</returns>
         public async Task<TEntity> CreateEntityAsync([NotNull] TEntity entity)
         {
-            if (entity is null) throw new ArgumentNullException(nameof(entity));
+            if (entity is null)
+            {
+                throw new ArgumentNullException(nameof(entity));
+            }
 
             //entity.Deleted              = false;
             //entity.CreatedTransactionId = Identifier.Uid;
@@ -206,7 +209,9 @@ namespace PH.Core3.EntityFramework.Services.Components.Crud.Entities
             var e = await Set.AddAsync(entity);
 
             if (AutoSaveChanges)
+            {
                 await Ctx.SaveChangesAsync();
+            }
 
             return e.Entity;
         }
@@ -245,13 +250,18 @@ namespace PH.Core3.EntityFramework.Services.Components.Crud.Entities
         [ItemNotNull]
         public async Task<TEntity> UpdateEntityAsync([NotNull] TEntity entity)
         {
-            if (entity is null) throw new ArgumentNullException(nameof(entity));
+            if (entity is null)
+            {
+                throw new ArgumentNullException(nameof(entity));
+            }
 
             //entity.UpdatedTransactionId = Identifier.Uid;
             Ctx.Entry(entity).State     = EntityState.Modified;
 
             if (AutoSaveChanges)
+            {
                 await Ctx.SaveChangesAsync();
+            }
 
             return entity;
         }
@@ -262,9 +272,13 @@ namespace PH.Core3.EntityFramework.Services.Components.Crud.Entities
         /// </summary>
         /// <param name="entity">Entity to Remove</param>
         /// <returns>Removed entity if valid for delete</returns>
+        [ItemNotNull]
         public async Task<TEntity> DeleteEntityAsync([NotNull] TEntity entity)
         {
-            if (entity is null) throw new ArgumentNullException(nameof(entity));
+            if (entity is null)
+            {
+                throw new ArgumentNullException(nameof(entity));
+            }
 
             entity.Deleted              = true;
             entity.DeletedTransactionId = Identifier.Uid;
@@ -317,7 +331,7 @@ namespace PH.Core3.EntityFramework.Services.Components.Crud.Entities
         /// <param name="id">value of the Id property</param>
         /// <returns><see cref="PH.Core3.Common.Result"/> containing True or error</returns>
         [ItemNotNull]
-        public async Task<IResult> RemoveByIdAsync(TKey id)
+        public async Task<IResult> RemoveByIdAsync([NotNull] TKey id)
         {
             
 

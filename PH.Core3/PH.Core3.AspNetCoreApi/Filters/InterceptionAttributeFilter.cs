@@ -41,9 +41,10 @@ namespace PH.Core3.AspNetCoreApi.Filters
         protected virtual void LogExecuting([CanBeNull] ActionExecutingContext context)
         {
             if(null == context)
+            {
                 return;
+            }
 
-           
 
             var actionDescriptor = context.ActionDescriptor.DisplayName;
 
@@ -52,12 +53,16 @@ namespace PH.Core3.AspNetCoreApi.Filters
             {
                 var attributes = descriptor.MethodInfo.CustomAttributes;
                 if (attributes.Any(a => a.AttributeType == typeof(SkipInterceptionLogAttribute)))
+                {
                     return;
+                }
             }
 
             var ip = GetIp(context.HttpContext);
             if(!string.IsNullOrEmpty(ip))
+            {
                 ip = $"FROM '{ip}' ";
+            }
 
             var data            = JsonConvert.SerializeObject(context.ActionArguments.ToDictionary(pair => pair));
             var validModelState = context.ModelState.IsValid;
@@ -78,7 +83,9 @@ namespace PH.Core3.AspNetCoreApi.Filters
         protected virtual string GetIp([CanBeNull] HttpContext ctx)
         {
             if (ctx == null)
+            {
                 return null;
+            }
 
             var remoteIpAddress = $"{ctx.Connection.RemoteIpAddress}:{ctx.Connection.RemotePort}" ;
             return remoteIpAddress;

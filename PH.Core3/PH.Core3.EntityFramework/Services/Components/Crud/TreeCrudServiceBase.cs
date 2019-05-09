@@ -87,6 +87,7 @@ namespace PH.Core3.EntityFramework.Services.Components.Crud
         /// Load All Items as Tree
         /// </summary>
         /// <returns><see cref="Result{TContent}"/> instance</returns>
+        [ItemNotNull]
         public async Task<IResult<TDto[]>> LoadAllAsTreeAsync()
         {
             int p = 0;

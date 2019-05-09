@@ -34,6 +34,7 @@ namespace PH.Core3.TestContext
 
         }
 
+        [NotNull]
         protected override Type[] ScanAssemblyTypes()
         {
             var a = GetType().Assembly.GetTypes();

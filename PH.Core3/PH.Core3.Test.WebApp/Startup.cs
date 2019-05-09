@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Autofac.Multitenant;
+using JetBrains.Annotations;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Hosting.Internal;
@@ -45,7 +46,8 @@ namespace PH.Core3.Test.WebApp
 
 
         // This method gets called by the runtime. Use this method to add services to the container.
-        public IServiceProvider ConfigureServices(IServiceCollection services)
+        [NotNull]
+        public IServiceProvider ConfigureServices([NotNull] IServiceCollection services)
         {
             #region base DI
 
@@ -231,12 +233,17 @@ namespace PH.Core3.Test.WebApp
         /// <param name="request">The current <see cref="T:Microsoft.AspNetCore.Http.HttpRequest">HTTP request</see> to select the version for.</param>
         /// <param name="model">The <see cref="T:Microsoft.AspNetCore.Mvc.Versioning.ApiVersionModel">model</see> to select the version from.</param>
         /// <returns>The selected <see cref="T:Microsoft.AspNetCore.Mvc.ApiVersion">API version</see>.</returns>
-        public ApiVersion SelectVersion(HttpRequest request, ApiVersionModel model)
+        [NotNull]
+        public ApiVersion SelectVersion([NotNull] HttpRequest request, ApiVersionModel model)
         {
             if (_finder.IsMatch(request.HttpContext, out var tenant, out var version))
+            {
                 return new ApiVersion(version, 0);
+            }
             else
+            {
                 throw new ArgumentException("Unable to determine API Version from Request Context", nameof(request));
+            }
         }
     }
 
@@ -247,7 +254,7 @@ namespace PH.Core3.Test.WebApp
         /// </summary>
         /// <param name="operation">The operation to apply the filter to.</param>
         /// <param name="context">The current operation filter context.</param>
-        public void Apply( Operation operation, OperationFilterContext context )
+        public void Apply( [NotNull] Operation operation, [NotNull] OperationFilterContext context )
         {
             var apiDescription = context.ApiDescription;
 

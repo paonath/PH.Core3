@@ -1,4 +1,6 @@
-﻿namespace PH.Core3.Common.Settings
+﻿using JetBrains.Annotations;
+
+namespace PH.Core3.Common.Settings
 {
     /// <summary>
     /// Variable Setting
@@ -33,7 +35,7 @@
         /// </summary>
         /// <param name="d">Setting instance</param>
         /// <returns>Value of the Setting</returns>
-        public static implicit operator T(SettingVariable<T> d)  
+        public static implicit operator T([NotNull] SettingVariable<T> d)  
         {
             return d.GetValue();
         }
@@ -44,6 +46,7 @@
         /// </summary>
         /// <param name="value">Value of the setting</param>
         /// <returns>Setting Variable</returns>
+        [NotNull]
         public static implicit operator SettingVariable<T>(T value)
         {
             return new SettingVariable<T>(value);

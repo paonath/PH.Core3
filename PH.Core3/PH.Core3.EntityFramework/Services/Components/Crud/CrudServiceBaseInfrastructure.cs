@@ -142,6 +142,7 @@ namespace PH.Core3.EntityFramework.Services.Components.Crud
         /// <summary>Converts to dto async.</summary>
         /// <param name="entity">The entity.</param>
         /// <returns>dto</returns>
+        [NotNull]
         protected virtual Task<TDto> ToDtoAsync(TEntity entity)
         {
             return Task.FromResult(ToDto(entity));

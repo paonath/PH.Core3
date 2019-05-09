@@ -168,7 +168,9 @@ namespace PH.Core3.Common.Result
         public static IResult<T> Eval<T>([NotNull] IIdentifier identifier, [CanBeNull] T content)
         {
             if (null == content)
+            {
                 return Fail<T>(identifier, "null object");
+            }
 
             return Ok(identifier, content);
         }

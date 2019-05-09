@@ -1,4 +1,6 @@
-﻿using FluentValidation.Results;
+﻿using System.Linq;
+using FluentValidation;
+using FluentValidation.Results;
 using Microsoft.Extensions.Logging;
 
 namespace PH.Core3.Common.Validation
@@ -35,5 +37,15 @@ namespace PH.Core3.Common.Validation
         {
             EventId = eventId;
         }
+
+        /// <summary>Parses the data annotation failure.</summary>
+        /// <param name="failure">The failure.</param>
+        /// <returns>CoreValidationFailure</returns>
+        public static CoreValidationFailure ParseDataAnnotationFailure(System.ComponentModel.DataAnnotations.ValidationResult failure)
+        {
+            return new CoreValidationFailure(failure.MemberNames.FirstOrDefault(),
+                                             failure.ErrorMessage);
+        }
+
     }
 }

@@ -16,7 +16,7 @@ namespace PH.Core3.Test.WebApp
         {
         }
 
-        public bool IsMatch([CanBeNull] HttpContext context, out string tenant, out int apiVersion)
+        public bool IsMatch([CanBeNull] HttpContext context, [CanBeNull] out string tenant, out int apiVersion)
         {
             tenant     = null;
             apiVersion = 0;
@@ -101,7 +101,7 @@ namespace PH.Core3.Test.WebApp
         /// <see langword="true" /> if the tenant could be identified; <see langword="false" />
         /// if not.
         /// </returns>
-        public bool TryIdentifyTenant(out object tenantId)
+        public bool TryIdentifyTenant([CanBeNull] out object tenantId)
         {
             var context = this.Accessor.HttpContext;
 

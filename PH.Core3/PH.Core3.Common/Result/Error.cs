@@ -29,9 +29,14 @@ namespace PH.Core3.Common.Result
         public Error([NotNull] string errorMessage, [CanBeNull] string outputMessage, EventId? errorEventId, [CanBeNull] IError innerError = null)
         {
             if (string.IsNullOrEmpty(errorMessage))
+            {
                 throw new ArgumentException("Value cannot be null or empty.", nameof(errorMessage));
+            }
+
             if (string.IsNullOrWhiteSpace(errorMessage))
+            {
                 throw new ArgumentException("Value cannot be null or whitespace.", nameof(errorMessage));
+            }
 
             ErrorMessage  = errorMessage;
             OutputMessage = outputMessage;

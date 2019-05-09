@@ -43,7 +43,9 @@ namespace PH.Core3.Common.Scope
             Scope    = scopeName ?? throw new ArgumentNullException(nameof(scopeName));
             Disposed = false;
             if (null != logger)
+            {
                 _logScope = logger.BeginScope(scopeName);
+            }
         }
 
         /// <summary>Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.</summary>

@@ -44,8 +44,10 @@ namespace PH.Core3.AspNetCoreApi.Controllers
         protected virtual void Commit(string commitMessage = "")
         {
             if(AlreadyCommitted)
+            {
                 return;
-            
+            }
+
             try
             {
                 Uow.Commit(commitMessage);

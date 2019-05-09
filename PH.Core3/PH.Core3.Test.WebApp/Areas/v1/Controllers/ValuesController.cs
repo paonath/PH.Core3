@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using JetBrains.Annotations;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using PH.Core3.Common;
@@ -39,6 +40,7 @@ namespace PH.Core3.Test.WebApp.Areas.v1.Controllers
 
         // GET api/values
         [HttpGet]
+        [NotNull]
         public ActionResult<IEnumerable<string>> Get()
         {
             var tst = _alberoService.LoadAsync();
@@ -56,6 +58,7 @@ namespace PH.Core3.Test.WebApp.Areas.v1.Controllers
 
         // GET api/values/5
         [HttpGet("{id}")]
+        [NotNull]
         public ActionResult<string> Get(int id)
         {
             return "value";

@@ -70,6 +70,7 @@ namespace PH.Core3.Common.Result
         }
 
 
+        [NotNull]
         public LazyResult<T> RaiseExit(int pid)
         {
             _raisedExit = true;
@@ -78,6 +79,7 @@ namespace PH.Core3.Common.Result
             return this;
         }
 
+        [NotNull]
         public static LazyResult<TEnd> Parse<TEnd, TSource>([NotNull] LazyResult<TSource> resultExited)
         {
             return new LazyResult<TEnd>(resultExited.Identifier,resultExited.ProgrId);
@@ -121,14 +123,14 @@ namespace PH.Core3.Common.Result
         private readonly Func<IResult<T>, Task<IResult<T>>> _onErrorFunc;
 
 
-        internal LazyEvaluatorAsync(IIdentifier identifier, Func<Task<IResult<T>>> asyncFnc, Func<IResult<T>, Task<IResult<T>>> onErrorFunc = null)
+        internal LazyEvaluatorAsync(IIdentifier identifier, Func<Task<IResult<T>>> asyncFnc, [CanBeNull] Func<IResult<T>, Task<IResult<T>>> onErrorFunc = null)
             : this(0, identifier, asyncFnc, onErrorFunc)
         {
             
             
         }
 
-        private LazyEvaluatorAsync(int progrId, IIdentifier identifier, Func<Task<IResult<T>>> asyncFnc,Func<IResult<T>, Task<IResult<T>>> onErrorFunc = null)
+        private LazyEvaluatorAsync(int progrId, IIdentifier identifier, Func<Task<IResult<T>>> asyncFnc,[CanBeNull] Func<IResult<T>, Task<IResult<T>>> onErrorFunc = null)
         {
             ProgrId      = progrId;
             _identifier  = identifier;
@@ -140,13 +142,16 @@ namespace PH.Core3.Common.Result
 
         
 
+        [ItemNotNull]
         private async Task<LazyResult<T>> EvaluateResultAsync()
         {
             var c = await _asyncFnc.Invoke();
             _evaluated = true;
 
             if (_raisedExit || ((c as LazyResult<T>)?.RaisedExit ?? false))
+            {
                 return new LazyResult<T>(c.Identifier, ProgrId, c.Content).RaiseExit(ProgrId);
+            }
 
 
             if (c.OnError)
@@ -173,10 +178,14 @@ namespace PH.Core3.Common.Result
 
         /// <summary>Raises the exit asynchronous.</summary>
         /// <returns>Result</returns>
+        [ItemNotNull]
         public async Task<IResult<T>> RaiseExitAsync()
         {
             if (!_evaluated)
+            {
                 _lazyResultInternal = await EvaluateResultAsync();
+            }
+
             _raisedExit = true;
 
             return _lazyResultInternal.RaiseExit(ProgrId);
@@ -189,7 +198,7 @@ namespace PH.Core3.Common.Result
         /// <param name="onErrorFunc">The on error function.</param>
         /// <returns></returns>
         [NotNull]
-        public LazyEvaluatorAsync<TOther> Next<TOther>([NotNull] Func<LazyEvaluatorAsync<T>, IResult<T>,  Task<IResult<TOther>>> nextFunction,Func<IResult<TOther>,Task<IResult<TOther>>> onErrorFunc = null)
+        public LazyEvaluatorAsync<TOther> Next<TOther>([NotNull] Func<LazyEvaluatorAsync<T>, IResult<T>,  Task<IResult<TOther>>> nextFunction,[CanBeNull] Func<IResult<TOther>,Task<IResult<TOther>>> onErrorFunc = null)
         {
            
             var pid = ProgrId + 1;
@@ -204,19 +213,27 @@ namespace PH.Core3.Common.Result
         {
             _lazyResultInternal = await EvaluateResultAsync();
             if (_lazyResultInternal.OnError)
+            {
                 return ResultFactory.FailLazyEvaluatedFunction<TOther>(ProgrId, _identifier, _lazyResultInternal.Errors);
+            }
 
             if (_raisedExit)
+            {
                 return LazyResult<TOther>.Parse<TOther, T>(_lazyResultInternal);
+            }
 
 
             var c = await nextFunction.Invoke(this,_lazyResultInternal);
 
             if (_raisedExit || _lazyResultInternal.RaisedExit)
+            {
                 return LazyResult<TOther>.Parse<TOther, T>(_lazyResultInternal);
+            }
 
             if (!c.OnError || null == onErrorFunc)
+            {
                 return c;
+            }
 
             return await onErrorFunc.Invoke(c);
            

@@ -31,10 +31,13 @@ namespace PH.Core3.Test.WebApp.Services
     public class AlberoDTo : EditAlberoDTo , IDtoResult<Guid>
     {
 
-        public static AlberoDTo ToAlberoDTo(Albero a)
+        [CanBeNull]
+        public static AlberoDTo ToAlberoDTo([CanBeNull] Albero a)
         {
             if (null == a)
+            {
                 return null;
+            }
 
             return new AlberoDTo()
             {
@@ -68,6 +71,7 @@ namespace PH.Core3.Test.WebApp.Services
         /// <param name="ent">Entity to Delete</param>
         /// <param name="c">Custom Validation Context</param>
         /// <returns>Task</returns>
+        [NotNull]
         protected override Task ValidatePreDelete(Albero ent, EntityValidationContext c)
         {
             //throw new NotImplementedException();
@@ -80,6 +84,7 @@ namespace PH.Core3.Test.WebApp.Services
         /// <param name="ent">Entity to Edit</param>
         /// <param name="c">Custom Validation Context</param>
         /// <returns>Task</returns>
+        [NotNull]
         protected override  Task ValidatePreUpdate(Albero ent, EntityValidationContext c)
         {
             //throw new NotImplementedException();
@@ -92,6 +97,7 @@ namespace PH.Core3.Test.WebApp.Services
         /// <param name="ent">Entity to Add</param>
         /// <param name="c">Custom Validation Context</param>
         /// <returns>Task</returns>
+        [NotNull]
         protected override Task ValidatePreInsert(Albero ent, EntityValidationContext c)
         {
            // throw new NotImplementedException();
@@ -120,6 +126,7 @@ namespace PH.Core3.Test.WebApp.Services
         /// </summary>
         /// <param name="entity">Entity</param>
         /// <returns>dto</returns>
+        [CanBeNull]
         protected override AlberoDTo ToDto(Albero entity)
         {
             return AlberoDTo.ToAlberoDTo(entity);

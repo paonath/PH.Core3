@@ -43,12 +43,19 @@ namespace PH.Core3.EntityFramework.Services.Components
         private void CheckAndSetTenant([NotNull] string tenantId)
         {
             if (string.IsNullOrEmpty(tenantId))
+            {
                 throw new ArgumentException("Value cannot be null or empty.", nameof(tenantId));
+            }
+
             if (string.IsNullOrWhiteSpace(tenantId))
+            {
                 throw new ArgumentException("Value cannot be null or whitespace.", nameof(tenantId));
+            }
 
             if(tenantId.Length > 128)
+            {
                 throw new ArgumentException(@"Max lenght 128", nameof(tenantId));
+            }
 
 
             TenantId = tenantId;
