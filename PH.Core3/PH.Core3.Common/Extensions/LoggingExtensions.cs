@@ -12,6 +12,7 @@ namespace PH.Core3.Common.Extensions
     /// </summary>
     public static class LoggingExtensions
     {
+
         
         /// <summary>
         /// Log error
