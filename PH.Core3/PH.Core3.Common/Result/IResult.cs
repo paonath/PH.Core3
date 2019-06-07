@@ -26,6 +26,8 @@ namespace PH.Core3.Common.Result
 
     }
 
+    
+
 
     /// <summary>
     /// Transport object wrapping a Result

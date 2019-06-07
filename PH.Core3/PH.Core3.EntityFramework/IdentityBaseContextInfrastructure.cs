@@ -8,6 +8,7 @@ using FluentValidation.Results;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using PH.Core3.Common;
 using PH.Core3.Common.CoreSystem;
 using PH.Core3.Common.Models.Entities;
@@ -38,6 +39,12 @@ namespace PH.Core3.EntityFramework
         /// Identifier
         /// </summary>
         public IIdentifier Identifier { get; set; }
+
+        
+        /// <summary>Gets or sets the logger.</summary>
+        /// <value>The logger.</value>
+        public ILogger Logger { get; set; }
+
 
         /// <summary>
         /// Initializes a new instance of the <see cref="IdentityBaseContextInfrastructure{TUser, TRole, TKey}"/> class.
@@ -70,22 +77,31 @@ namespace PH.Core3.EntityFramework
         /// </exception>
         protected int SaveBaseChanges([NotNull] IIdentifier identifier,[NotNull] string author)
         {
-            if (identifier is null)
+            try
             {
-                throw new ArgumentNullException(nameof(identifier));
-            }
+                if (identifier is null)
+                {
+                    throw new ArgumentNullException(nameof(identifier));
+                }
 
-            if (string.IsNullOrEmpty(author) || string.IsNullOrWhiteSpace(author))
+                if (string.IsNullOrEmpty(author) || string.IsNullOrWhiteSpace(author))
+                {
+                    throw new ArgumentNullException(nameof(author), @"Author must be set before any savechanges");
+                }
+
+                var auditEntries = this.OnBeforeSaveChanges(identifier, author);
+                var result       = base.SaveChanges();
+                var auditsNum    = OnAfterSaveChanges(auditEntries);
+                Changecount += result;
+                return result;
+
+            }
+            catch (Exception e)
             {
-                throw new ArgumentNullException(nameof(author), @"Author must be set before any savechanges");
+                Logger?.LogCritical($"SaveBaseChanges error: {e.Message}", e);
+
+                throw;
             }
-
-            var auditEntries = this.OnBeforeSaveChanges(identifier, author);
-            var result = base.SaveChanges();
-            var auditsNum = OnAfterSaveChanges(auditEntries);
-            Changecount += result;
-            return result;
-
             
         }
 
@@ -101,23 +117,32 @@ namespace PH.Core3.EntityFramework
         /// </exception>
         protected int SaveBaseChanges([NotNull] IIdentifier identifier,[NotNull] string author, bool b)
         {
-            if (identifier is null)
+            try
             {
-                throw new ArgumentNullException(nameof(identifier));
-            }
+                if (identifier is null)
+                {
+                    throw new ArgumentNullException(nameof(identifier));
+                }
 
-            if (string.IsNullOrEmpty(author) || string.IsNullOrWhiteSpace(author))
+                if (string.IsNullOrEmpty(author) || string.IsNullOrWhiteSpace(author))
+                {
+                    throw new ArgumentNullException(nameof(author), @"Author must be set before any savechanges");
+                }
+
+                var auditEntries = OnBeforeSaveChanges(identifier, author);
+                var result       = base.SaveChanges(b);
+                var auditsNum    = OnAfterSaveChanges(auditEntries);
+                Changecount += result;
+                return result;
+
+
+            }
+            catch (Exception e)
             {
-                throw new ArgumentNullException(nameof(author), @"Author must be set before any savechanges");
+                Logger?.LogCritical($"SaveBaseChanges error: {e.Message}", e);
+
+                throw;
             }
-
-            var auditEntries = OnBeforeSaveChanges(identifier, author);
-            var result = base.SaveChanges(b);
-            var auditsNum = OnAfterSaveChanges(auditEntries);
-            Changecount += result;
-            return result;
-
-            
 
         }
 
@@ -135,22 +160,31 @@ namespace PH.Core3.EntityFramework
         protected async Task<int> SaveBaseChangesAsync([NotNull] IIdentifier identifier,[NotNull] string author,CancellationToken cancellationToken =
                                                             new CancellationToken())
         {
-            if (identifier is null)
+            try
             {
-                throw new ArgumentNullException(nameof(identifier));
-            }
+                if (identifier is null)
+                {
+                    throw new ArgumentNullException(nameof(identifier));
+                }
 
-            if (string.IsNullOrEmpty(author) || string.IsNullOrWhiteSpace(author))
+                if (string.IsNullOrEmpty(author) || string.IsNullOrWhiteSpace(author))
+                {
+                    throw new ArgumentNullException(nameof(author), @"Author must be set before any savechanges");
+                }
+
+                var auditEntries = OnBeforeSaveChanges(identifier, author);
+                var result       = await base.SaveChangesAsync(cancellationToken);
+                var auditsNum    = await OnAfterSaveChangesAsync(auditEntries);
+                Changecount += result;
+                return result;
+
+            }
+            catch (Exception e)
             {
-                throw new ArgumentNullException(nameof(author), @"Author must be set before any savechanges");
+                Logger?.LogCritical($"SaveBaseChangesAsync error: {e.Message}", e);
+
+                throw;
             }
-
-            var auditEntries = OnBeforeSaveChanges(identifier, author);
-            var result = await base.SaveChangesAsync(cancellationToken);
-            var auditsNum = await OnAfterSaveChangesAsync(auditEntries);
-            Changecount += result;
-            return result;
-
             
         }
 
@@ -168,22 +202,30 @@ namespace PH.Core3.EntityFramework
         protected async Task<int> SaveBaseChangesAsync([NotNull] IIdentifier identifier,[NotNull] string author, bool b,CancellationToken cancellationToken =
                                                             new CancellationToken())
         {
-            if (identifier is null)
+            try
             {
-                throw new ArgumentNullException(nameof(identifier));
-            }
+                if (identifier is null)
+                {
+                    throw new ArgumentNullException(nameof(identifier));
+                }
 
-            if (string.IsNullOrEmpty(author) || string.IsNullOrWhiteSpace(author))
+                if (string.IsNullOrEmpty(author) || string.IsNullOrWhiteSpace(author))
+                {
+                    throw new ArgumentNullException(nameof(author), @"Author must be set before any savechanges");
+                }
+
+                var auditEntries = OnBeforeSaveChanges(identifier, author);
+                var result       = await base.SaveChangesAsync(b, cancellationToken);
+                var auditsNum    = await OnAfterSaveChangesAsync(auditEntries);
+                Changecount += result;
+                return result;
+
+            }
+            catch (Exception e)
             {
-                throw new ArgumentNullException(nameof(author), @"Author must be set before any savechanges");
+                Logger?.LogCritical($"SaveBaseChangesAsync error: {e.Message}", e);
+                throw;
             }
-
-            var auditEntries = OnBeforeSaveChanges(identifier, author);
-            var result = await base.SaveChangesAsync(b, cancellationToken);
-            var auditsNum = await OnAfterSaveChangesAsync(auditEntries);
-            Changecount += result;
-            return result;
-
             
         }
 
@@ -202,123 +244,131 @@ namespace PH.Core3.EntityFramework
         [NotNull]
         private List<AuditEntry> OnBeforeSaveChanges([NotNull] IIdentifier identifier, string author)
         {
-            ChangeTracker.DetectChanges();
-            var auditEntries = new List<AuditEntry>();
-
-            var transactionId = identifier.Uid;
-            bool allOk = true;
-            var l = new List<CoreValidationException>();
-
-            foreach (var entry in ChangeTracker.Entries())
+            try
             {
-                if (entry.Entity is Audit.Audit || entry.Entity is TransactionAudit ||
-                    entry.State == EntityState.Detached ||
-                    entry.State == EntityState.Unchanged)
+                ChangeTracker.DetectChanges();
+                var auditEntries = new List<AuditEntry>();
+
+                var  transactionId = identifier.Uid;
+                bool allOk         = true;
+                var  l             = new List<CoreValidationException>();
+
+                foreach (var entry in ChangeTracker.Entries())
                 {
-                    continue;
-                }
+                    if (entry.Entity is Audit.Audit || entry.Entity is TransactionAudit ||
+                        entry.State == EntityState.Detached ||
+                        entry.State == EntityState.Unchanged)
+                    {
+                        continue;
+                    }
 
                 
-                if (entry.Entity is IEntity e)
-                {
-                    if (null == e.TenantId)
+                    if (entry.Entity is IEntity e)
                     {
-                        e.TenantId = TenantId;
-
-                        if (entry.State == EntityState.Added)
+                        if (null == e.TenantId)
                         {
-                            e.CreatedTransactionId = identifier.Uid;
-                            e.Deleted = false;
-                        }
+                            e.TenantId = TenantId;
 
-                        if (entry.State == EntityState.Modified)
-                        {
-                            if (string.IsNullOrEmpty(e.UpdatedTransactionId))
+                            if (entry.State == EntityState.Added)
                             {
-                                e.UpdatedTransactionId = identifier.Uid;
+                                e.CreatedTransactionId = identifier.Uid;
+                                e.Deleted              = false;
+                            }
+
+                            if (entry.State == EntityState.Modified)
+                            {
+                                if (string.IsNullOrEmpty(e.UpdatedTransactionId))
+                                {
+                                    e.UpdatedTransactionId = identifier.Uid;
+                                }
                             }
                         }
+
+
+
                     }
 
 
-
-                }
-
-
-                if (!DataAnnotationsValidator.TryValidate(entry.Entity, out var errors))
-                {
-                    allOk = false;
-                    var err = $"Invalid data on '{entry.Entity.GetType().Name}'"; 
-                    l.Add(CoreValidationException.ParseDataAnnotationErrors(Identifier, errors, err ));
-                    
-                }
-
-
-                if (allOk)
-                {
-                    
-                    var auditEntry = new AuditEntry(entry, transactionId, author)
+                    if (!DataAnnotationsValidator.TryValidate(entry.Entity, out var errors))
                     {
-                        TableName = entry.Metadata.Relational().TableName
-                    };
+                        allOk = false;
+                        var err = $"Invalid data on '{entry.Entity.GetType().Name}'"; 
+                        l.Add(CoreValidationException.ParseDataAnnotationErrors(Identifier, errors, err ));
+                    
+                    }
 
 
-                    auditEntries.Add(auditEntry);
-
-                    foreach (var property in entry.Properties)
+                    if (allOk)
                     {
-                        if (property.IsTemporary)
+                    
+                        var auditEntry = new AuditEntry(entry, transactionId, author)
                         {
-                            // value will be generated by the database, get the value after saving
-                            auditEntry.TemporaryProperties.Add(property);
-                            continue;
-                        }
+                            TableName = entry.Metadata.Relational().TableName
+                        };
 
-                        string propertyName = property.Metadata.Name;
-                        if (property.Metadata.IsPrimaryKey())
+
+                        auditEntries.Add(auditEntry);
+
+                        foreach (var property in entry.Properties)
                         {
-                            auditEntry.KeyValues[propertyName] = property.CurrentValue;
-                            continue;
-                        }
+                            if (property.IsTemporary)
+                            {
+                                // value will be generated by the database, get the value after saving
+                                auditEntry.TemporaryProperties.Add(property);
+                                continue;
+                            }
 
-                        switch (entry.State)
-                        {
-                            case EntityState.Added:
-                                auditEntry.NewValues[propertyName] = property.CurrentValue;
-                                break;
+                            string propertyName = property.Metadata.Name;
+                            if (property.Metadata.IsPrimaryKey())
+                            {
+                                auditEntry.KeyValues[propertyName] = property.CurrentValue;
+                                continue;
+                            }
 
-                            case EntityState.Deleted:
-                                auditEntry.OldValues[propertyName] = property.OriginalValue;
-                                break;
-
-                            case EntityState.Modified:
-                                if (property.IsModified)
-                                {
-                                    auditEntry.OldValues[propertyName] = property.OriginalValue;
+                            switch (entry.State)
+                            {
+                                case EntityState.Added:
                                     auditEntry.NewValues[propertyName] = property.CurrentValue;
-                                }
+                                    break;
 
-                                break;
+                                case EntityState.Deleted:
+                                    auditEntry.OldValues[propertyName] = property.OriginalValue;
+                                    break;
+
+                                case EntityState.Modified:
+                                    if (property.IsModified)
+                                    {
+                                        auditEntry.OldValues[propertyName] = property.OriginalValue;
+                                        auditEntry.NewValues[propertyName] = property.CurrentValue;
+                                    }
+
+                                    break;
+                            }
                         }
+
                     }
 
                 }
 
-            }
+                if (!allOk)
+                {
+                    throw new CoreAggregateException(Identifier, @"Error saving data", l);
+                }
 
-            if (!allOk)
+                // Save audit entities that have all the modifications
+                foreach (var auditEntry in auditEntries.Where(_ => !_.HasTemporaryProperties))
+                {
+                    Audits.Add(auditEntry.ToAudit());
+                }
+
+                // keep a list of entries where the value of some properties are unknown at this step
+                return auditEntries.Where(_ => _.HasTemporaryProperties).ToList();
+            }
+            catch (Exception exc)
             {
-                throw new CoreAggregateException(Identifier, @"Error saving data", l);
+                Logger?.LogCritical($"OnBeforeSaveChanges error: {exc.Message}", exc);
+                throw;
             }
-
-            // Save audit entities that have all the modifications
-            foreach (var auditEntry in auditEntries.Where(_ => !_.HasTemporaryProperties))
-            {
-                Audits.Add(auditEntry.ToAudit());
-            }
-
-            // keep a list of entries where the value of some properties are unknown at this step
-            return auditEntries.Where(_ => _.HasTemporaryProperties).ToList();
         }
 
 
@@ -326,64 +376,82 @@ namespace PH.Core3.EntityFramework
 
         private int OnAfterSaveChanges([CanBeNull] List<AuditEntry> auditEntries)
         {
-            if (auditEntries == null || auditEntries.Count == 0)
+            try
             {
-                return 0;
-            }
-
-
-            foreach (var auditEntry in auditEntries)
-            {
-                // Get the final value of the temporary properties
-                foreach (var prop in auditEntry.TemporaryProperties)
+                if (auditEntries == null || auditEntries.Count == 0)
                 {
-                    if (prop.Metadata.IsPrimaryKey())
-                    {
-                        auditEntry.KeyValues[prop.Metadata.Name] = prop.CurrentValue;
-                    }
-                    else
-                    {
-                        auditEntry.NewValues[prop.Metadata.Name] = prop.CurrentValue;
-                    }
+                    return 0;
                 }
 
-                // Save the Audit entry
 
-                Audits.Add(auditEntry.ToAudit());
+                foreach (var auditEntry in auditEntries)
+                {
+                    // Get the final value of the temporary properties
+                    foreach (var prop in auditEntry.TemporaryProperties)
+                    {
+                        if (prop.Metadata.IsPrimaryKey())
+                        {
+                            auditEntry.KeyValues[prop.Metadata.Name] = prop.CurrentValue;
+                        }
+                        else
+                        {
+                            auditEntry.NewValues[prop.Metadata.Name] = prop.CurrentValue;
+                        }
+                    }
+
+                    // Save the Audit entry
+
+                    Audits.Add(auditEntry.ToAudit());
+                }
+
+                return SaveChanges();
             }
+            catch (Exception exc)
+            {
+                Logger?.LogCritical($"OnAfterSaveChanges error: {exc.Message}", exc);
 
-            return SaveChanges();
+                throw;
+            }
         }
 
         [NotNull]
         private async Task<int> OnAfterSaveChangesAsync([CanBeNull] List<AuditEntry> auditEntries)
         {
-            if (auditEntries == null || auditEntries.Count == 0)
+            try
             {
-                return 0;
-            }
-
-
-            foreach (var auditEntry in auditEntries)
-            {
-                // Get the final value of the temporary properties
-                foreach (var prop in auditEntry.TemporaryProperties)
+                if (auditEntries == null || auditEntries.Count == 0)
                 {
-                    if (prop.Metadata.IsPrimaryKey())
-                    {
-                        auditEntry.KeyValues[prop.Metadata.Name] = prop.CurrentValue;
-                    }
-                    else
-                    {
-                        auditEntry.NewValues[prop.Metadata.Name] = prop.CurrentValue;
-                    }
+                    return 0;
                 }
 
-                // Save the Audit entry
-                Audits.Add(auditEntry.ToAudit());
-            }
 
-            return await base.SaveChangesAsync();
+                foreach (var auditEntry in auditEntries)
+                {
+                    // Get the final value of the temporary properties
+                    foreach (var prop in auditEntry.TemporaryProperties)
+                    {
+                        if (prop.Metadata.IsPrimaryKey())
+                        {
+                            auditEntry.KeyValues[prop.Metadata.Name] = prop.CurrentValue;
+                        }
+                        else
+                        {
+                            auditEntry.NewValues[prop.Metadata.Name] = prop.CurrentValue;
+                        }
+                    }
+
+                    // Save the Audit entry
+                    Audits.Add(auditEntry.ToAudit());
+                }
+
+                return await base.SaveChangesAsync();
+            }
+            catch (Exception exc)
+            {
+                Logger?.LogCritical($"OnAfterSaveChangesAsync error: {exc.Message}", exc);
+
+                throw;
+            }
         }
 
         #endregion

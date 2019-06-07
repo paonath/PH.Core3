@@ -39,10 +39,6 @@ namespace PH.Core3.EntityFramework
         where TRole : IdentityRole<TKey>, IEntity<TKey>
         where TKey : IEquatable<TKey>
     {
-        /// <summary>Gets or sets the logger.</summary>
-        /// <value>The logger.</value>
-        public ILogger Logger { get; set; }
-
         /// <summary>Gets the scope dictionary.</summary>
         /// <value>The scope dictionary.</value>
         public Dictionary<int, string> ScopeDictionary { get; }

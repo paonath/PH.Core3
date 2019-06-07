@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Text;
@@ -46,6 +47,19 @@ namespace PH.Core3.Common.Result
             Errors = errors?.ToList() ?? new List<IError>();
         }
 
+        /// <summary>Initializes a new instance of theResult on error with content class.</summary>
+        public Result([NotNull] TContent content,[NotNull] List<IError> errors, [NotNull] IIdentifier identifier)
+        {
+            if (content == null)
+            {
+                throw new ArgumentNullException(nameof(content));
+            }
+
+            Errors = errors ?? throw new ArgumentNullException(nameof(errors));
+            Identifier = identifier ?? throw new ArgumentNullException(nameof(identifier));
+            Content = content;
+        }
+
 
         /// <summary>
         /// True if On Error
@@ -63,6 +77,7 @@ namespace PH.Core3.Common.Result
         /// </summary>
         public TContent Content { get; protected set; }
     }
+
 
     /*
     internal class PagedResult<TContent[]> : Result<TContent[]>

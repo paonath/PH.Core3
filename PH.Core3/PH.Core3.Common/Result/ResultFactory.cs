@@ -135,10 +135,7 @@ namespace PH.Core3.Common.Result
             return new LazyEvaluatorAsync<TContent>(identifier, asyncFnc, onErrorFunc);
         }
 
-        //public static IResult<TExit> RaiseExit<TExit,TContent>(IResult<TContent> result)
-        //{
-        //    LazyResult<TExit>.Parse<TExit,TContent>()
-        //}
+        
 
         /// <summary>Fails from exception.</summary>
         /// <typeparam name="T"></typeparam>
@@ -212,6 +209,19 @@ namespace PH.Core3.Common.Result
             //    return PagedOk<TContent>(identifier, content, -1, -1, -1);
 
             return new Result<TContent>(identifier, content);
+        }
+
+
+        /// <summary>Ok Json Result</summary>
+        /// <typeparam name="TContent">The type of the content.</typeparam>
+        /// <param name="identifier">The identifier.</param>
+        /// <param name="content">The content.</param>
+        /// <param name="json">The json.</param>
+        /// <returns></returns>
+        public static IJsonResult<TContent> Ok<TContent>([NotNull] IIdentifier identifier, [NotNull] TContent content,
+                                                         [NotNull] string json)
+        {
+            return new JsonResult<TContent>(identifier, content, json);
         }
 
 
@@ -386,7 +396,76 @@ namespace PH.Core3.Common.Result
         {
             return new Result<TContent>(identifier, errors);
         }
-        
+
+        /// <summary>
+        /// Bad Json Result
+        /// </summary>
+        /// <typeparam name="TContent">Type of object on error</typeparam>
+        /// <param name="identifier">Identifier</param>
+        /// <param name="errors">errors</param>
+        /// <returns>bad result</returns>
+        [NotNull]
+        public static IJsonResult<TContent> FailJson<TContent>([NotNull] IIdentifier identifier, [NotNull] IEnumerable<IError> errors)
+        {
+            return new JsonResult<TContent>(identifier, errors);
+        }
+
+        /// <summary>Return Bad Result with content.</summary>
+        /// <typeparam name="TContent">The type of the content.</typeparam>
+        /// <param name="identifier">The identifier.</param>
+        /// <param name="content">The content.</param>
+        /// <param name="errors">The errors.</param>
+        /// <returns>bad result with content</returns>
+        [NotNull]
+        public static IResult<TContent> Fail<TContent>([NotNull] IIdentifier identifier, [NotNull] TContent content,
+                                                       [NotNull] IEnumerable<IError> errors)
+        {
+            return new Result<TContent>(content,errors.ToList(), identifier);
+        }
+
+
+        /// <summary>Return Bad Result with content.</summary>
+        /// <typeparam name="TContent">The type of the content.</typeparam>
+        /// <param name="identifier">The identifier.</param>
+        /// <param name="content">The content.</param>
+        /// <param name="json">The json content</param>
+        /// <param name="errors">The errors.</param>
+        /// <returns>bad result with content</returns>
+        [NotNull]
+        public static IJsonResult<TContent> FailJson<TContent>([NotNull] IIdentifier identifier, [NotNull] TContent content,string json,
+                                                       [NotNull] IEnumerable<IError> errors)
+        {
+            return new JsonResult<TContent>(content,errors.ToList(), identifier,json);
+        }
+
+
+        /// <summary>Return Bad Result with content.</summary>
+        /// <typeparam name="TContent">The type of the content.</typeparam>
+        /// <param name="identifier">The identifier.</param>
+        /// <param name="content">The content.</param>
+        /// <param name="error">The error.</param>
+        /// <returns></returns>
+        [NotNull]
+        public static IResult<TContent> Fail<TContent>([NotNull] IIdentifier identifier, [NotNull] TContent content, [NotNull] IError error)
+        {
+            //return new Result<TContent>(identifier, new []{error});
+            return Fail<TContent>(identifier, content,new[] {error} );
+        }
+
+        /// <summary>Return Bad Result with content.</summary>
+        /// <typeparam name="TContent">The type of the content.</typeparam>
+        /// <param name="identifier">The identifier.</param>
+        /// <param name="content">The content.</param>
+        /// <param name="json">The json content</param>
+        /// <param name="error">The error.</param>
+        /// <returns></returns>
+        [NotNull]
+        public static IJsonResult<TContent> FailJson<TContent>([NotNull] IIdentifier identifier, [NotNull] TContent content, string json, [NotNull] IError error)
+        {
+            //return new Result<TContent>(identifier, new []{error});
+            return FailJson<TContent>(identifier, content, json,new[] {error} );
+        }
+
         /// <summary>
         /// Bad Result
         /// </summary>
@@ -399,6 +478,21 @@ namespace PH.Core3.Common.Result
         {
             //return new Result<TContent>(identifier, new []{error});
             return Fail<TContent>(identifier, new[] {error});
+        }
+
+
+        /// <summary>
+        /// Bad Json Result
+        /// </summary>
+        /// <typeparam name="TContent">Type of object on error</typeparam>
+        /// <param name="identifier">Identifier</param>
+        /// <param name="error">error</param>
+        /// <returns>bad result</returns>
+        [NotNull]
+        public static IJsonResult<TContent> FailJson<TContent>([NotNull] IIdentifier identifier, [NotNull] IError error)
+        {
+            //return new Result<TContent>(identifier, new []{error});
+            return FailJson<TContent>(identifier, new[] {error});
         }
 
 
@@ -418,6 +512,22 @@ namespace PH.Core3.Common.Result
             //return new Result<TContent>(identifier, new []{new Error(errorMessage,outputMessage, eventId) });
             return Fail<TContent>(identifier, new []{new Error(errorMessage,outputMessage, eventId) });
         }
+        
+        /// <summary>
+        /// Bad Json Result
+        /// </summary>
+        /// <typeparam name="TContent">Type of object on error</typeparam>
+        /// <param name="identifier">Identifier</param>
+        /// <param name="errorMessage">error message</param>
+        /// <param name="eventId">Event Id</param>
+        /// <param name="outputMessage">Output message</param>
+        /// <returns>bad result</returns>
+        [NotNull]
+        public static IJsonResult<TContent> FailJson<TContent>([NotNull] IIdentifier identifier, [NotNull] string errorMessage,
+                                                       string outputMessage = "",EventId? eventId = null)
+        {
+            return FailJson<TContent>(identifier, new []{new Error(errorMessage,outputMessage, eventId) });
+        }
 
         /// <summary>
         /// Bad Result
@@ -432,10 +542,24 @@ namespace PH.Core3.Common.Result
         public static IResult<TContent> Fail<TContent>([NotNull] IIdentifier identifier, EventId eventId, [NotNull] string errorMessage,
                                                        string outputMessage = "")
         {
-            //return new Result<TContent>(identifier, new []{new Error(errorMessage,outputMessage, eventId) }); 
             return Fail<TContent>(identifier, new []{new Error(errorMessage,outputMessage, eventId) });
         }
 
+        /// <summary>
+        /// Bad Json Result
+        /// </summary>
+        /// <typeparam name="TContent">Type of object on error</typeparam>
+        /// <param name="identifier">Identifier</param>
+        /// <param name="errorMessage">error message</param>
+        /// <param name="eventId">Event Id</param>
+        /// <param name="outputMessage">Output message</param>
+        /// <returns>bad result</returns>
+        [NotNull]
+        public static IJsonResult<TContent> FailJson<TContent>([NotNull] IIdentifier identifier, EventId eventId, [NotNull] string errorMessage,
+                                                       string outputMessage = "")
+        {
+            return FailJson<TContent>(identifier, new []{new Error(errorMessage,outputMessage, eventId) });
+        }
 
     }
 }
