@@ -29,11 +29,11 @@ namespace PH.Core3.XUnitTest
 
 
         [ItemNotNull]
-        public async Task<IResult<int>> TreOk()
+        public  Task<IResult<int>> TreOk()
         {
             bool param = true;
 
-            return TryTre(param);
+            return Task.FromResult(TryTre(param));
 
 
         }

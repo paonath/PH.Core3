@@ -37,10 +37,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BuildPackages", "BuildPacka
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Entity Framework", "Entity Framework", "{F7C8DB15-E871-42FC-AC48-359ACB1BFB9B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PH.Core3.MongoDb", "PH.Core3.MongoDb\PH.Core3.MongoDb.csproj", "{ADF630E6-4546-4DC8-9731-D73D424051BE}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PH.TinyRest", "PH.TinyRest\PH.TinyRest.csproj", "{77F4924A-51EB-48B3-9A73-ADEEBF20A033}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -87,14 +83,6 @@ Global
 		{6EB2D1CA-1464-4086-8C4F-97FCCBFF0ED3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6EB2D1CA-1464-4086-8C4F-97FCCBFF0ED3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6EB2D1CA-1464-4086-8C4F-97FCCBFF0ED3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{ADF630E6-4546-4DC8-9731-D73D424051BE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{ADF630E6-4546-4DC8-9731-D73D424051BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{ADF630E6-4546-4DC8-9731-D73D424051BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{ADF630E6-4546-4DC8-9731-D73D424051BE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{77F4924A-51EB-48B3-9A73-ADEEBF20A033}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{77F4924A-51EB-48B3-9A73-ADEEBF20A033}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{77F4924A-51EB-48B3-9A73-ADEEBF20A033}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{77F4924A-51EB-48B3-9A73-ADEEBF20A033}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
