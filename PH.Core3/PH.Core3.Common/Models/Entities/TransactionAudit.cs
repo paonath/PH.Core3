@@ -12,7 +12,6 @@ namespace PH.Core3.Common.Models.Entities
         /// Unique Id of current transaction
         /// </summary>
         [StringLength(128)]
-        [Required]
         public string Id { get; set; }
 
         /// <summary>
@@ -24,7 +23,6 @@ namespace PH.Core3.Common.Models.Entities
         /// <summary>
         /// Author of current Transaction
         /// </summary>
-        [Required]
         [StringLength(500)]
         public string Author { get; set; }
 
@@ -32,7 +30,6 @@ namespace PH.Core3.Common.Models.Entities
         /// <summary>
         /// Date And Time UTC of Current Transaction Open
         /// </summary>
-        [Required]
         public DateTime UtcDateTime { get; set; }
 
 
@@ -51,7 +48,6 @@ namespace PH.Core3.Common.Models.Entities
         /// <summary>
         /// Tenant Identifier
         /// </summary>
-        [Required]
         [StringLength(128)]
         public string TenantId { get; set; }
 

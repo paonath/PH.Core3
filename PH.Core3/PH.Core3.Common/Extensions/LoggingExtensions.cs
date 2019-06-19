@@ -302,7 +302,7 @@ namespace PH.Core3.Common.Extensions
         #region private methods
 
         [NotNull]
-        private static StringBuilder PrepareValidationFailures([NotNull] ValidationResult fluentValidationResult,
+        internal static StringBuilder PrepareValidationFailures([NotNull] ValidationResult fluentValidationResult,
                                                                EventId? eventId, [NotNull] out Error[] errors)
         {
             StringBuilder sb   = new StringBuilder();

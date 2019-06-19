@@ -11,6 +11,11 @@ namespace PH.Core3.EntityFramework.Mapping
         public void Configure([NotNull] EntityTypeBuilder<TransactionAudit> builder)
         {
             builder.ToTable("transaction_audit");
+
+            builder.Property(x => x.TenantId).IsRequired();
+            builder.Property(x => x.Id).IsRequired();
+            builder.Property(x => x.UtcDateTime).IsRequired();
+            builder.Property(x => x.Author).IsRequired();
             
             builder.Property(x => x.MillisecDuration).HasDefaultValue(0);
             builder.Property(x => x.Progr).HasDefaultValue(1);

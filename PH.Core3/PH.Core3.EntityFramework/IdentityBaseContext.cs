@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
+using MassTransit;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
@@ -95,7 +96,7 @@ namespace PH.Core3.EntityFramework
 
             Disposed                = false;
             Initialized             = false;
-            CtxUid                  = Guid.NewGuid();
+            CtxUid = NewId.NextGuid(); //Guid.NewGuid();
             CancellationTokenSource = new CancellationTokenSource();
             CancellationToken       = CancellationTokenSource.Token;
             ScopeDictionary         = new Dictionary<int, string>();
@@ -431,6 +432,7 @@ namespace PH.Core3.EntityFramework
 
             var d = DateTime.UtcNow - _transactionAudit.UtcDateTime;
             _transactionAudit.MillisecDuration = d.TotalMilliseconds;
+            _transactionAudit.TenantId = TenantId;
 
 
             if (transactionCommitMessage != "")

@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
+using FluentValidation.Results;
 using JetBrains.Annotations;
 using Microsoft.Extensions.Logging;
+using PH.Core3.Common.Extensions;
 
 namespace PH.Core3.Common.Result
 {
@@ -464,6 +467,19 @@ namespace PH.Core3.Common.Result
         {
             //return new Result<TContent>(identifier, new []{error});
             return FailJson<TContent>(identifier, content, json,new[] {error} );
+        }
+
+
+        /// <summary>Return Bad Result.</summary>
+        /// <typeparam name="TContent">The type of the content.</typeparam>
+        /// <param name="identifier">The identifier.</param>
+        /// <param name="fluentValidationResult">The fluent validation result.</param>
+        /// <param name="eventId">The event identifier.</param>
+        /// <returns></returns>
+        public static IResult<TContent> Fail<TContent>([NotNull] IIdentifier identifier, [NotNull] ValidationResult fluentValidationResult,EventId? eventId = null)
+        {
+            StringBuilder sb = LoggingExtensions.PrepareValidationFailures(fluentValidationResult, eventId, out var errors);
+            return ResultFactory.Fail<TContent>(identifier, errors);
         }
 
         /// <summary>

@@ -16,12 +16,13 @@ using NLog.Config;
 using NLog.Targets;
 using PH.Core3.Common;
 using PH.Core3.EntityFramework;
+using PH.Core3.EntityFramework.Extensions;
 using PH.Core3.TestContext;
 using PH.Core3.UnitOfWork;
 
 namespace PH.Core3.Test.CreateUser
 {
-     class Program
+    class Program
     {
         static void Main(string[] args)
         {
@@ -31,12 +32,10 @@ namespace PH.Core3.Test.CreateUser
                 //l.AddConsole().AddFilter(level => level >= LogLevel.Trace);
 
                 //l.AddDebug();
-
             });
 
             serviceCollection.AddLogging();
             serviceCollection.AddSingleton<ILoggerFactory, LoggerFactory>();
-
 
 
             serviceCollection.AddDbContext<MyContext>(options =>
@@ -49,11 +48,11 @@ namespace PH.Core3.Test.CreateUser
                              .AddEntityFrameworkStores<MyContext>()
                              .AddDefaultTokenProviders();
 
-            
+
             // BuildWebHost(args).Run();
             // NLog: setup the logger first to catch all errors
             var logger = NLog.Web.NLogBuilder.ConfigureNLog(NlogConfig.GetNLogCOnfiguration()).GetCurrentClassLogger();
-           
+
             try
             {
                 logger.Info("Init App");
@@ -62,13 +61,9 @@ namespace PH.Core3.Test.CreateUser
 
                 using (var scope = Init(serviceCollection))
                 {
-
                     var t = PerformCode(scope);
                     t.Wait();
-
-
                 }
-                
             }
             catch (Exception ex)
             {
@@ -81,16 +76,14 @@ namespace PH.Core3.Test.CreateUser
                 // Ensure to flush and stop internal timers/threads before application-exit (Avoid segmentation fault on Linux)
                 NLog.LogManager.Shutdown();
             }
-
-            
         }
 
         private static async Task PerformCode(ILifetimeScope scope)
         {
             using (var uow = scope.Resolve<IUnitOfWork>())
             {
-                var ctx         = scope.Resolve<MyContext>();
-                ctx.TenantId = "ABC";
+                var ctx = scope.Resolve<MyContext>();
+                ctx.TenantId = "SGURZ";
 
                 var userManager = scope.Resolve<ApplicationUserManager>();
 
@@ -100,98 +93,91 @@ namespace PH.Core3.Test.CreateUser
                 Console.WriteLine("Provide Password");
                 var password = Console.ReadLine();
 
-                var ty = await userManager.CreateAsync(new User() { Email = user, UserName = user}, password);
+                var u  = new User() {Email = user, UserName = user};
+                var ty = await userManager.CreateAsync(u, password);
 
 
                 var tyu = await ctx.SaveChangesAsync();
 
-                uow.Commit("create user");
+                u.AccessFailedCount = 2;
+                await ctx.Users.UpdateAsync(u);
+                await ctx.SaveChangesAsync();
 
+
+                uow.Commit("create user");
             }
         }
 
 
-
         private static ILifetimeScope Init(ServiceCollection serviceCollection)
         {
-            
-
-           
-
-           
-
-
             var containerBuilder = new ContainerBuilder();
 
-            
+
             containerBuilder.Populate(serviceCollection);
 
 
             containerBuilder.Register(c =>
-                   {
+                            {
+                                string iid = $"{Guid.NewGuid():N}";
+                                MappedDiagnosticsLogicalContext.Set("IID", iid);
 
-                       string iid = $"{Guid.NewGuid():N}";
-                       MappedDiagnosticsLogicalContext.Set("IID", iid);
-
-                       return new PH.Core3.Common.Identifiers.Identifier(iid);
-                   })
-                   .AsSelf()
-                   .As<IIdentifier>()
-                   .AsImplementedInterfaces()
-                   .InstancePerLifetimeScope();
+                                return new PH.Core3.Common.Identifiers.Identifier(iid);
+                            })
+                            .AsSelf()
+                            .As<IIdentifier>()
+                            .AsImplementedInterfaces()
+                            .InstancePerLifetimeScope();
 
 
             containerBuilder.Register(c =>
-                   {
-                       var context = c.Resolve<MyContext>();
-                       context.Author = "Console App";
-                       context.Identifier = c.Resolve<IIdentifier>();
-                       return new PH.Core3.EntityFramework.EntityFrameworkUnitOfWork(context, c.Resolve<ILogger<EntityFrameworkUnitOfWork>>());
-                   })
-                   
-                   .AsSelf()
-                   .As<IUnitOfWork>()
-                   .AsImplementedInterfaces()
-                   .InstancePerLifetimeScope();
+                            {
+                                var context = c.Resolve<MyContext>();
+                                context.Author     = "Console App";
+                                context.Identifier = c.Resolve<IIdentifier>();
+                                return new PH.Core3.EntityFramework.EntityFrameworkUnitOfWork(context,
+                                                                                              c.Resolve<ILogger<
+                                                                                                  EntityFrameworkUnitOfWork
+                                                                                              >>());
+                            })
+                            .AsSelf()
+                            .As<IUnitOfWork>()
+                            .AsImplementedInterfaces()
+                            .InstancePerLifetimeScope();
 
 
             containerBuilder.RegisterType<PH.PicoCrypt2.AesCrypt>()
-                   .AsSelf()
-                   .AsImplementedInterfaces()
-                   .InstancePerLifetimeScope();
+                            .AsSelf()
+                            .AsImplementedInterfaces()
+                            .InstancePerLifetimeScope();
 
             var authServices = typeof(ApplicationUserManager).Assembly.GetTypes()
-                                                                                                     .Where(t => t.IsAbstract == false 
-                                                                                                           )
-                                                                                                     .ToArray();
+                                                             .Where(t => t.IsAbstract == false
+                                                                   )
+                                                             .ToArray();
             foreach (var serviceType in authServices)
             {
                 containerBuilder.RegisterType(serviceType)
-                       .AsSelf()
-                       .AsImplementedInterfaces()
-                       .InstancePerLifetimeScope()
-                       .OnActivated(e =>
-                       {
-
-                       })
-                       .PropertiesAutowired(PropertyWiringOptions.AllowCircularDependencies);
+                                .AsSelf()
+                                .AsImplementedInterfaces()
+                                .InstancePerLifetimeScope()
+                                .OnActivated(e => { })
+                                .PropertiesAutowired(PropertyWiringOptions.AllowCircularDependencies);
             }
 
-            
+
             var container       = containerBuilder.Build();
             var serviceProvider = new AutofacServiceProvider(container);
             return container.BeginLifetimeScope();
         }
     }
 
-    
 
-     internal static class NlogConfig
+    internal static class NlogConfig
     {
         [NotNull]
         public static LoggingConfiguration GetNLogCOnfiguration(string apiVersion = "")
         {
-
             //%date %-5level [%property{ExecutingCtx}] - %message | %stacktrace{5} | [%logger ]%newline" 
 
             var layout =
@@ -270,9 +256,6 @@ namespace PH.Core3.Test.CreateUser
             ////config.LoggingRules.Add(blRule);
 
 
-            
-
-
             return config;
         }
 
@@ -286,6 +269,5 @@ namespace PH.Core3.Test.CreateUser
     public class MySettingsConfig
     {
         public string ConnectionString { get; set; }
-       
     }
 }

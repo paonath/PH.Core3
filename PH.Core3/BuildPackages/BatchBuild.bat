@@ -1,5 +1,7 @@
 echo "Build nuget packages"
 
+
+
 dotnet pack "P:\Dev\Gitlab\PH.Core3\PH.Core3\PH.Core3.AspNetCoreApi\PH.Core3.AspNetCoreApi.csproj" -c Release --include-source  -o "P:\Dev\Gitlab\PH.Core3\PH.Core3\BuildPackages"
 rem dotnet pack "P:\Dev\Gitlab\PH.Core3\PH.Core3\PH.Core3.AspNetCoreApi\PH.Core3.AspNetCoreApi.csproj" -c Release --include-source --include-symbols -o "P:\Dev\Gitlab\PH.Core3\PH.Core3\BuildPackages"
 

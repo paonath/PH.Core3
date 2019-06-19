@@ -268,19 +268,20 @@ namespace PH.Core3.EntityFramework
                         if (null == e.TenantId)
                         {
                             e.TenantId = TenantId;
+                            
+                        }
 
-                            if (entry.State == EntityState.Added)
-                            {
-                                e.CreatedTransactionId = identifier.Uid;
-                                e.Deleted              = false;
-                            }
+                        if (entry.State == EntityState.Added)
+                        {
+                            e.CreatedTransactionId = identifier.Uid;
+                            e.Deleted              = false;
+                        }
 
-                            if (entry.State == EntityState.Modified)
+                        if (entry.State == EntityState.Modified)
+                        {
+                            if (string.IsNullOrEmpty(e.UpdatedTransactionId))
                             {
-                                if (string.IsNullOrEmpty(e.UpdatedTransactionId))
-                                {
-                                    e.UpdatedTransactionId = identifier.Uid;
-                                }
+                                e.UpdatedTransactionId = identifier.Uid;
                             }
                         }
 

@@ -16,7 +16,6 @@ namespace PH.Core3.Common.Models.Entities
         /// <summary>
         /// Unique Id of current class
         /// </summary>
-        [Required]
         public TKey Id { get; set; }
 
 
@@ -25,7 +24,6 @@ namespace PH.Core3.Common.Models.Entities
         ///
         /// (Logical delete)
         /// </summary>
-        [Required]
         public bool Deleted { get; set; }
 
 
@@ -33,7 +31,6 @@ namespace PH.Core3.Common.Models.Entities
         /// <summary>
         /// Tenant Identifier
         /// </summary>
-        [Required]
         [StringLength(128)]
         public string TenantId { get; set; }
 
