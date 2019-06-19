@@ -14,4 +14,5 @@ This repo is a small framework for CRUD operation on a API System, structuread a
 | **PH.Core3.AspNetCoreApi** | API Base Package: should be referenced by Asp.Net Core API Project | netcoreapp2.2 |
 
 
-PH.Core3.Common: [![NuGet Badge](https://buildstats.info/nuget/PH.Core3.Common)](https://www.nuget.org/packages/PH.Core3.Common)
+PH.Core3.Common:  [![NuGet Badge](https://buildstats.info/nuget/PH.Core3.Common)](https://www.nuget.org/packages/PH.Core3.Common/)
+
