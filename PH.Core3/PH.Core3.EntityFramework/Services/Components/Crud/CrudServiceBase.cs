@@ -16,8 +16,6 @@ using PH.Core3.Common.Services.Crud;
 
 namespace PH.Core3.EntityFramework.Services.Components.Crud
 {
-  
-
     /// <summary>
     /// CRUD Service
     /// </summary>
@@ -35,14 +33,12 @@ namespace PH.Core3.EntityFramework.Services.Components.Crud
         where TContext : DbContext
         where TEntity : class, IEntity<TKey>
         where TKey : IEquatable<TKey>
-        where TNewDto : IDto, INewDto 
-        where TEditDto :  TNewDto, IEditDto<TKey>, IDto<TKey>
+        where TNewDto : IDto, INewDto
+        where TEditDto : TNewDto, IEditDto<TKey>, IDto<TKey>
         where TDto : IDtoResult<TKey>, TEditDto, IDto<TKey>, IIdentifiable<TKey>
 
 
-
     {
-
         private readonly ILogger<CrudServiceBase<TContext, TEntity, TDto, TNewDto, TEditDto, TKey>> _logger;
 
         /// <summary>
@@ -57,7 +53,6 @@ namespace PH.Core3.EntityFramework.Services.Components.Crud
                                   , [NotNull]
                                   ILogger<CrudServiceBase<TContext, TEntity, TDto, TNewDto, TEditDto, TKey>> logger
                                   , [NotNull] TContext ctx
-
                                   , [NotNull] TransientCrudSettings settings, [NotNull] string tenantId)
             : base(coreIdentifier, logger, ctx, settings, tenantId)
         {
@@ -100,10 +95,10 @@ namespace PH.Core3.EntityFramework.Services.Components.Crud
         /// </summary>
         /// <returns><see cref="Result{ToDto}"/> instance</returns>
         [ItemNotNull]
-        public  virtual async Task<IResult<TDto[]>> LoadAllAsync()
+        public virtual async Task<IResult<TDto[]>> LoadAllAsync()
         {
             var all = await Set.ToArrayAsync();
-            
+
             var res = all.Select(ToDto).ToArray();
             return ResultFactory.Ok(Identifier, res);
         }
@@ -116,8 +111,6 @@ namespace PH.Core3.EntityFramework.Services.Components.Crud
         [ItemNotNull]
         public async Task<IPagedResult<TDto>> LoadAsync(int pageNumber = 0)
         {
-
-
             var b = await EntityPagedLoadAllAsync(pageNumber);
             if (b.OnError)
             {
@@ -128,7 +121,6 @@ namespace PH.Core3.EntityFramework.Services.Components.Crud
                 return ResultFactory.PagedOk(Identifier, b.Content.Select(x => ToDto(x)).ToArray(), b.Count,
                                              b.PageNumber, b.PageSize);
             }
-
         }
 
         /// <summary>
@@ -140,7 +132,6 @@ namespace PH.Core3.EntityFramework.Services.Components.Crud
         [ItemNotNull]
         public async Task<IPagedResult<TDto>> LoadAsync(int skipItems, int itemsToLoad)
         {
-
             var b = await EntityLoadAsync(skipItems, itemsToLoad);
             if (b.OnError)
             {
@@ -168,25 +159,29 @@ namespace PH.Core3.EntityFramework.Services.Components.Crud
         */
 
 
-
         /// <summary>
         /// Async Add new Dto item
         /// </summary>
         /// <param name="entity">Item to Add</param>
         /// <returns><see cref="Result{TDto}"/> containing added Item or error</returns>
         [ItemNotNull]
-        public  virtual async Task<IResult<TDto>> AddAsync(TNewDto entity)
+        public virtual async Task<IResult<TDto>> AddAsync(TNewDto entity)
         {
             var t = await ParseDtoAndValidateAsync(entity);
-            if (t.InsertValidationResult.IsValid)
-            {
-                var ins = await CreateEntityAsync(t.EntityToInsert);
-                
-                return ResultFactory.Ok(Identifier,ToDto(ins));
-            }
-            else
+            if (!t.InsertValidationResult.IsValid)
             {
                 return _logger.ErrorAndReturnFail<TDto>(Identifier, t.InsertValidationResult);
+            }
+
+            try
+            {
+                var ins = await CreateEntityAsync(t.EntityToInsert);
+
+                return ResultFactory.Ok(Identifier, ToDto(ins));
+            }
+            catch (Exception e)
+            {
+                return _logger.CriticalAndReturnFail<TDto>(Identifier, e);
             }
         }
 
@@ -197,16 +192,21 @@ namespace PH.Core3.EntityFramework.Services.Components.Crud
         /// <param name="entity">Content to delete</param>
         /// <returns><see cref="PH.Core3.Common.Result"/> containing True or error</returns>
         [ItemNotNull]
-        public  virtual async Task<IResult> RemoveAsync([NotNull] TDto entity)
+        public virtual async Task<IResult> RemoveAsync([NotNull] TDto entity)
         {
             var t = await GetEntityForDeleteAsync(entity.Id);
-            if (t.DeleteValidationResult.IsValid)
+            if (!t.DeleteValidationResult.IsValid)
+            {
+                return _logger.ErrorAndReturnFail(Identifier, t.DeleteValidationResult);
+            }
+
+            try
             {
                 return await RemoveAsync(t.EntityToDelete);
             }
-            else
+            catch (Exception e)
             {
-                return _logger.ErrorAndReturnFail(Identifier,t.DeleteValidationResult);
+                return _logger.CriticalAndReturnFail<TDto>(Identifier, e);
             }
         }
 
@@ -217,24 +217,33 @@ namespace PH.Core3.EntityFramework.Services.Components.Crud
         /// <param name="entity">Content to Update</param>
         /// <returns><see cref="Result{TDto}"/> result</returns>
         [ItemNotNull]
-        public  virtual async Task<IResult<TDto>> UpdateAsync(TEditDto entity)
+        public virtual async Task<IResult<TDto>> UpdateAsync(TEditDto entity)
         {
             var e = await FindEntityByIdAsync(entity.Id);
             if (null == e)
             {
-                return _logger.CriticalAndReturnFail<TDto>(Identifier,$"Unable to find {EntityTypeName} with id {entity.Id}");
+                return _logger.CriticalAndReturnFail<TDto>(Identifier,
+                                                           $"Unable to find {EntityTypeName} with id {entity.Id}");
             }
 
             var toUpdate = await MergeWithDtoAndValidateAsync(e, entity);
-            if (toUpdate.UpdateValidationResult.IsValid)
+            if (!toUpdate.UpdateValidationResult.IsValid)
             {
+                return _logger.ErrorAndReturnFail<TDto>(Identifier, toUpdate.UpdateValidationResult);
+
+            }
+
+            try
+            {
+
                 var updated = await UpdateEntityAsync(toUpdate.EntityToUpdate);
 
-                return ResultFactory.Ok(Identifier,ToDto(updated));
+                return ResultFactory.Ok(Identifier, ToDto(updated));
+
             }
-            else
+            catch (Exception exception)
             {
-                return _logger.ErrorAndReturnFail<TDto>(Identifier,toUpdate.UpdateValidationResult);
+                return _logger.CriticalAndReturnFail<TDto>(Identifier, exception);
             }
         }
     }

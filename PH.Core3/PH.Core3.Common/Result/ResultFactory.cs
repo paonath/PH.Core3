@@ -10,6 +10,8 @@ using PH.Core3.Common.Extensions;
 
 namespace PH.Core3.Common.Result
 {
+
+   
     /// <summary>
     /// Factory methods class for <see cref="IResult"/>
     /// </summary>

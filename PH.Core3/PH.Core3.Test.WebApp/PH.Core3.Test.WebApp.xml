@@ -76,6 +76,10 @@
             Unique Id of current class
             </summary>
         </member>
+        <member name="P:PH.Core3.Test.WebApp.Services.AlberoDTo.UtcLastUpdated">
+            <summary>Gets the UTC last updated date and time for current entity.</summary>
+            <value>The UTC last updated.</value>
+        </member>
         <member name="T:PH.Core3.Test.WebApp.Services.AlberoService">
             <summary>
             

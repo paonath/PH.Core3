@@ -274,6 +274,7 @@ namespace PH.Core3.EntityFramework
                         if (entry.State == EntityState.Added)
                         {
                             e.CreatedTransactionId = identifier.Uid;
+                            e.UpdatedTransactionId = identifier.Uid;
                             e.Deleted              = false;
                         }
 

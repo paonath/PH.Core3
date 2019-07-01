@@ -41,10 +41,13 @@ namespace PH.Core3.Test.WebApp.Services
 
             return new AlberoDTo()
             {
-                Id = a.Id, CategoryId = a.CategoryId, Description = a.Description
+                Id = a.Id, CategoryId = a.CategoryId, Description = a.Description, UtcLastUpdated = a.UpdatedTransaction?.UtcDateTime
             };
         }
 
+        /// <summary>Gets the UTC last updated date and time for current entity.</summary>
+        /// <value>The UTC last updated.</value>
+        public DateTime? UtcLastUpdated { get; protected set; }
     }
 
     /// <summary>

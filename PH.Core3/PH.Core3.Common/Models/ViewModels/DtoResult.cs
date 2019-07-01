@@ -14,5 +14,10 @@ namespace PH.Core3.Common.Models.ViewModels
         /// Unique Id of current class
         /// </summary>
         public TKey Id { get; set; }
+
+
+        /// <summary>Gets the UTC last updated date and time for current entity.</summary>
+        /// <value>The UTC last updated.</value>
+        public DateTime? UtcLastUpdated { get; protected set; }
     }
 }

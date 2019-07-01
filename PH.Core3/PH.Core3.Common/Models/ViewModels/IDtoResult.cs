@@ -11,5 +11,10 @@ namespace PH.Core3.Common.Models.ViewModels
     public interface IDtoResult<TKey> : IEditDto<TKey>
         where TKey : IEquatable<TKey>
     {
+
+
+        /// <summary>Gets the UTC last updated date and time for current entity.</summary>
+        /// <value>The UTC last updated.</value>
+        DateTime? UtcLastUpdated { get; }
     }
 }

@@ -3,6 +3,8 @@
 
 ## Contents
 
+- [AlberoDTo](#T-PH-Core3-Test-WebApp-Services-AlberoDTo 'PH.Core3.Test.WebApp.Services.AlberoDTo')
+  - [UtcLastUpdated](#P-PH-Core3-Test-WebApp-Services-AlberoDTo-UtcLastUpdated 'PH.Core3.Test.WebApp.Services.AlberoDTo.UtcLastUpdated')
 - [AlberoService](#T-PH-Core3-Test-WebApp-Services-AlberoService 'PH.Core3.Test.WebApp.Services.AlberoService')
   - [#ctor(coreIdentifier,logger,ctx,settings)](#M-PH-Core3-Test-WebApp-Services-AlberoService-#ctor-PH-Core3-Common-IIdentifier,Microsoft-Extensions-Logging-ILogger{PH-Core3-EntityFramework-Services-Components-Crud-CrudServiceBase{PH-Core3-TestContext-MyContext,PH-Core3-TestContext-Albero,PH-Core3-Test-WebApp-Services-AlberoDTo,PH-Core3-Test-WebApp-Services-NewAlberoDTo,PH-Core3-Test-WebApp-Services-EditAlberoDTo,System-Guid}},PH-Core3-TestContext-MyContext,PH-Core3-Common-Services-Components-Crud-TransientCrudSettings- 'PH.Core3.Test.WebApp.Services.AlberoService.#ctor(PH.Core3.Common.IIdentifier,Microsoft.Extensions.Logging.ILogger{PH.Core3.EntityFramework.Services.Components.Crud.CrudServiceBase{PH.Core3.TestContext.MyContext,PH.Core3.TestContext.Albero,PH.Core3.Test.WebApp.Services.AlberoDTo,PH.Core3.Test.WebApp.Services.NewAlberoDTo,PH.Core3.Test.WebApp.Services.EditAlberoDTo,System.Guid}},PH.Core3.TestContext.MyContext,PH.Core3.Common.Services.Components.Crud.TransientCrudSettings)')
   - [ServiceIdentifier](#P-PH-Core3-Test-WebApp-Services-AlberoService-ServiceIdentifier 'PH.Core3.Test.WebApp.Services.AlberoService.ServiceIdentifier')
@@ -30,6 +32,20 @@
   - [Apply(operation,context)](#M-PH-Core3-Test-WebApp-SwaggerDefaultValues-Apply-Swashbuckle-AspNetCore-Swagger-Operation,Swashbuckle-AspNetCore-SwaggerGen-OperationFilterContext- 'PH.Core3.Test.WebApp.SwaggerDefaultValues.Apply(Swashbuckle.AspNetCore.Swagger.Operation,Swashbuckle.AspNetCore.SwaggerGen.OperationFilterContext)')
 - [ValuesController](#T-PH-Core3-Test-WebApp-Areas-v0-Controllers-ValuesController 'PH.Core3.Test.WebApp.Areas.v0.Controllers.ValuesController')
 - [ValuesController](#T-PH-Core3-Test-WebApp-Areas-v1-Controllers-ValuesController 'PH.Core3.Test.WebApp.Areas.v1.Controllers.ValuesController')
+
+<a name='T-PH-Core3-Test-WebApp-Services-AlberoDTo'></a>
+## AlberoDTo `type`
+
+##### Namespace
+
+PH.Core3.Test.WebApp.Services
+
+<a name='P-PH-Core3-Test-WebApp-Services-AlberoDTo-UtcLastUpdated'></a>
+### UtcLastUpdated `property`
+
+##### Summary
+
+Gets the UTC last updated date and time for current entity.
 
 <a name='T-PH-Core3-Test-WebApp-Services-AlberoService'></a>
 ## AlberoService `type`

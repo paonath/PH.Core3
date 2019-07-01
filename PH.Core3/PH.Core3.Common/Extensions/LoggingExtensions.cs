@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Text;
 using FluentValidation.Results;
 using JetBrains.Annotations;
@@ -249,6 +250,21 @@ namespace PH.Core3.Common.Extensions
         {
             l.LogOnlyCritical(error);
             return ResultFactory.Fail<T>(i, error);
+        }
+
+        /// <summary>Criticals the and return fail.</summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="l">The logger instance.</param>
+        /// <param name="i">The identifier.</param>
+        /// <param name="exception">The exception.</param>
+        /// <returns></returns>
+        [NotNull]
+        public static IResult<T> CriticalAndReturnFail<T>(this ILogger l, [NotNull] IIdentifier i,[NotNull] Exception exception)
+        {
+            l.LogCritical(exception, exception.Message);
+            var err = new Error(exception.Message);
+            
+            return ResultFactory.Fail<T>(i, err);
         }
 
         /// <summary>Criticals the and return fail.</summary>
