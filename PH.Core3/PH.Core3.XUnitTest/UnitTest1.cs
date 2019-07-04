@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
+using PH.Core3.Common.Extensions;
 using PH.Core3.Common.Identifiers;
 using PH.Core3.Common.Result;
 using Xunit;
@@ -31,6 +32,8 @@ namespace PH.Core3.XUnitTest
         [ItemNotNull]
         public  Task<IResult<int>> TreOk()
         {
+            
+
             bool param = true;
 
             return Task.FromResult(TryTre(param));
@@ -41,6 +44,8 @@ namespace PH.Core3.XUnitTest
         [Fact]
         public async void Test1()
         {
+            var dbg = NewIdExtensions.NextSortableIdLognString();
+
             var c = new Couple<int, string>(async () => await TreOk(),
                                             result =>
                                             {
