@@ -1,4 +1,6 @@
 ﻿using System.Linq;
+using System.Reflection;
+using System.Text;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Controllers;
@@ -6,38 +8,38 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using PH.Core3.Common;
+using PH.Core3.UnitOfWork;
 
 namespace PH.Core3.AspNetCoreApi.Filters
 {
     /// <summary>
-    /// Action filter for logging executing action
+    /// Filter for logging Actions on Controllers.
+    ///
+    /// <para>All actions must be decorated with <see cref="LogActionAttribute">LogActionAttribute</see></para>
+    /// 
     /// </summary>
+    /// <seealso cref="Microsoft.AspNetCore.Mvc.Filters.ActionFilterAttribute" />
     public class InterceptionAttributeFilter: ActionFilterAttribute
     {
-        /// <summary>
-        /// Id
-        /// </summary>
+        /// <summary>The identifier</summary>
         protected readonly IIdentifier Identifier;
-        /// <summary>
-        /// Logger
-        /// </summary>
+
+        /// <summary>The logger</summary>
         protected readonly ILogger<InterceptionAttributeFilter> Logger;
 
         /// <summary>
-        /// Init new instance
+        /// Initializes a new instance of the <see cref="InterceptionAttributeFilter"/> class.
         /// </summary>
-        /// <param name="identifier">identifier</param>
-        /// <param name="logger">logger</param>
+        /// <param name="identifier">The identifier.</param>
+        /// <param name="logger">The logger.</param>
         public InterceptionAttributeFilter(IIdentifier identifier, ILogger<InterceptionAttributeFilter> logger)
         {
             Identifier = identifier;
-            Logger = logger;
+            Logger     = logger;
         }
 
-        /// <summary>
-        /// log executing action if not marked with SkipInterceptionLogAttribute
-        /// </summary>
-        /// <param name="context">action context</param>
+        /// <summary>Logs the begin execution of a MVC Action.</summary>
+        /// <param name="context">The context.</param>
         protected virtual void LogExecuting([CanBeNull] ActionExecutingContext context)
         {
             if(null == context)
@@ -52,33 +54,59 @@ namespace PH.Core3.AspNetCoreApi.Filters
             if (null != descriptor)
             {
                 var attributes = descriptor.MethodInfo.CustomAttributes;
-                if (attributes.Any(a => a.AttributeType == typeof(SkipInterceptionLogAttribute)))
+
+                var skip = descriptor.MethodInfo.GetCustomAttribute<SkipInterceptionLogAttribute>();
+                if (null != skip)
                 {
                     return;
                 }
+                
+                var loggingAttr = descriptor.MethodInfo.GetCustomAttribute<LogActionAttribute>();
+                if (null == loggingAttr)
+                {
+                    return;
+                }
+                else
+                {
+                    StringBuilder msgBuilder = new StringBuilder();
+                    msgBuilder.Append(loggingAttr.Prefix);
+                    if (loggingAttr.LogIpCaller)
+                    {
+                        var ip = GetIp(context.HttpContext);
+                        if(!string.IsNullOrEmpty(ip))
+                        {
+                            ip = $"FROM '{ip}' ==> ";
+                        }
+
+                        msgBuilder.Append($" {ip}");
+                    }
+                    var validModelState = context.ModelState.IsValid;
+                    msgBuilder.Append($" {nameof(actionDescriptor)}: '{actionDescriptor}'; {nameof(validModelState)}: '{validModelState}'");
+
+                    if (loggingAttr.LogActionArguments)
+                    {
+                        var data = JsonConvert.SerializeObject(context.ActionArguments.ToDictionary(pair => pair));
+                        msgBuilder.Append($" {nameof(data)}; '{data}'");
+
+                    }
+
+                    if (loggingAttr.PostfixMessage != string.Empty)
+                    {
+                        msgBuilder.Append($" {loggingAttr.PostfixMessage}");
+                    }
+
+                    Logger.Log(loggingAttr.LogLevel, msgBuilder.ToString());
+
+                }
+
             }
-
-            var ip = GetIp(context.HttpContext);
-            if(!string.IsNullOrEmpty(ip))
-            {
-                ip = $"FROM '{ip}' ";
-            }
-
-            var data            = JsonConvert.SerializeObject(context.ActionArguments.ToDictionary(pair => pair));
-            var validModelState = context.ModelState.IsValid;
-
-            string msg =
-                $"CALL {ip}==> {nameof(actionDescriptor)}: '{actionDescriptor}'; {nameof(validModelState)}: '{validModelState}' {nameof(data)}; '{data}'";
             
-            
-            Logger.LogDebug(msg);
+           
         }
 
-        /// <summary>
-        /// Get caller ip
-        /// </summary>
-        /// <param name="ctx">http context</param>
-        /// <returns>ip adress as string</returns>
+        /// <summary>Gets the ip from HttpContext.</summary>
+        /// <param name="ctx">The HttpContext.</param>
+        /// <returns></returns>
         [CanBeNull]
         protected virtual string GetIp([CanBeNull] HttpContext ctx)
         {
@@ -91,18 +119,13 @@ namespace PH.Core3.AspNetCoreApi.Filters
             return remoteIpAddress;
         }
 
-
         /// <summary>
-        /// Log Action Executing
         /// </summary>
         /// <param name="context"></param>
+        /// <inheritdoc />
         public override void OnActionExecuting(ActionExecutingContext context)
         {
-                LogExecuting(context);
-
-
-
-
+            LogExecuting(context);
             base.OnActionExecuting(context);
         }
 
