@@ -35,6 +35,7 @@
     <ProjectReference Include="..\PH.Core3.Common\PH.Core3.Common.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="JetBrains.Annotations" Version="2019.1.3" />
     <PackageReference Include="MailKit" Version="2.2.0" />
     <PackageReference Include="MimeKit" Version="2.2.0" />
     <PackageReference Include="System.Runtime.Extensions" Version="4.3.1" />
