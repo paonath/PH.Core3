@@ -20,7 +20,7 @@ namespace PH.Core3.AspNetCoreApi.Filters
     /// 
     /// </summary>
     /// <seealso cref="Microsoft.AspNetCore.Mvc.Filters.ActionFilterAttribute" />
-    public class InterceptionAttributeFilter : ActionFilterAttribute
+        public class InterceptionAttributeFilter : ActionFilterAttribute
     {
         /// <summary>The identifier</summary>
         protected readonly IIdentifier Identifier;
@@ -124,40 +124,59 @@ namespace PH.Core3.AspNetCoreApi.Filters
                 var attributes = descriptor.MethodInfo.CustomAttributes;
                 
                 var loggingAttr = descriptor.MethodInfo.GetCustomAttribute<LogActionAttribute>();
-                if (loggingAttr?.LogActionOutcomeData != true)
+                if (null == loggingAttr)
                 {
-                    Logger.Log(loggingAttr?.LogLevel ?? LogLevel.Debug ,$"{context?.HttpContext?.Request?.Path} Outcome  HttpStatusCode: '{context?.HttpContext?.Response?.StatusCode}' ");
                     return;
-                }
-
-                if (null == context.HttpContext)
-                {
-                    Logger.LogWarning($"NULL context.HttpContext");
-                    return;
-                }
-
-                StringBuilder msgBuilder = new StringBuilder();
-                    
-
-                
-                msgBuilder.Append($"{context?.HttpContext?.Request?.Path} Outcome: ");
-               
-
-                if (context.Result is ObjectResult result)
-                {
-                    var dump = JsonConvert.SerializeObject(result.Value);
-                    msgBuilder.Append($" {dump} - HttpStatusCode: '{context?.HttpContext?.Response?.StatusCode}' - {actionDescriptor}");
                 }
                 else
                 {
-                    msgBuilder.Append($" HttpStatusCode: '{context?.HttpContext?.Response?.StatusCode}' - {actionDescriptor}");
+                    if (loggingAttr?.LogActionOutcomeData != true)
+                    {
+                        Logger.Log(loggingAttr?.LogLevel ?? LogLevel.Debug ,$"{context?.HttpContext?.Request?.Path} Outcome  HttpStatusCode: '{context?.HttpContext?.Response?.StatusCode}' ");
+                        return;
+                    }
+
+                    if (null == context.HttpContext)
+                    {
+                        Logger.LogWarning($"NULL context.HttpContext");
+                        return;
+                    }
+
+                    StringBuilder msgBuilder = new StringBuilder();
+                    
+
+                
+                    msgBuilder.Append($"{context?.HttpContext?.Request?.Path} Outcome: ");
+               
+
+                    if (context.Result is ObjectResult result)
+                    {
+                        var dump    = JsonConvert.SerializeObject(result.Value, Formatting.None);
+                        var content = $"{result.Value.GetType().Name} {dump.Replace("\"", "\\\"")} ";
+
+                        msgBuilder.Append($" {content} - HttpStatusCode: '{context?.HttpContext?.Response?.StatusCode}' - {actionDescriptor}");
+                    }
+                    else
+                    {
+                        msgBuilder.Append($" HttpStatusCode: '{context?.HttpContext?.Response?.StatusCode}' - {actionDescriptor}");
+                    }
+
+                    var msg = msgBuilder.ToString();
+                    if (null != context.Exception)
+                    {
+                        Logger.Log(loggingAttr.LogLevel, msg, context?.Exception);
+                    }
+                    else
+                    {
+                        Logger.Log(loggingAttr.LogLevel, msg);
+                    }
+
+
+
                 }
 
 
-
-
-
-                Logger.Log(loggingAttr.LogLevel, msgBuilder.ToString(), context?.Exception);
+                
 
             }
 
