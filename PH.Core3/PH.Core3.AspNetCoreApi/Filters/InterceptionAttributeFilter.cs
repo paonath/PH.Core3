@@ -126,6 +126,7 @@ namespace PH.Core3.AspNetCoreApi.Filters
                 var loggingAttr = descriptor.MethodInfo.GetCustomAttribute<LogActionAttribute>();
                 if (loggingAttr?.LogActionOutcomeData != true)
                 {
+                    Logger.Log(loggingAttr?.LogLevel ?? LogLevel.Debug ,$"{context?.HttpContext?.Request?.Path} Outcome  HttpStatusCode: '{context?.HttpContext?.Response?.StatusCode}' ");
                     return;
                 }
 
