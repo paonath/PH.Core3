@@ -35,10 +35,19 @@ namespace PH.Core3.Test.WebApp
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Startup"/> class.
+        /// </summary>
+        /// <param name="configuration">The configuration.</param>
+        /// <param name="hostingEnvironment">the hosting environment</param>
+        public Startup(IConfiguration configuration, IHostingEnvironment hostingEnvironment)
         {
+            _environment  = hostingEnvironment;
             Configuration = configuration;
         }
+
+        private IHostingEnvironment _environment;
+
 
         public static MultitenantContainer ApplicationContainer { get; set; }
         

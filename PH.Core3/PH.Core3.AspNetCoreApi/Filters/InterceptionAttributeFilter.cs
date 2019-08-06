@@ -3,6 +3,7 @@ using System.Reflection;
 using System.Text;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Logging;
@@ -19,7 +20,7 @@ namespace PH.Core3.AspNetCoreApi.Filters
     /// 
     /// </summary>
     /// <seealso cref="Microsoft.AspNetCore.Mvc.Filters.ActionFilterAttribute" />
-    public class InterceptionAttributeFilter: ActionFilterAttribute
+    public class InterceptionAttributeFilter : ActionFilterAttribute
     {
         /// <summary>The identifier</summary>
         protected readonly IIdentifier Identifier;
@@ -42,7 +43,7 @@ namespace PH.Core3.AspNetCoreApi.Filters
         /// <param name="context">The context.</param>
         protected virtual void LogExecuting([CanBeNull] ActionExecutingContext context)
         {
-            if(null == context)
+            if (null == context)
             {
                 return;
             }
@@ -50,16 +51,10 @@ namespace PH.Core3.AspNetCoreApi.Filters
 
             var actionDescriptor = context.ActionDescriptor.DisplayName;
 
-            var descriptor = (ControllerActionDescriptor)context.ActionDescriptor;
+            var descriptor = (ControllerActionDescriptor) context.ActionDescriptor;
             if (null != descriptor)
             {
                 var attributes = descriptor.MethodInfo.CustomAttributes;
-
-                var skip = descriptor.MethodInfo.GetCustomAttribute<SkipInterceptionLogAttribute>();
-                if (null != skip)
-                {
-                    return;
-                }
                 
                 var loggingAttr = descriptor.MethodInfo.GetCustomAttribute<LogActionAttribute>();
                 if (null == loggingAttr)
@@ -70,24 +65,33 @@ namespace PH.Core3.AspNetCoreApi.Filters
                 {
                     StringBuilder msgBuilder = new StringBuilder();
                     msgBuilder.Append(loggingAttr.Prefix);
+
+                    if (!string.IsNullOrEmpty(context?.HttpContext?.Request?.Path))
+                    {
+                        msgBuilder.Append($" '{context?.HttpContext?.Request?.Path}' -");
+                    }
+
+
+                    var validModelState = context.ModelState.IsValid;
+                    msgBuilder
+                        .Append($" {nameof(actionDescriptor)}: '{actionDescriptor}'; {nameof(validModelState)}: '{validModelState}'");
+
+                    if (loggingAttr.LogActionIncomeArguments)
+                    {
+                        var data = JsonConvert.SerializeObject(context.ActionArguments.ToDictionary(pair => pair));
+                        msgBuilder.Append($" {nameof(data)}; '{data}'");
+
+                    }
+
                     if (loggingAttr.LogIpCaller)
                     {
                         var ip = GetIp(context.HttpContext);
-                        if(!string.IsNullOrEmpty(ip))
+                        if (!string.IsNullOrEmpty(ip))
                         {
                             ip = $"FROM '{ip}' ==> ";
                         }
 
                         msgBuilder.Append($" {ip}");
-                    }
-                    var validModelState = context.ModelState.IsValid;
-                    msgBuilder.Append($" {nameof(actionDescriptor)}: '{actionDescriptor}'; {nameof(validModelState)}: '{validModelState}'");
-
-                    if (loggingAttr.LogActionArguments)
-                    {
-                        var data = JsonConvert.SerializeObject(context.ActionArguments.ToDictionary(pair => pair));
-                        msgBuilder.Append($" {nameof(data)}; '{data}'");
-
                     }
 
                     if (loggingAttr.PostfixMessage != string.Empty)
@@ -100,8 +104,73 @@ namespace PH.Core3.AspNetCoreApi.Filters
                 }
 
             }
-            
-           
+
+
+        }
+        /// <summary>Logs the result executed.</summary>
+        /// <param name="context">The context.</param>
+        protected virtual void LogResultExecuted(ResultExecutedContext context)
+        {
+            if (null == context)
+            {
+                return;
+            }
+
+            var actionDescriptor = context.ActionDescriptor.DisplayName;
+
+            var descriptor = (ControllerActionDescriptor) context.ActionDescriptor;
+            if (null != descriptor)
+            {
+                var attributes = descriptor.MethodInfo.CustomAttributes;
+                
+                var loggingAttr = descriptor.MethodInfo.GetCustomAttribute<LogActionAttribute>();
+                if (loggingAttr?.LogActionOutcomeData != true)
+                {
+                    return;
+                }
+
+                if (null == context.HttpContext)
+                {
+                    Logger.LogWarning($"NULL context.HttpContext");
+                    return;
+                }
+
+                StringBuilder msgBuilder = new StringBuilder();
+                    
+
+                
+                msgBuilder.Append($"{context?.HttpContext?.Request?.Path} Outcome: ");
+               
+
+                if (context.Result is ObjectResult result)
+                {
+                    var dump = JsonConvert.SerializeObject(result.Value);
+                    msgBuilder.Append($" {dump} - HttpStatusCode: '{context?.HttpContext?.Response?.StatusCode}' - {actionDescriptor}");
+                }
+                else
+                {
+                    msgBuilder.Append($" HttpStatusCode: '{context?.HttpContext?.Response?.StatusCode}' - {actionDescriptor}");
+                }
+
+
+
+
+
+                Logger.Log(loggingAttr.LogLevel, msgBuilder.ToString(), context?.Exception);
+
+            }
+
+        }
+
+
+        /// <summary>
+        /// </summary>
+        /// <param name="context"></param>
+        /// <inheritdoc />
+        public override void OnResultExecuted(ResultExecutedContext context)
+        {
+            base.OnResultExecuted(context);
+            LogResultExecuted(context);
         }
 
         /// <summary>Gets the ip from HttpContext.</summary>

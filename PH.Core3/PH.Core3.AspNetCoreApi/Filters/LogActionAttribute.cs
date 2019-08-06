@@ -24,7 +24,16 @@ namespace PH.Core3.AspNetCoreApi.Filters
         /// <para>Default <c>true</c></para>
         /// </summary>
         /// <value><c>true</c> if log action arguments; otherwise, <c>false</c>.</value>
-        public bool LogActionArguments { get; set; }
+        public bool LogActionIncomeArguments { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether log action outcome data: : if <c>true</c> the model of action outcome is json serialized and logged.
+        /// <para>Default <c>true</c></para>
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if log action outcome data; otherwise, <c>false</c>.
+        /// </value>
+        public bool LogActionOutcomeData { get; set; }
 
         /// <summary>Gets or sets the prefix on logged message.</summary>
         /// <para>Prepend this prefix to log message</para>
@@ -48,21 +57,21 @@ namespace PH.Core3.AspNetCoreApi.Filters
         /// <summary>
         /// Initializes a new instance of the <see cref="LogActionAttribute"/> class.
         /// </summary>
-        public LogActionAttribute():this(LogLevel.Debug)
+        public LogActionAttribute(LogLevel level):this()
         {
-            
+            LogLevel = level;
 
         }
         /// <summary>
         /// Initializes a new instance of the <see cref="LogActionAttribute"/> class.
         /// </summary>
-        /// <param name="level">The log level.</param>
-        public LogActionAttribute(LogLevel level)
+        public LogActionAttribute()
         {
             LogIpCaller        = false;
-            LogActionArguments = true;
+            LogActionIncomeArguments = true;
+            LogActionOutcomeData = true;
             Prefix             = "CALL";
-            LogLevel           = level;
+            LogLevel           = LogLevel.Debug;
             PostfixMessage     = string.Empty;
         }
 

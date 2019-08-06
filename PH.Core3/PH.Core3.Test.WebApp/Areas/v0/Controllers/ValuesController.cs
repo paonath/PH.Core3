@@ -1,7 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using PH.Core3.AspNetCoreApi.Filters;
 using PH.Core3.Test.WebApp.HostedService;
 
 namespace PH.Core3.Test.WebApp.Areas.v0.Controllers
@@ -31,6 +34,28 @@ namespace PH.Core3.Test.WebApp.Areas.v0.Controllers
             await _mailSenderService.SendEmailAsync("pippo@gmail.com");
 
             return new string[] { "value0", "value28" };
+           
+        }
+
+        // GET api/values
+        [HttpGet("{id}")]
+        [ItemNotNull]
+        [LogAction(LogLevel.Information, LogActionOutcomeData = true, LogActionIncomeArguments = true, PostfixMessage = "ciao")]
+        public async Task<ActionResult<IEnumerable<string>>> Get(int id)
+        {
+
+            return new string[] { "value0", "value28" };
+           
+        }
+
+        // GET api/values
+        [HttpGet("exc/{id}")]
+        [ItemNotNull]
+        [LogAction(LogLevel.Information, LogActionOutcomeData = true, LogActionIncomeArguments = true, PostfixMessage = "ciao")]
+        public async Task<IActionResult> GetExc(int id)
+        {
+
+            throw new ArgumentOutOfRangeException(nameof(id), id,$"test exc");
            
         }
 

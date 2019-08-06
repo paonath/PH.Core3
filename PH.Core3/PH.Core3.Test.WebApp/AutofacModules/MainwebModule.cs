@@ -62,7 +62,12 @@ namespace PH.Core3.Test.WebApp.AutofacModules
                    .AsImplementedInterfaces()
                    .InstancePerLifetimeScope();
 
-            builder.Register(c => new PH.Core3.Common.Services.Components.Path.WebPathTranslator(c.Resolve<IHostingEnvironment>().WebRootPath))
+            builder.Register(c =>
+                   {
+                       var wPAth = c.ResolveOptional<IHostingEnvironment>()?.WebRootPath ?? "C:\\temp";
+                       return new
+                                     PH.Core3.Common.Services.Components.Path.WebPathTranslator(wPAth);
+                   })
                    .AsSelf()
                    .AsImplementedInterfaces()
                    .As<IWebPathTranslator>()

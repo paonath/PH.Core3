@@ -72,7 +72,7 @@ namespace PH.Core3.Test.WebApp
 
                    .UseStartup<Startup>()
                    .UseAutofacMultitenantRequestServices(() => Startup.ApplicationContainer)
-                   .UseUrls("http://localhost:5000", "https://localhost:5001")
+                   .UseUrls("http://localhost:5000")
                    .Build();
 
 
