@@ -179,6 +179,39 @@ namespace PH.Core3.Common.Extensions
 
         #region IResult<T>
 
+        /// <summary>Log Error and return fail with content</summary>
+        /// <typeparam name="T">Type of the content</typeparam>
+        /// <param name="logger">The logger.</param>
+        /// <param name="identifier">The identifier.</param>
+        /// <param name="content">The content.</param>
+        /// <param name="errorMessage">The error message.</param>
+        /// <returns></returns>
+        [NotNull]
+        public static IResultErrorWithContent<T> ErrorWithContentAndReturnFail<T>(this ILogger logger, [NotNull] IIdentifier identifier,
+                                                                  [NotNull] T content, [NotNull] string errorMessage)
+        {
+           
+            return ErrorWithContentAndReturnFail(logger, identifier, content, new Error(errorMessage));
+            
+        }
+
+        /// <summary>Log Error and return fail with content</summary>
+        /// <typeparam name="T">Type of the content</typeparam>
+        /// <param name="logger">The logger.</param>
+        /// <param name="identifier">The identifier.</param>
+        /// <param name="content">The content.</param>
+        /// <param name="error">The error.</param>
+        /// <returns></returns>
+        [NotNull]
+        public static IResultErrorWithContent<T> ErrorWithContentAndReturnFail<T>(this ILogger logger, [NotNull] IIdentifier identifier,
+                                                                                  [NotNull] T content, [NotNull] IError error)
+        {
+            
+            LogOnlyError(logger, error);
+            return ResultFactory.FailWithContent(identifier, content, error);
+        }
+
+
         /// <summary>
         /// Log Error and return fail
         /// </summary>

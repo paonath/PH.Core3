@@ -1,7 +1,8 @@
 ﻿using System;
 using Microsoft.Extensions.Logging;
+using PH.Core3.AspNetCoreApi.Filters;
 
-namespace PH.Core3.AspNetCoreApi.Filters
+namespace PH.Core3.AspNetCoreApi.Attributes
 {
     /// <summary>
     /// Attribute for auto-logging Actions on Controllers using <see cref="InterceptionAttributeFilter">InterceptionAttributeFilter</see>
@@ -53,28 +54,31 @@ namespace PH.Core3.AspNetCoreApi.Filters
         /// <value>The postfix message.</value>
         public string PostfixMessage { get; set; }
 
+        /// <summary>Gets or sets the message: if any, the message is written to ActionExcecutin before any other parts of this attribute</summary>
+        /// <value>The message.</value>
+        public string Message { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="LogActionAttribute"/> class.
         /// </summary>
-        public LogActionAttribute(LogLevel level):this()
+        public LogActionAttribute(LogLevel level, string message = "") : this()
         {
             LogLevel = level;
-
+            Message  = message;
         }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="LogActionAttribute"/> class.
         /// </summary>
         public LogActionAttribute()
         {
-            LogIpCaller        = false;
+            LogIpCaller              = false;
             LogActionIncomeArguments = true;
-            LogActionOutcomeData = true;
-            Prefix             = "CALL";
-            LogLevel           = LogLevel.Debug;
-            PostfixMessage     = string.Empty;
+            LogActionOutcomeData     = true;
+            Prefix                   = "CALL";
+            LogLevel                 = LogLevel.Debug;
+            PostfixMessage           = string.Empty;
+            Message                  = string.Empty;
         }
-
-        
     }
 }

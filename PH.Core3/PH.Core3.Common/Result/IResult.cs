@@ -42,6 +42,15 @@ namespace PH.Core3.Common.Result
     }
 
     /// <summary>
+    /// Error Result with a Content Output
+    /// </summary>
+    /// <typeparam name="TContent">The type of the content.</typeparam>
+    /// <seealso cref="PH.Core3.Common.Result.IResult{TContent}" />
+    /// <seealso cref="PH.Core3.Common.Result.IResult" />
+    public interface IResultErrorWithContent<out TContent> : IResult<TContent> , IResult
+    { }
+
+    /// <summary>
     /// Transport object wrapping a Result array paged
     /// </summary>
     /// <typeparam name="TContent">Type of the Result content</typeparam>

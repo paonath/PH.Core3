@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using PH.Core3.AspNetCoreApi.Attributes;
 using PH.Core3.Common;
 using PH.Core3.UnitOfWork;
 
@@ -64,6 +65,10 @@ namespace PH.Core3.AspNetCoreApi.Filters
                 else
                 {
                     StringBuilder msgBuilder = new StringBuilder();
+                    if (!string.IsNullOrEmpty(loggingAttr.Message))
+                    {
+                        msgBuilder.Append($"{loggingAttr.Message} ");
+                    }
                     msgBuilder.Append(loggingAttr.Prefix);
 
                     if (!string.IsNullOrEmpty(context?.HttpContext?.Request?.Path))

@@ -9,6 +9,17 @@ using JetBrains.Annotations;
 
 namespace PH.Core3.Common.Result
 {
+
+    internal class ResultErrorWithContent<TContent> : Result<TContent>, IResult<TContent>,
+                                                      IResultErrorWithContent<TContent>
+    {
+        
+        /// <summary>Initializes a new instance of the Result on error with content class.</summary>
+        public ResultErrorWithContent([NotNull] TContent content, [NotNull] List<IError> errors, [NotNull] IIdentifier identifier) : base(content, errors, identifier)
+        {
+        }
+    }
+
     /// <summary>
     /// Transport object wrapping a real Result
     ///
@@ -47,7 +58,7 @@ namespace PH.Core3.Common.Result
             Errors = errors?.ToList() ?? new List<IError>();
         }
 
-        /// <summary>Initializes a new instance of theResult on error with content class.</summary>
+        /// <summary>Initializes a new instance of the Result on error with content class.</summary>
         public Result([NotNull] TContent content,[NotNull] List<IError> errors, [NotNull] IIdentifier identifier)
         {
             if (content == null)

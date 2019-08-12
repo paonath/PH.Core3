@@ -427,6 +427,7 @@ namespace PH.Core3.EntityFramework
             if (Changecount == 0)
             {
                 UowLogger?.LogTrace("No changes to commit");
+                Committed?.Invoke(this, new UnitOfWorkEventArg(Identifier));
                 return;
             }
 

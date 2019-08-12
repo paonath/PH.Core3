@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using PH.Core3.AspNetCoreApi.Attributes;
 using PH.Core3.AspNetCoreApi.Filters;
 using PH.Core3.Test.WebApp.HostedService;
 

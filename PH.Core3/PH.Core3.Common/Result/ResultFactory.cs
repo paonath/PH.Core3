@@ -388,6 +388,44 @@ namespace PH.Core3.Common.Result
         }
 
 
+        /// <summary>Bad Result with Content</summary>
+        /// <typeparam name="TContent">The type of the content.</typeparam>
+        /// <param name="identifier">The identifier.</param>
+        /// <param name="content">The content.</param>
+        /// <param name="errors">The errors.</param>
+        /// <returns>Bad Result with Content</returns>
+        [NotNull]
+        public static IResultErrorWithContent<TContent> FailWithContent<TContent>([NotNull] IIdentifier identifier,[NotNull] TContent content, [NotNull] IEnumerable<IError> errors)
+        {
+            return new ResultErrorWithContent<TContent>(content, errors.ToList(), identifier);
+        }
+
+        /// <summary>Bad Result with Content</summary>
+        /// <typeparam name="TContent">The type of the content.</typeparam>
+        /// <param name="identifier">The identifier.</param>
+        /// <param name="content">The content.</param>
+        /// <param name="error">The error.</param>
+        /// <returns>Bad Result with Content</returns>
+        [NotNull]
+        public static IResultErrorWithContent<TContent> FailWithContent<TContent>([NotNull] IIdentifier identifier,[NotNull] TContent content, [NotNull] IError error)
+        {
+            return FailWithContent(identifier, content, new List<IError>() {error});
+        }
+
+        /// <summary>Fails the content of the with.</summary>
+        /// <typeparam name="TContent">The type of the content.</typeparam>
+        /// <param name="identifier">The identifier.</param>
+        /// <param name="content">The content.</param>
+        /// <param name="errorMessage">The error message.</param>
+        /// <returns>Bad Result with Content</returns>
+        [NotNull]
+        public static IResultErrorWithContent<TContent> FailWithContent<TContent>([NotNull] IIdentifier identifier,[NotNull] TContent content, [NotNull] string errorMessage)
+        {
+            return FailWithContent(identifier, content, new List<IError>() {new Error(errorMessage)});
+        }
+
+
+
 
         /// <summary>
         /// Bad Result
