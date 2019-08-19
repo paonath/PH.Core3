@@ -26,21 +26,21 @@ namespace PH.Core3.Common.Services.Crud
         /// <returns><see cref="Result{T}"/> instance</returns>
         Task<IResult<T[]>> EntityLoadAllAsync();
 
-        /// <summary>
-        /// Load All Items
-        /// </summary>
-        /// <returns><see cref="Result{T}"/> instance</returns>
-        Task<IPagedResult<T>> EntityPagedLoadAllAsync(int pageNumber = 0);
+        ///// <summary>
+        ///// Load All Items
+        ///// </summary>
+        ///// <returns><see cref="Result{T}"/> instance</returns>
+        //Task<IPagedResult<T>> EntityPagedLoadAllAsync(int pageNumber = 0);
 
         
 
-        /// <summary>
-        /// Load Items as Paged Result
-        /// </summary>
-        /// <param name="skipItems">number of items to skip</param>
-        /// <param name="itemsToLoad">number of items to load</param>
-        /// <returns><see cref="PagedResult{T}"/> instance</returns>
-        Task<IPagedResult<T>> EntityLoadAsync(int skipItems, int itemsToLoad);
+        ///// <summary>
+        ///// Load Items as Paged Result
+        ///// </summary>
+        ///// <param name="skipItems">number of items to skip</param>
+        ///// <param name="itemsToLoad">number of items to load</param>
+        ///// <returns><see cref="PagedResult{T}"/> instance</returns>
+        //Task<IPagedResult<T>> EntityLoadAsync(int skipItems, int itemsToLoad);
 
     }
 }

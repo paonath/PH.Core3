@@ -2,6 +2,16 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+
+    <!-- Generate XML docs -->
+    <DocumentationFile>bin\$(Configuration)\PH.Core3.EntityFramework.Abstractions.xml</DocumentationFile>
+
+
+    <!--NUGET PKG-->
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    
+    <PackageId>PH.Core3.EntityFramework.Abstractions</PackageId>
   </PropertyGroup>
 
  <ItemGroup>

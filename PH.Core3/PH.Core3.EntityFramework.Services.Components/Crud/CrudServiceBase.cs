@@ -103,46 +103,46 @@ namespace PH.Core3.EntityFramework.Services.Components.Crud
             return ResultFactory.Ok(Identifier, res);
         }
 
-        /// <summary>
-        /// Load Items as Paged Result using default pagination setting
-        /// </summary>
-        /// <param name="pageNumber">page number</param>
-        /// <returns><see cref="PagedResult{TContent}"/> instance</returns>
-        [ItemNotNull]
-        public async Task<IPagedResult<TDto>> LoadAsync(int pageNumber = 0)
-        {
-            var b = await EntityPagedLoadAllAsync(pageNumber);
-            if (b.OnError)
-            {
-                return ResultFactory.PagedFail<TDto>(Identifier, b.Errors);
-            }
-            else
-            {
-                return ResultFactory.PagedOk(Identifier, b.Content.Select(x => ToDto(x)).ToArray(), b.Count,
-                                             b.PageNumber, b.PageSize);
-            }
-        }
+        ///// <summary>
+        ///// Load Items as Paged Result using default pagination setting
+        ///// </summary>
+        ///// <param name="pageNumber">page number</param>
+        ///// <returns><see cref="PagedResult{TContent}"/> instance</returns>
+        //[ItemNotNull]
+        //public async Task<IPagedResult<TDto>> LoadAsync(int pageNumber = 0)
+        //{
+        //    var b = await EntityPagedLoadAllAsync(pageNumber);
+        //    if (b.OnError)
+        //    {
+        //        return ResultFactory.PagedFail<TDto>(Identifier, b.Errors);
+        //    }
+        //    else
+        //    {
+        //        return ResultFactory.PagedOk(Identifier, b.Content.Select(x => ToDto(x)).ToArray(), b.Count,
+        //                                     b.PageNumber, b.PageSize);
+        //    }
+        //}
 
-        /// <summary>
-        /// Load Items as Paged Result
-        /// </summary>
-        /// <param name="skipItems">number of items to skip</param>
-        /// <param name="itemsToLoad">number of items to load</param>
-        /// <returns><see cref="PagedResult{TContent}"/> instance</returns>
-        [ItemNotNull]
-        public async Task<IPagedResult<TDto>> LoadAsync(int skipItems, int itemsToLoad)
-        {
-            var b = await EntityLoadAsync(skipItems, itemsToLoad);
-            if (b.OnError)
-            {
-                return ResultFactory.PagedFail<TDto>(Identifier, b.Errors);
-            }
-            else
-            {
-                return ResultFactory.PagedOk(Identifier, b.Content.Select(x => ToDto(x)).ToArray(), b.Count,
-                                             b.PageNumber, b.PageSize);
-            }
-        }
+        ///// <summary>
+        ///// Load Items as Paged Result
+        ///// </summary>
+        ///// <param name="skipItems">number of items to skip</param>
+        ///// <param name="itemsToLoad">number of items to load</param>
+        ///// <returns><see cref="PagedResult{TContent}"/> instance</returns>
+        //[ItemNotNull]
+        //public async Task<IPagedResult<TDto>> LoadAsync(int skipItems, int itemsToLoad)
+        //{
+        //    var b = await EntityLoadAsync(skipItems, itemsToLoad);
+        //    if (b.OnError)
+        //    {
+        //        return ResultFactory.PagedFail<TDto>(Identifier, b.Errors);
+        //    }
+        //    else
+        //    {
+        //        return ResultFactory.PagedOk(Identifier, b.Content.Select(x => ToDto(x)).ToArray(), b.Count,
+        //                                     b.PageNumber, b.PageSize);
+        //    }
+        //}
 
         /*
         protected Task<IPagedResult<TDto>> QueryPagedAsync(Expression<Func<TEntity, bool>> query,
@@ -192,12 +192,12 @@ namespace PH.Core3.EntityFramework.Services.Components.Crud
         /// <param name="entity">Content to delete</param>
         /// <returns><see cref="PH.Core3.Common.Result"/> containing True or error</returns>
         [ItemNotNull]
-        public virtual async Task<IResult> RemoveAsync([NotNull] TDto entity)
+        public virtual async Task<IResult<bool>> RemoveAsync([NotNull] TDto entity)
         {
             var t = await GetEntityForDeleteAsync(entity.Id);
             if (!t.DeleteValidationResult.IsValid)
             {
-                return _logger.ErrorAndReturnFail(Identifier, t.DeleteValidationResult);
+                return _logger.ErrorAndReturnFail<bool>(Identifier, t.DeleteValidationResult);
             }
 
             try
@@ -206,7 +206,7 @@ namespace PH.Core3.EntityFramework.Services.Components.Crud
             }
             catch (Exception e)
             {
-                return _logger.CriticalAndReturnFail<TDto>(Identifier, e);
+                return _logger.CriticalAndReturnFail<bool>(Identifier, e);
             }
         }
 

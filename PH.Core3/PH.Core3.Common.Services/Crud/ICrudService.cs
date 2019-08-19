@@ -21,7 +21,7 @@ namespace PH.Core3.Common.Services.Crud
         /// </summary>
         /// <param name="id">value of the Id property</param>
         /// <returns></returns>
-        Task<IResult> EntityRemoveByIdAsync([NotNull] TKey id);
+        Task<IResult<bool>> EntityRemoveByIdAsync([NotNull] TKey id);
 
     }
 

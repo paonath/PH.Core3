@@ -90,9 +90,9 @@ namespace PH.Core3.Common.Result
         /// </summary>
         /// <param name="identifier">Identifier</param>
         /// <param name="progrId">progr id</param>
-        /// <param name="errors">errors </param>
-        internal LazyResult([NotNull] IIdentifier identifier, int progrId, [NotNull] IEnumerable<IError> errors) 
-            : base(identifier, errors)
+        /// <param name="error">error </param>
+        internal LazyResult([NotNull] IIdentifier identifier, int progrId, [NotNull] IError error) 
+            : base(identifier, error)
         {
             _progrId = progrId;
             _raisedExit = false;
@@ -159,11 +159,11 @@ namespace PH.Core3.Common.Result
                 if (null != _onErrorFunc)
                 {
                     var err = await _onErrorFunc.Invoke(c);
-                    return new LazyResult<T>(err.Identifier, ProgrId, err.Errors);
+                    return new LazyResult<T>(err.Identifier, ProgrId, err.Error);
                 }
                 else
                 {
-                    return new LazyResult<T>(c.Identifier, ProgrId, c.Errors);
+                    return new LazyResult<T>(c.Identifier, ProgrId, c.Error);
                 }
             }
 
@@ -214,7 +214,7 @@ namespace PH.Core3.Common.Result
             _lazyResultInternal = await EvaluateResultAsync();
             if (_lazyResultInternal.OnError)
             {
-                return ResultFactory.FailLazyEvaluatedFunction<TOther>(ProgrId, _identifier, _lazyResultInternal.Errors);
+                return ResultFactory.FailLazyEvaluatedFunction<TOther>(ProgrId, _identifier, _lazyResultInternal.Error);
             }
 
             if (_raisedExit)

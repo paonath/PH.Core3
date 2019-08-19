@@ -30,10 +30,10 @@ namespace PH.Core3.Common.Result
         /// </summary>
         IError InnerError { get; }
 
-        /// <summary>
-        /// Error Exception
-        /// </summary>
-        [JsonIgnore]
-        Exception Exception { get; }
+        ///// <summary>
+        ///// Error Exception
+        ///// </summary>
+        //[JsonIgnore]
+        //Exception Exception { get; }
     }
 }

@@ -43,15 +43,13 @@ namespace PH.Core3.Test.WebApp.Areas.v1.Controllers
         [NotNull]
         public ActionResult<IEnumerable<string>> Get()
         {
-            var tst = _alberoService.LoadAsync();
+            var tst = _alberoService.LoadAllAsync();
             tst.Wait();
             var r = tst.Result;
 
             
 
-            var xx = ResultFactory.PagedOk<AlberoDTo>(_identifier, r.Content, -1, -1, -1);
-            var xxx = ResultFactory.PagedOk(_identifier, new AlberoDTo[]{new AlberoDTo(), new AlberoDTo(), }, 5, 0, 2);
-
+        
 
             return new string[] { "value1", "value2" };
         }

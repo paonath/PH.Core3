@@ -185,7 +185,7 @@ namespace PH.Core3.XUnitTest
             var chain = await ResultFactory.ChainAsync(id,
                     async () => await MethodTestAsync(ResultFactory.Ok<int>(id, 1)), error =>
                     {
-                        _testOutputHelper.WriteLine(error.Errors.First().ErrorMessage);
+                        _testOutputHelper.WriteLine(error.Error.ErrorMessage);
                         return Task.FromResult(error);
                     })
 
@@ -406,7 +406,7 @@ namespace PH.Core3.XUnitTest
             var chain = await ResultFactory.ChainAsync(id,
                     async () => await MethodTestAsync(ResultFactory.Ok<int>(id, 1)), error =>
                     {
-                        _testOutputHelper.WriteLine(error.Errors.First().ErrorMessage);
+                        _testOutputHelper.WriteLine(error.Error.ErrorMessage);
                         return Task.FromResult(error);
                     })
                 .Next(async (eval, result) => await MethodTestAsync(result))

@@ -1,4 +1,4 @@
-﻿namespace PH.Core3.EntityFramework
+﻿namespace PH.Core3.EntityFramework.Infrastructure
 {
     /// <summary>
     /// Tenant Context

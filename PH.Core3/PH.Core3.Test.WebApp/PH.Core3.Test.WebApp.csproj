@@ -43,6 +43,8 @@
     <ProjectReference Include="..\PH.Core3.Common.Services.Components\PH.Core3.Common.Services.Components.csproj" />
     <ProjectReference Include="..\PH.Core3.Common.Services\PH.Core3.Common.Services.csproj" />
     <ProjectReference Include="..\PH.Core3.Common\PH.Core3.Common.csproj" />
+    <ProjectReference Include="..\PH.Core3.EntityFramework.Abstractions\PH.Core3.EntityFramework.Abstractions.csproj" />
+    <ProjectReference Include="..\PH.Core3.EntityFramework.Services.Components\PH.Core3.EntityFramework.Services.Components.csproj" />
     <ProjectReference Include="..\PH.Core3.EntityFramework\PH.Core3.EntityFramework.csproj" />
     <ProjectReference Include="..\PH.Core3.TestContext\PH.Core3.TestContext.csproj" />
     <ProjectReference Include="..\PH.Core3.UnitOfWork\PH.Core3.UnitOfWork.csproj" />

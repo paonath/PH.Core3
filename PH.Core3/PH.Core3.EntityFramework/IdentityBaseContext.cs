@@ -18,6 +18,7 @@ using PH.Core3.Common.CoreSystem;
 using PH.Core3.Common.Scope;
 using PH.Core3.Common.UnitOfWorkInfrastructure;
 using PH.Core3.EntityFramework.Abstractions.Models.Entities;
+using PH.Core3.EntityFramework.Infrastructure;
 using PH.Core3.EntityFramework.Mapping;
 using PH.Core3.UnitOfWork;
 

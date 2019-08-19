@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using PH.Core3.Common;
 using PH.Core3.Common.CoreSystem;
 using PH.Core3.Common.UnitOfWorkInfrastructure;
+using PH.Core3.EntityFramework.Infrastructure;
 using PH.Core3.UnitOfWork;
 
 namespace PH.Core3.EntityFramework

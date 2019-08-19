@@ -25,9 +25,11 @@ namespace PH.Core3.Common.Result
         /// <param name="errorEventId">Event Id for this error</param>
         /// <param name="innerError">Inner Error</param>
         public LazyEvaluatedError(int progrId,[NotNull] string errorMessage, [CanBeNull] string outputMessage, EventId? errorEventId,  [CanBeNull] IError innerError = null) 
-            : base(errorMessage, outputMessage, errorEventId, innerError)
+            : base(errorMessage, innerError)
         {
             ProgrId = progrId;
+            OutputMessage = outputMessage;
+            ErrorEventId = errorEventId;
         }
     }
 }

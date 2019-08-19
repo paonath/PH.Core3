@@ -99,7 +99,7 @@ namespace PH.Core3.EntityFramework.Services.Components.Crud.Entities
             var e = await FindEntityByIdAsync(id);
             if (null == e)
             {
-                return ResultFactory.NotFound<TEntity>(Identifier,
+                return ResultFactory.Fail<TEntity>(Identifier,
                                                        new Error($"{EntityTypeName} with id '{id}' not found"));
             }
             else
@@ -115,25 +115,28 @@ namespace PH.Core3.EntityFramework.Services.Components.Crud.Entities
         [ItemNotNull]
         public async Task<IResult<TEntity[]>> EntityLoadAllAsync()
         {
-            var c = await EntityLoadAsync(-1, -1);
-            return c;
+            //var c = await EntityLoadAsync(-1, -1);
+            //return c;
+            var arr = await Set.ToArrayAsync();
+            return ResultFactory.Ok(Identifier, arr);
+
         }
 
-        /// <summary>
-        /// Load All Items
-        /// </summary>
-        /// <returns><see cref="IPagedResult{T}"/> instance</returns>
-        [ItemNotNull]
-        public async Task<IPagedResult<TEntity>> EntityPagedLoadAllAsync(int pageNumber = 0)
-        {
-            if (ItemsPaginationSize.Value == -1)
-            {
-                return await EntityLoadAsync(-1, -1);
-            }
+        ///// <summary>
+        ///// Load All Items
+        ///// </summary>
+        ///// <returns><see cref="IPagedResult{T}"/> instance</returns>
+        //[ItemNotNull]
+        //public async Task<IPagedResult<TEntity>> EntityPagedLoadAllAsync(int pageNumber = 0)
+        //{
+        //    if (ItemsPaginationSize.Value == -1)
+        //    {
+        //        return await EntityLoadAsync(-1, -1);
+        //    }
 
-            var itemsToSkip = pageNumber * ItemsPaginationSize.Value;
-            return await EntityLoadAsync(itemsToSkip, ItemsPaginationSize.Value);
-        }
+        //    var itemsToSkip = pageNumber * ItemsPaginationSize.Value;
+        //    return await EntityLoadAsync(itemsToSkip, ItemsPaginationSize.Value);
+        //}
 
 
         ///// <summary>
@@ -149,47 +152,47 @@ namespace PH.Core3.EntityFramework.Services.Components.Crud.Entities
 
 
         
-        /// <summary>
-        /// Load Items as Paged Result
-        /// </summary>
-        /// <param name="skipItems">number of items to skip</param>
-        /// <param name="itemsToLoad">number of items to load</param>
-        /// <returns><see cref="PagedResult{TContent}"/> instance</returns>
-        [ItemNotNull]
-        public async Task<IPagedResult<TEntity>> EntityLoadAsync(int skipItems, int itemsToLoad)
-        {
-            var c = await Set.LongCountAsync();
-            if (c == 0)
-            {
-                return ResultFactory.PagedEmpty<TEntity>(Identifier);
-            }
+        ///// <summary>
+        ///// Load Items as Paged Result
+        ///// </summary>
+        ///// <param name="skipItems">number of items to skip</param>
+        ///// <param name="itemsToLoad">number of items to load</param>
+        ///// <returns><see cref="PagedResult{TContent}"/> instance</returns>
+        //[ItemNotNull]
+        //public async Task<IPagedResult<TEntity>> EntityLoadAsync(int skipItems, int itemsToLoad)
+        //{
+        //    var c = await Set.LongCountAsync();
+        //    if (c == 0)
+        //    {
+        //        return ResultFactory.PagedEmpty<TEntity>(Identifier);
+        //    }
 
 
-            TEntity[] all        = null;
-            int       pageNumber = 0;
+        //    TEntity[] all        = null;
+        //    int       pageNumber = 0;
 
-            if (skipItems == -1 && itemsToLoad == -1)
-            {
-                all        = await Set.ToArrayAsync();
-                pageNumber = -1;
-            }
-            else
-            {
-                if (skipItems == 0)
-                {
-                    pageNumber = 0;
-                }
-                else
-                {
-                    pageNumber = (int) (c / skipItems);
-                }
+        //    if (skipItems == -1 && itemsToLoad == -1)
+        //    {
+        //        all        = await Set.ToArrayAsync();
+        //        pageNumber = -1;
+        //    }
+        //    else
+        //    {
+        //        if (skipItems == 0)
+        //        {
+        //            pageNumber = 0;
+        //        }
+        //        else
+        //        {
+        //            pageNumber = (int) (c / skipItems);
+        //        }
 
-                all = await Set.Skip(skipItems).Take(itemsToLoad).ToArrayAsync();
-            }
+        //        all = await Set.Skip(skipItems).Take(itemsToLoad).ToArrayAsync();
+        //    }
 
             
-            return ResultFactory.PagedOk(Identifier, all, c, pageNumber, itemsToLoad);
-        }
+        //    return ResultFactory.PagedOk(Identifier, all, c, pageNumber, itemsToLoad);
+        //}
 
 
         /*

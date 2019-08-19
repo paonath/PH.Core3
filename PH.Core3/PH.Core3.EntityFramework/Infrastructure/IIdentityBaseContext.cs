@@ -9,7 +9,7 @@ using PH.Core3.Common;
 using PH.Core3.Common.CoreSystem;
 using PH.Core3.EntityFramework.Abstractions.Models.Entities;
 
-namespace PH.Core3.EntityFramework
+namespace PH.Core3.EntityFramework.Infrastructure
 {
     /// <summary>
     /// 

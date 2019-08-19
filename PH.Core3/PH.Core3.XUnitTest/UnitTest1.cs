@@ -21,7 +21,7 @@ namespace PH.Core3.XUnitTest
             }
             else
             {
-                var bad = ResultFactory.Fail<int>(id, new Error("Sbaglio apposta", "", null, null));
+                var bad = ResultFactory.Fail<int>(id, new Error("Sbaglio apposta"));
                 return bad;
             }
 
@@ -121,7 +121,7 @@ namespace PH.Core3.XUnitTest
                 return r;
             }
 
-            return ResultFactory.Fail<TOuput>(inpurResult.Identifier, inpurResult.Errors);
+            return ResultFactory.Fail<TOuput>(inpurResult.Identifier, inpurResult.Error);
         }
 
         /*

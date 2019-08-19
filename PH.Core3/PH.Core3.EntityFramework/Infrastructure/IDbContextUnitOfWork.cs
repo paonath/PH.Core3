@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using PH.Core3.UnitOfWork;
 
-namespace PH.Core3.EntityFramework
+namespace PH.Core3.EntityFramework.Infrastructure
 {
     /// <summary>
     /// Db Context Unit Of Work

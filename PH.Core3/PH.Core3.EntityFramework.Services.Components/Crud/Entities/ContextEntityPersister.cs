@@ -318,10 +318,10 @@ namespace PH.Core3.EntityFramework.Services.Components.Crud.Entities
         /// <param name="entity">Entity to Remove</param>
         /// <returns><see cref="PH.Core3.Common.Result"/> containing True or error</returns>
         [ItemNotNull]
-        public async Task<IResult> RemoveAsync([NotNull] TEntity entity)
+        public async Task<IResult<bool>> RemoveAsync([NotNull] TEntity entity)
         {
             var delResult = await DeleteEntityAsync(entity);
-            return ResultFactory.True(Identifier);
+            return ResultFactory.TrueResult(Identifier);
         }
 
 
@@ -331,14 +331,14 @@ namespace PH.Core3.EntityFramework.Services.Components.Crud.Entities
         /// <param name="id">value of the Id property</param>
         /// <returns><see cref="PH.Core3.Common.Result"/> containing True or error</returns>
         [ItemNotNull]
-        public async Task<IResult> RemoveByIdAsync([NotNull] TKey id)
+        public async Task<IResult<bool>> RemoveByIdAsync([NotNull] TKey id)
         {
             
 
             var en = await FindEntityByIdAsync(id);
             if(null == en)
             {
-                return ResultFactory.Fail(Identifier, Error.Parse($"{EntityTypeName} with id '{id}' not found"));
+                return ResultFactory.FalseResult(Identifier, new Error($"{EntityTypeName} with id '{id}' not found"));
             }
             
             return await RemoveAsync(en);

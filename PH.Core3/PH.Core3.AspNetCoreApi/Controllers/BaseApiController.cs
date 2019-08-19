@@ -32,7 +32,7 @@ namespace PH.Core3.AspNetCoreApi.Controllers
         /// <returns>Http 500 Error</returns>
         protected virtual async Task<ActionResult<TContent>> ErrorTypedAsync<TContent>([NotNull] IResult<TContent> content)
         {
-            return await Task.FromResult(StatusCode(StatusCodes.Status500InternalServerError, content.Errors));
+            return await Task.FromResult(StatusCode(StatusCodes.Status500InternalServerError, content.Error));
         }
 
         /// <summary>
@@ -78,8 +78,9 @@ namespace PH.Core3.AspNetCoreApi.Controllers
             catch (Exception e)
             {
                 Logger.LogCritical(e,e.Message);
-                var errResult = ResultFactory.Fail(Uow.Identifier , e.Message);
-                return StatusCode(StatusCodes.Status500InternalServerError, errResult.Errors);
+
+                var errResult = ResultFactory.Fail<TContent>(Uow.Identifier, e);
+                return StatusCode(StatusCodes.Status500InternalServerError, errResult.Error);
             }
 
         }

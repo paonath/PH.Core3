@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using FluentValidation.Results;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -16,7 +14,7 @@ using PH.Core3.Common.Validation;
 using PH.Core3.EntityFramework.Abstractions.Models.Entities;
 using PH.Core3.EntityFramework.Audit;
 
-namespace PH.Core3.EntityFramework
+namespace PH.Core3.EntityFramework.Infrastructure
 {
     /// <summary>
     /// 
