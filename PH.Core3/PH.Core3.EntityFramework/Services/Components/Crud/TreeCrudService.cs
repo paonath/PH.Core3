@@ -4,10 +4,10 @@ using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using PH.Core3.Common;
-using PH.Core3.Common.Models.Entities;
 using PH.Core3.Common.Models.ViewModels;
 using PH.Core3.Common.Models.ViewModels.Tree;
 using PH.Core3.Common.Services.Components.Crud;
+using PH.Core3.EntityFramework.Abstractions.Models.Entities;
 
 namespace PH.Core3.EntityFramework.Services.Components.Crud
 {

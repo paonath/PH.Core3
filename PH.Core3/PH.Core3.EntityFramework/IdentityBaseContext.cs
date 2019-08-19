@@ -15,9 +15,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using PH.Core3.Common;
 using PH.Core3.Common.CoreSystem;
-using PH.Core3.Common.Models.Entities;
 using PH.Core3.Common.Scope;
 using PH.Core3.Common.UnitOfWorkInfrastructure;
+using PH.Core3.EntityFramework.Abstractions.Models.Entities;
 using PH.Core3.EntityFramework.Mapping;
 using PH.Core3.UnitOfWork;
 
@@ -36,7 +36,6 @@ namespace PH.Core3.EntityFramework
         IAuditContext, IIdentityBaseContext<TUser, TRole, TKey> , IDbContextUnitOfWork
         
         where TUser : IdentityUser<TKey>, IEntity<TKey>
-
         where TRole : IdentityRole<TKey>, IEntity<TKey>
         where TKey : IEquatable<TKey>
     {
@@ -241,7 +240,7 @@ namespace PH.Core3.EntityFramework
             base.OnModelCreating(builder);
             OnCustomModelCreating(builder);
 
-            builder.ApplyConfiguration(new TransactionAuditMap());
+            builder.ApplyConfiguration<TransactionAudit>(new TransactionAuditMap());
             AssignTenantAndOtherQueryFilterOnModelCreating(builder);
         }
 

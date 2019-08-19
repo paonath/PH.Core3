@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Threading.Tasks;
-using PH.Core3.Common.Models.Entities;
 using PH.Core3.Common.Models.ViewModels;
 using PH.Core3.Common.Result;
 
 namespace PH.Core3.Common.Services.Crud
 {
     /// <summary>
-    /// Service for CRUD (Create/Read/Update/Delete) Operations on <see cref="ITreeItem">Tree Items</see>.
+    /// Service for CRUD (Create/Read/Update/Delete) Operations on Tree Items.
     ///     
     ///     <see cref="ICrudService{TDto,TNewDto,TEditDto,TKey}"/>
     /// </summary>

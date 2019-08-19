@@ -81,6 +81,8 @@ namespace PH.Core3.EntityFramework.Abstractions.Models.Entities
     public interface IEntity<TKey> : IEntity 
         where TKey : IEquatable<TKey>
     {
-        
+        /// <summary>Gets or sets the unique id (Primary Key) for current Entity.</summary>
+        /// <value>The Id.</value>
+        TKey Id { get; set; }
     }
 }

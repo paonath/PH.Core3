@@ -11,9 +11,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using PH.Core3.Common;
 using PH.Core3.Common.CoreSystem;
-using PH.Core3.Common.Models.Entities;
 using PH.Core3.Common.Services.Components.Crud.Entities;
 using PH.Core3.Common.Validation;
+using PH.Core3.EntityFramework.Abstractions.Models.Entities;
 using PH.Core3.EntityFramework.Audit;
 
 namespace PH.Core3.EntityFramework

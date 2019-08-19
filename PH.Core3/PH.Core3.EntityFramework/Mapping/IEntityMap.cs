@@ -1,6 +1,6 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
-using PH.Core3.Common.Models.Entities;
+using PH.Core3.EntityFramework.Abstractions.Models.Entities;
 
 namespace PH.Core3.EntityFramework.Mapping
 {

@@ -7,8 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using PH.Core3.Common;
 using PH.Core3.Common.CoreSystem;
-using PH.Core3.Common.Models.Entities;
-using PH.Core3.UnitOfWork;
+using PH.Core3.EntityFramework.Abstractions.Models.Entities;
 
 namespace PH.Core3.EntityFramework
 {
@@ -20,7 +19,9 @@ namespace PH.Core3.EntityFramework
     /// <typeparam name="TKey">The type of the key.</typeparam>
     /// <seealso cref="ITenantContext" />
     public interface IIdentityBaseContext<TUser, TRole, TKey> : ITenantContext, IInitializable<IdentityBaseContext<TUser, TRole, TKey>>
-        where TUser : IdentityUser<TKey>, IEntity<TKey> where TRole : IdentityRole<TKey>, IEntity<TKey> where TKey : IEquatable<TKey>
+        where TUser : IdentityUser<TKey>, IEntity<TKey> 
+        where TRole : IdentityRole<TKey>, IEntity<TKey> 
+        where TKey : IEquatable<TKey>
     {
         /// <summary>Gets or sets the logger.</summary>
         /// <value>The logger.</value>
