@@ -38,8 +38,7 @@ namespace PH.Core3.EntityFramework.Abstractions.Models.Entities
         /// <summary>
         ///  Uid If <see cref="IEntity.Deleted"/> 
         /// </summary>
-        [StringLength(128)]
-        public string DeletedTransactionId { get; set; }
+        public long DeletedTransactionId { get; set; }
 
         /// <summary>
         /// Reference to Delete <see cref="TransactionAudit"/> 
@@ -50,8 +49,7 @@ namespace PH.Core3.EntityFramework.Abstractions.Models.Entities
         /// <summary>
         /// Uid of creation
         /// </summary>
-        [StringLength(128)]
-        public string CreatedTransactionId { get; set; }
+        public long CreatedTransactionId { get; set; }
 
         /// <summary>
         /// Reference to Create <see cref="TransactionAudit"/>
@@ -62,8 +60,7 @@ namespace PH.Core3.EntityFramework.Abstractions.Models.Entities
         /// <summary>
         /// Uid of update
         /// </summary>
-        [StringLength(128)]
-        public string UpdatedTransactionId { get; set; }
+        public long UpdatedTransactionId { get; set; }
 
         /// <summary>
         /// Reference to Update <see cref="TransactionAudit"/>

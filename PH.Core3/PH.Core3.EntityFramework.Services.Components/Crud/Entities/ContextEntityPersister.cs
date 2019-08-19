@@ -281,8 +281,7 @@ namespace PH.Core3.EntityFramework.Services.Components.Crud.Entities
             }
 
             entity.Deleted              = true;
-            entity.DeletedTransactionId = Identifier.Uid;
-
+            
             return await UpdateEntityAsync(entity);
         }
 

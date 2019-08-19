@@ -78,7 +78,7 @@ namespace PH.Core3.EntityFramework
         /// <value>The cancellation token.</value>
         public CancellationToken CancellationToken { get; protected set; }
 
-        private TransactionAudit _transactionAudit;
+        
 
 
         /// <summary>
@@ -374,10 +374,10 @@ namespace PH.Core3.EntityFramework
                 _transaction = await Database.BeginTransactionAsync(CancellationToken);
                 var tyAudit = new TransactionAudit()
                 {
-                    Id = Identifier.Uid, Author = Author, UtcDateTime = DateTime.UtcNow, TenantId = TenantId
+                    Author = Author, UtcDateTime = DateTime.UtcNow, TenantId = TenantId, StrIdentifier = Identifier.Uid
                 };
                 var ty = await TransactionAudits.AddAsync(tyAudit, CancellationToken);
-                _transactionAudit = ty.Entity;
+                TransactionAudit = ty.Entity;
 
             });
 
@@ -431,14 +431,15 @@ namespace PH.Core3.EntityFramework
                 return;
             }
 
-            var d = DateTime.UtcNow - _transactionAudit.UtcDateTime;
-            _transactionAudit.MillisecDuration = d.TotalMilliseconds;
-            _transactionAudit.TenantId = TenantId;
+            var d = DateTime.UtcNow - TransactionAudit.UtcDateTime;
+            TransactionAudit.MillisecDuration = d.TotalMilliseconds;
+            TransactionAudit.TenantId = TenantId;
+            TransactionAudit.StrIdentifier = Identifier.Uid;
 
 
             if (transactionCommitMessage != "")
             {
-                _transactionAudit.CommitMessage = transactionCommitMessage;
+                TransactionAudit.CommitMessage = transactionCommitMessage;
             }
 
             if (ScopeDictionary.Count > 0)
@@ -450,17 +451,14 @@ namespace PH.Core3.EntityFramework
                     s = $"{s.Substring(0, 497)}...";
                 }
 
-                _transactionAudit.Scopes = s;
+                TransactionAudit.Scopes = s;
             }
 
-           
+
 
             var t = Task.Run(async () =>
             {
-                var progr = await TransactionAudits.MaxAsync(x => x.Progr, CancellationToken);
-                _transactionAudit.Progr = 1 + progr;
-
-                TransactionAudits.Update(_transactionAudit);
+                TransactionAudits.Update(TransactionAudit);
                 var t2 = await SaveChangesAsync(CancellationToken);
 
             });

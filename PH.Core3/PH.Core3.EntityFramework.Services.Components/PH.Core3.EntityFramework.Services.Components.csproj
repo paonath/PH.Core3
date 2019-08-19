@@ -19,11 +19,15 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" Version="2.2.6" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.2.6" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\PH.Core3.Common.Services.Components\PH.Core3.Common.Services.Components.csproj" />
     <ProjectReference Include="..\PH.Core3.Common.Services\PH.Core3.Common.Services.csproj" />
     <ProjectReference Include="..\PH.Core3.Common\PH.Core3.Common.csproj" />
     <ProjectReference Include="..\PH.Core3.EntityFramework.Abstractions\PH.Core3.EntityFramework.Abstractions.csproj" />
-    <ProjectReference Include="..\PH.Core3.EntityFramework\PH.Core3.EntityFramework.csproj" />
   </ItemGroup>
 
 </Project>

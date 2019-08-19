@@ -43,6 +43,10 @@ namespace PH.Core3.EntityFramework.Infrastructure
         /// <value>The logger.</value>
         public ILogger Logger { get; set; }
 
+        /// <summary>
+        /// Current Transaction Audit.
+        /// </summary>
+        protected TransactionAudit TransactionAudit;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="IdentityBaseContextInfrastructure{TUser, TRole, TKey}"/> class.
@@ -271,17 +275,15 @@ namespace PH.Core3.EntityFramework.Infrastructure
 
                         if (entry.State == EntityState.Added)
                         {
-                            e.CreatedTransactionId = identifier.Uid;
-                            e.UpdatedTransactionId = identifier.Uid;
+                            e.CreatedTransactionId = TransactionAudit.Id;
+                            e.UpdatedTransactionId = TransactionAudit.Id;
                             e.Deleted              = false;
                         }
 
                         if (entry.State == EntityState.Modified)
                         {
-                            if (string.IsNullOrEmpty(e.UpdatedTransactionId))
-                            {
-                                e.UpdatedTransactionId = identifier.Uid;
-                            }
+                            e.UpdatedTransactionId = TransactionAudit.Id;
+                            
                         }
 
 

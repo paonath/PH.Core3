@@ -13,18 +13,19 @@ namespace PH.Core3.EntityFramework.Mapping
             builder.ToTable("transaction_audit");
 
             builder.Property(x => x.TenantId).IsRequired();
-            builder.Property(x => x.Id).IsRequired();
+            builder.Property(x => x.Id).ValueGeneratedOnAdd();
             builder.Property(x => x.UtcDateTime).IsRequired();
             builder.Property(x => x.Author).IsRequired();
             
             builder.Property(x => x.MillisecDuration).HasDefaultValue(0);
-            builder.Property(x => x.Progr).HasDefaultValue(1);
+            builder.Property(x => x.StrIdentifier).IsRequired(true);
 
 
             builder
                 .HasIndex(i => new
                 {
                     i.Id,
+                    i.StrIdentifier,
                     i.Author,
                     i.UtcDateTime,
                     i.Timestamp,

@@ -11,14 +11,12 @@ namespace PH.Core3.EntityFramework.Abstractions.Models.Entities
         /// <summary>
         /// Unique Id of current transaction
         /// </summary>
+        public long Id { get; set; }
+
+        /// <summary>Gets or sets the string identifier: unique, assigned.</summary>
+        /// <value>The string identifier.</value>
         [StringLength(128)]
-        public string Id { get; set; }
-
-        /// <summary>
-        /// Progressive order number
-        /// </summary>
-        public long Progr { get; set; }
-
+        public string StrIdentifier { get; set; }
 
         /// <summary>
         /// Author of current Transaction
