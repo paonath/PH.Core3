@@ -1,29 +1,21 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace PH.Core3.Common.Models.Entities
+namespace PH.Core3.EntityFramework.Abstractions.Models.Entities
 {
     /// <summary>
-    /// Entity Base Class to Persist on Db
-    ///
-    /// All entities that need to persist on the database must implement the current interface
+    /// User entity
     /// </summary>
-    /// <typeparam name="TKey">Type of the Id property</typeparam>
-    public abstract class Entity<TKey> : IEntity<TKey>, IEntity
-        where TKey : IEquatable<TKey>
+    /// <seealso cref="Microsoft.AspNetCore.Identity.IdentityUser{String}" />
+    /// <seealso cref="IEntity{TKey}" />
+    public abstract class UserEntity : Microsoft.AspNetCore.Identity.IdentityUser<string> , IEntity<string>
     {
-        /// <summary>
-        /// Unique Id of current class
-        /// </summary>
-        public TKey Id { get; set; }
-
-
         /// <summary>
         /// True if Entity is Deleted
         ///
         /// (Logical delete)
         /// </summary>
+        [Required]
         public bool Deleted { get; set; }
 
 
@@ -31,6 +23,7 @@ namespace PH.Core3.Common.Models.Entities
         /// <summary>
         /// Tenant Identifier
         /// </summary>
+        [Required]
         [StringLength(128)]
         public string TenantId { get; set; }
 
@@ -77,7 +70,5 @@ namespace PH.Core3.Common.Models.Entities
         /// </summary>
         [Timestamp]
         public byte[] Timestamp { get; set; }
-
-       
     }
 }

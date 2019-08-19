@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace PH.Core3.Common.Models.Entities
+namespace PH.Core3.EntityFramework.Abstractions.Models.Entities
 {
     /// <summary>
     /// Class for Tracking Audits on Db.

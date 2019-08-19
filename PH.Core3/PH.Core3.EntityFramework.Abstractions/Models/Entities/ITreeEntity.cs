@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using JetBrains.Annotations;
 
-namespace PH.Core3.Common.Models.Entities
+namespace PH.Core3.EntityFramework.Abstractions.Models.Entities
 {
     
     /// <summary>

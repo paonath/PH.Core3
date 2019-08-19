@@ -3,15 +3,15 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using JetBrains.Annotations;
 
-namespace PH.Core3.Common.Models.Entities
+namespace PH.Core3.EntityFramework.Abstractions.Models.Entities
 {
     /// <summary>
     /// Entity Base auto-filtered based on UtcValidFrom and UtcValidUntil
     /// </summary>
     /// <typeparam name="TKey">The type of the key.</typeparam>
-    /// <seealso cref="PH.Core3.Common.Models.Entities.Entity{TKey}" />
-    /// <seealso cref="PH.Core3.Common.Models.Entities.IStatusEntity{TKey}" />
-    /// <seealso cref="PH.Core3.Common.Models.Entities.IStatusEntity" />
+    /// <seealso cref="Entity{TKey}" />
+    /// <seealso cref="IStatusEntity{TKey}" />
+    /// <seealso cref="IStatusEntity" />
     public abstract class StatusEntity<TKey> : Entity<TKey>, IStatusEntity<TKey>, IStatusEntity
         where TKey : IEquatable<TKey>
     {

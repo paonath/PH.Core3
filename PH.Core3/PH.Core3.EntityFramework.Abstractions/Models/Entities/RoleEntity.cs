@@ -1,13 +1,13 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace PH.Core3.Common.Models.Entities
+namespace PH.Core3.EntityFramework.Abstractions.Models.Entities
 {
     /// <summary>
     /// Role
     /// </summary>
     /// <seealso cref="Microsoft.AspNetCore.Identity.IdentityRole{String}" />
-    /// <seealso cref="PH.Core3.Common.Models.Entities.IEntity{String}" />
+    /// <seealso cref="IEntity{TKey}" />
     public abstract class RoleEntity : Microsoft.AspNetCore.Identity.IdentityRole<string>, IEntity<string>
     {
         /// <summary>
