@@ -44,9 +44,8 @@ namespace PH.Core3.EntityFramework.Services.Components.Crud.Entities
         /// <param name="coreIdentifier">Identifier</param>
         /// <param name="ctx"><see cref="DbContext"/> db context</param>
         /// <param name="settings">read settings</param>
-        /// <param name="tenantId">Tenant Identifier</param>
         /// <param name="logger"></param>
-        protected ContextEntityReader([NotNull] IIdentifier coreIdentifier, [NotNull] TContext ctx, [NotNull] TransientReadSettings settings, [NotNull] string tenantId, ILogger<ContextEntityReader<TContext, TEntity, TKey>> logger) : base(coreIdentifier, ctx, tenantId)
+        protected ContextEntityReader([NotNull] IIdentifier coreIdentifier, [NotNull] TContext ctx, [NotNull] TransientReadSettings settings/*, [NotNull] string tenantId*/, ILogger<ContextEntityReader<TContext, TEntity, TKey>> logger) : base(coreIdentifier, ctx/*, tenantId*/)
         {
             _logger = logger;
             _readSettings = settings;

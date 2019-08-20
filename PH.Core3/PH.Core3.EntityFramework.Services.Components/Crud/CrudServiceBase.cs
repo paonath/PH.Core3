@@ -48,13 +48,12 @@ namespace PH.Core3.EntityFramework.Services.Components.Crud
         /// <param name="logger">Logger</param>
         /// <param name="ctx">Entity Framework DbContext</param>
         /// <param name="settings">CRUD settings</param>
-        /// <param name="tenantId">Tenant Identifier</param>
         protected CrudServiceBase([NotNull] IIdentifier coreIdentifier
                                   , [NotNull]
                                   ILogger<CrudServiceBase<TContext, TEntity, TDto, TNewDto, TEditDto, TKey>> logger
                                   , [NotNull] TContext ctx
-                                  , [NotNull] TransientCrudSettings settings, [NotNull] string tenantId)
-            : base(coreIdentifier, logger, ctx, settings, tenantId)
+                                  , [NotNull] TransientCrudSettings settings/*, [NotNull] string tenantId*/)
+            : base(coreIdentifier, logger, ctx, settings/*, tenantId*/)
         {
             _logger = logger;
         }

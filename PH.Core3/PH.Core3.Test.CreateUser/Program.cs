@@ -83,7 +83,9 @@ namespace PH.Core3.Test.CreateUser
             using (var uow = scope.Resolve<IUnitOfWork>())
             {
                 var ctx = scope.Resolve<MyContext>();
-                ctx.TenantId = "SGURZ";
+                ctx.Initialize();
+
+                ctx.TenantName = "SGURZ";
 
                 var userManager = scope.Resolve<ApplicationUserManager>();
 

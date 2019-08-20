@@ -64,7 +64,7 @@ namespace PH.Core3.Test.WebApp.Services
         /// <param name="settings">CRUD settings</param>
         
         public AlberoService([NotNull] IIdentifier coreIdentifier, [NotNull] ILogger<CrudServiceBase<MyContext, Albero, AlberoDTo, NewAlberoDTo, EditAlberoDTo, Guid>> logger
-                             , [NotNull] MyContext ctx, [NotNull] TransientCrudSettings settings) : base(coreIdentifier, logger, ctx, settings, ctx.TenantId)
+                             , [NotNull] MyContext ctx, [NotNull] TransientCrudSettings settings) : base(coreIdentifier, logger, ctx, settings /*, ctx.TenantId*/)
         {
         }
 

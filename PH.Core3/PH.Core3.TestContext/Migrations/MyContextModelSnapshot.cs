@@ -14,7 +14,7 @@ namespace PH.Core3.TestContext.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.2.0-rtm-35687")
+                .HasAnnotation("ProductVersion", "2.2.6-servicing-10079")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -101,11 +101,30 @@ namespace PH.Core3.TestContext.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("PH.Core3.Common.Models.Entities.TransactionAudit", b =>
+            modelBuilder.Entity("PH.Core3.EntityFramework.Abstractions.Models.Entities.Tenant", b =>
                 {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd()
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Name")
                         .HasMaxLength(128);
+
+                    b.Property<string>("NormalizedName")
+                        .HasMaxLength(128);
+
+                    b.Property<DateTime?>("Timestamp")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate();
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Tenants");
+                });
+
+            modelBuilder.Entity("PH.Core3.EntityFramework.Abstractions.Models.Entities.TransactionAudit", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd();
 
                     b.Property<string>("Author")
                         .IsRequired()
@@ -121,9 +140,11 @@ namespace PH.Core3.TestContext.Migrations
                     b.Property<string>("Scopes")
                         .HasMaxLength(500);
 
-                    b.Property<string>("TenantId")
+                    b.Property<string>("StrIdentifier")
                         .IsRequired()
                         .HasMaxLength(128);
+
+                    b.Property<int>("TenantId");
 
                     b.Property<DateTime?>("Timestamp")
                         .IsConcurrencyToken()
@@ -133,7 +154,9 @@ namespace PH.Core3.TestContext.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Id", "Author", "UtcDateTime", "Timestamp", "TenantId");
+                    b.HasIndex("TenantId");
+
+                    b.HasIndex("Id", "StrIdentifier", "Author", "UtcDateTime", "Timestamp", "TenantId");
 
                     b.ToTable("transaction_audit");
                 });
@@ -172,16 +195,14 @@ namespace PH.Core3.TestContext.Migrations
 
                     b.Property<Guid?>("CategoryId");
 
-                    b.Property<string>("CreatedTransactionId")
-                        .HasColumnName("CreatedTransactionId")
-                        .HasMaxLength(128);
+                    b.Property<long>("CreatedTransactionId")
+                        .HasColumnName("CreatedTransactionId");
 
                     b.Property<bool>("Deleted")
                         .HasColumnName("Deleted");
 
-                    b.Property<string>("DeletedTransactionId")
-                        .HasColumnName("DeletedTransactionId")
-                        .HasMaxLength(128);
+                    b.Property<long?>("DeletedTransactionId")
+                        .HasColumnName("DeletedTransactionId");
 
                     b.Property<string>("Description");
 
@@ -192,18 +213,15 @@ namespace PH.Core3.TestContext.Migrations
 
                     b.Property<Guid>("RootId");
 
-                    b.Property<string>("TenantId")
-                        .IsRequired()
-                        .HasMaxLength(128);
+                    b.Property<int>("TenantId");
 
                     b.Property<DateTime?>("Timestamp")
                         .IsConcurrencyToken()
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnName("Timestamp");
 
-                    b.Property<string>("UpdatedTransactionId")
-                        .HasColumnName("UpdatedTransactionId")
-                        .HasMaxLength(128);
+                    b.Property<long>("UpdatedTransactionId")
+                        .HasColumnName("UpdatedTransactionId");
 
                     b.HasKey("Id");
 
@@ -216,6 +234,8 @@ namespace PH.Core3.TestContext.Migrations
                     b.HasIndex("ParentId");
 
                     b.HasIndex("RootId");
+
+                    b.HasIndex("TenantId");
 
                     b.HasIndex("UpdatedTransactionId");
 
@@ -231,38 +251,35 @@ namespace PH.Core3.TestContext.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("CreatedTransactionId")
-                        .HasColumnName("CreatedTransactionId")
-                        .HasMaxLength(128);
+                    b.Property<long>("CreatedTransactionId")
+                        .HasColumnName("CreatedTransactionId");
 
                     b.Property<bool>("Deleted")
                         .HasColumnName("Deleted");
 
-                    b.Property<string>("DeletedTransactionId")
-                        .HasColumnName("DeletedTransactionId")
-                        .HasMaxLength(128);
+                    b.Property<long?>("DeletedTransactionId")
+                        .HasColumnName("DeletedTransactionId");
 
                     b.Property<int>("EntityLevel")
                         .HasColumnName("EntityLevelLevel");
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(23);
 
                     b.Property<Guid?>("ParentId");
 
                     b.Property<Guid>("RootId");
 
-                    b.Property<string>("TenantId")
-                        .IsRequired()
-                        .HasMaxLength(128);
+                    b.Property<int>("TenantId");
 
                     b.Property<DateTime?>("Timestamp")
                         .IsConcurrencyToken()
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnName("Timestamp");
 
-                    b.Property<string>("UpdatedTransactionId")
-                        .HasColumnName("UpdatedTransactionId")
-                        .HasMaxLength(128);
+                    b.Property<long>("UpdatedTransactionId")
+                        .HasColumnName("UpdatedTransactionId");
 
                     b.HasKey("Id");
 
@@ -273,6 +290,8 @@ namespace PH.Core3.TestContext.Migrations
                     b.HasIndex("ParentId");
 
                     b.HasIndex("RootId");
+
+                    b.HasIndex("TenantId");
 
                     b.HasIndex("UpdatedTransactionId");
 
@@ -291,16 +310,14 @@ namespace PH.Core3.TestContext.Migrations
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken();
 
-                    b.Property<string>("CreatedTransactionId")
-                        .HasColumnName("CreatedTransactionId")
-                        .HasMaxLength(128);
+                    b.Property<long>("CreatedTransactionId")
+                        .HasColumnName("CreatedTransactionId");
 
                     b.Property<bool>("Deleted")
                         .HasColumnName("Deleted");
 
-                    b.Property<string>("DeletedTransactionId")
-                        .HasColumnName("DeletedTransactionId")
-                        .HasMaxLength(128);
+                    b.Property<long?>("DeletedTransactionId")
+                        .HasColumnName("DeletedTransactionId");
 
                     b.Property<string>("Name")
                         .HasMaxLength(256);
@@ -308,18 +325,15 @@ namespace PH.Core3.TestContext.Migrations
                     b.Property<string>("NormalizedName")
                         .HasMaxLength(256);
 
-                    b.Property<string>("TenantId")
-                        .IsRequired()
-                        .HasMaxLength(128);
+                    b.Property<int>("TenantId");
 
                     b.Property<DateTime?>("Timestamp")
                         .IsConcurrencyToken()
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnName("Timestamp");
 
-                    b.Property<string>("UpdatedTransactionId")
-                        .HasColumnName("UpdatedTransactionId")
-                        .HasMaxLength(128);
+                    b.Property<long>("UpdatedTransactionId")
+                        .HasColumnName("UpdatedTransactionId");
 
                     b.HasKey("Id");
 
@@ -330,6 +344,8 @@ namespace PH.Core3.TestContext.Migrations
                     b.HasIndex("NormalizedName")
                         .IsUnique()
                         .HasName("RoleNameIndex");
+
+                    b.HasIndex("TenantId");
 
                     b.HasIndex("UpdatedTransactionId");
 
@@ -348,16 +364,14 @@ namespace PH.Core3.TestContext.Migrations
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken();
 
-                    b.Property<string>("CreatedTransactionId")
-                        .HasColumnName("CreatedTransactionId")
-                        .HasMaxLength(128);
+                    b.Property<long>("CreatedTransactionId")
+                        .HasColumnName("CreatedTransactionId");
 
                     b.Property<bool>("Deleted")
                         .HasColumnName("Deleted");
 
-                    b.Property<string>("DeletedTransactionId")
-                        .HasColumnName("DeletedTransactionId")
-                        .HasMaxLength(128);
+                    b.Property<long?>("DeletedTransactionId")
+                        .HasColumnName("DeletedTransactionId");
 
                     b.Property<string>("Email")
                         .HasMaxLength(256);
@@ -382,9 +396,7 @@ namespace PH.Core3.TestContext.Migrations
 
                     b.Property<string>("SecurityStamp");
 
-                    b.Property<string>("TenantId")
-                        .IsRequired()
-                        .HasMaxLength(128);
+                    b.Property<int>("TenantId");
 
                     b.Property<DateTime?>("Timestamp")
                         .IsConcurrencyToken()
@@ -393,9 +405,8 @@ namespace PH.Core3.TestContext.Migrations
 
                     b.Property<bool>("TwoFactorEnabled");
 
-                    b.Property<string>("UpdatedTransactionId")
-                        .HasColumnName("UpdatedTransactionId")
-                        .HasMaxLength(128);
+                    b.Property<long>("UpdatedTransactionId")
+                        .HasColumnName("UpdatedTransactionId");
 
                     b.Property<string>("UserName")
                         .HasMaxLength(256);
@@ -412,6 +423,8 @@ namespace PH.Core3.TestContext.Migrations
                     b.HasIndex("NormalizedUserName")
                         .IsUnique()
                         .HasName("UserNameIndex");
+
+                    b.HasIndex("TenantId");
 
                     b.HasIndex("UpdatedTransactionId");
 
@@ -465,17 +478,26 @@ namespace PH.Core3.TestContext.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
+            modelBuilder.Entity("PH.Core3.EntityFramework.Abstractions.Models.Entities.TransactionAudit", b =>
+                {
+                    b.HasOne("PH.Core3.EntityFramework.Abstractions.Models.Entities.Tenant", "Tenant")
+                        .WithMany()
+                        .HasForeignKey("TenantId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
             modelBuilder.Entity("PH.Core3.TestContext.Albero", b =>
                 {
                     b.HasOne("PH.Core3.TestContext.Category", "Category")
                         .WithMany("Alberi")
                         .HasForeignKey("CategoryId");
 
-                    b.HasOne("PH.Core3.Common.Models.Entities.TransactionAudit", "CreatedTransaction")
+                    b.HasOne("PH.Core3.EntityFramework.Abstractions.Models.Entities.TransactionAudit", "CreatedTransaction")
                         .WithMany()
-                        .HasForeignKey("CreatedTransactionId");
+                        .HasForeignKey("CreatedTransactionId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("PH.Core3.Common.Models.Entities.TransactionAudit", "DeletedTransaction")
+                    b.HasOne("PH.Core3.EntityFramework.Abstractions.Models.Entities.TransactionAudit", "DeletedTransaction")
                         .WithMany()
                         .HasForeignKey("DeletedTransactionId");
 
@@ -488,18 +510,25 @@ namespace PH.Core3.TestContext.Migrations
                         .HasForeignKey("RootId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("PH.Core3.Common.Models.Entities.TransactionAudit", "UpdatedTransaction")
+                    b.HasOne("PH.Core3.EntityFramework.Abstractions.Models.Entities.Tenant", "Tenant")
                         .WithMany()
-                        .HasForeignKey("UpdatedTransactionId");
+                        .HasForeignKey("TenantId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("PH.Core3.EntityFramework.Abstractions.Models.Entities.TransactionAudit", "UpdatedTransaction")
+                        .WithMany()
+                        .HasForeignKey("UpdatedTransactionId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("PH.Core3.TestContext.Category", b =>
                 {
-                    b.HasOne("PH.Core3.Common.Models.Entities.TransactionAudit", "CreatedTransaction")
+                    b.HasOne("PH.Core3.EntityFramework.Abstractions.Models.Entities.TransactionAudit", "CreatedTransaction")
                         .WithMany()
-                        .HasForeignKey("CreatedTransactionId");
+                        .HasForeignKey("CreatedTransactionId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("PH.Core3.Common.Models.Entities.TransactionAudit", "DeletedTransaction")
+                    b.HasOne("PH.Core3.EntityFramework.Abstractions.Models.Entities.TransactionAudit", "DeletedTransaction")
                         .WithMany()
                         .HasForeignKey("DeletedTransactionId");
 
@@ -512,39 +541,59 @@ namespace PH.Core3.TestContext.Migrations
                         .HasForeignKey("RootId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("PH.Core3.Common.Models.Entities.TransactionAudit", "UpdatedTransaction")
+                    b.HasOne("PH.Core3.EntityFramework.Abstractions.Models.Entities.Tenant", "Tenant")
                         .WithMany()
-                        .HasForeignKey("UpdatedTransactionId");
+                        .HasForeignKey("TenantId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("PH.Core3.EntityFramework.Abstractions.Models.Entities.TransactionAudit", "UpdatedTransaction")
+                        .WithMany()
+                        .HasForeignKey("UpdatedTransactionId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("PH.Core3.TestContext.Role", b =>
                 {
-                    b.HasOne("PH.Core3.Common.Models.Entities.TransactionAudit", "CreatedTransaction")
+                    b.HasOne("PH.Core3.EntityFramework.Abstractions.Models.Entities.TransactionAudit", "CreatedTransaction")
                         .WithMany()
-                        .HasForeignKey("CreatedTransactionId");
+                        .HasForeignKey("CreatedTransactionId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("PH.Core3.Common.Models.Entities.TransactionAudit", "DeletedTransaction")
+                    b.HasOne("PH.Core3.EntityFramework.Abstractions.Models.Entities.TransactionAudit", "DeletedTransaction")
                         .WithMany()
                         .HasForeignKey("DeletedTransactionId");
 
-                    b.HasOne("PH.Core3.Common.Models.Entities.TransactionAudit", "UpdatedTransaction")
+                    b.HasOne("PH.Core3.EntityFramework.Abstractions.Models.Entities.Tenant", "Tenant")
                         .WithMany()
-                        .HasForeignKey("UpdatedTransactionId");
+                        .HasForeignKey("TenantId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("PH.Core3.EntityFramework.Abstractions.Models.Entities.TransactionAudit", "UpdatedTransaction")
+                        .WithMany()
+                        .HasForeignKey("UpdatedTransactionId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("PH.Core3.TestContext.User", b =>
                 {
-                    b.HasOne("PH.Core3.Common.Models.Entities.TransactionAudit", "CreatedTransaction")
+                    b.HasOne("PH.Core3.EntityFramework.Abstractions.Models.Entities.TransactionAudit", "CreatedTransaction")
                         .WithMany()
-                        .HasForeignKey("CreatedTransactionId");
+                        .HasForeignKey("CreatedTransactionId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("PH.Core3.Common.Models.Entities.TransactionAudit", "DeletedTransaction")
+                    b.HasOne("PH.Core3.EntityFramework.Abstractions.Models.Entities.TransactionAudit", "DeletedTransaction")
                         .WithMany()
                         .HasForeignKey("DeletedTransactionId");
 
-                    b.HasOne("PH.Core3.Common.Models.Entities.TransactionAudit", "UpdatedTransaction")
+                    b.HasOne("PH.Core3.EntityFramework.Abstractions.Models.Entities.Tenant", "Tenant")
                         .WithMany()
-                        .HasForeignKey("UpdatedTransactionId");
+                        .HasForeignKey("TenantId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("PH.Core3.EntityFramework.Abstractions.Models.Entities.TransactionAudit", "UpdatedTransaction")
+                        .WithMany()
+                        .HasForeignKey("UpdatedTransactionId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
         }

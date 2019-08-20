@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace PH.Core3.TestContext.Migrations
 {
-    public partial class Init : Migration
+    public partial class a_new_hope : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -27,21 +27,44 @@ namespace PH.Core3.TestContext.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Tenants",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Name = table.Column<string>(maxLength: 128, nullable: true),
+                    NormalizedName = table.Column<string>(maxLength: 128, nullable: true),
+                    Timestamp = table.Column<DateTime>(rowVersion: true, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Tenants", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "transaction_audit",
                 columns: table => new
                 {
-                    Id = table.Column<string>(maxLength: 128, nullable: false),
+                    Id = table.Column<long>(nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    StrIdentifier = table.Column<string>(maxLength: 128, nullable: false),
                     Author = table.Column<string>(maxLength: 500, nullable: false),
                     UtcDateTime = table.Column<DateTime>(nullable: false),
                     Timestamp = table.Column<DateTime>(rowVersion: true, nullable: true),
                     MillisecDuration = table.Column<double>(nullable: false, defaultValue: 0.0),
-                    TenantId = table.Column<string>(maxLength: 128, nullable: false),
+                    TenantId = table.Column<int>(nullable: false),
                     Scopes = table.Column<string>(maxLength: 500, nullable: true),
                     CommitMessage = table.Column<string>(maxLength: 500, nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_transaction_audit", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_transaction_audit_Tenants_TenantId",
+                        column: x => x.TenantId,
+                        principalTable: "Tenants",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -53,10 +76,10 @@ namespace PH.Core3.TestContext.Migrations
                     NormalizedName = table.Column<string>(maxLength: 256, nullable: true),
                     ConcurrencyStamp = table.Column<string>(nullable: true),
                     Deleted = table.Column<bool>(nullable: false),
-                    TenantId = table.Column<string>(maxLength: 128, nullable: false),
-                    DeletedTransactionId = table.Column<string>(maxLength: 128, nullable: true),
-                    CreatedTransactionId = table.Column<string>(maxLength: 128, nullable: true),
-                    UpdatedTransactionId = table.Column<string>(maxLength: 128, nullable: true),
+                    TenantId = table.Column<int>(nullable: false),
+                    DeletedTransactionId = table.Column<long>(nullable: true),
+                    CreatedTransactionId = table.Column<long>(nullable: false),
+                    UpdatedTransactionId = table.Column<long>(nullable: false),
                     Timestamp = table.Column<DateTime>(rowVersion: true, nullable: true)
                 },
                 constraints: table =>
@@ -67,7 +90,7 @@ namespace PH.Core3.TestContext.Migrations
                         column: x => x.CreatedTransactionId,
                         principalTable: "transaction_audit",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_AspNetRoles_transaction_audit_DeletedTransactionId",
                         column: x => x.DeletedTransactionId,
@@ -75,11 +98,17 @@ namespace PH.Core3.TestContext.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
+                        name: "FK_AspNetRoles_Tenants_TenantId",
+                        column: x => x.TenantId,
+                        principalTable: "Tenants",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
                         name: "FK_AspNetRoles_transaction_audit_UpdatedTransactionId",
                         column: x => x.UpdatedTransactionId,
                         principalTable: "transaction_audit",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -102,10 +131,10 @@ namespace PH.Core3.TestContext.Migrations
                     LockoutEnabled = table.Column<bool>(nullable: false),
                     AccessFailedCount = table.Column<int>(nullable: false),
                     Deleted = table.Column<bool>(nullable: false),
-                    TenantId = table.Column<string>(maxLength: 128, nullable: false),
-                    DeletedTransactionId = table.Column<string>(maxLength: 128, nullable: true),
-                    CreatedTransactionId = table.Column<string>(maxLength: 128, nullable: true),
-                    UpdatedTransactionId = table.Column<string>(maxLength: 128, nullable: true),
+                    TenantId = table.Column<int>(nullable: false),
+                    DeletedTransactionId = table.Column<long>(nullable: true),
+                    CreatedTransactionId = table.Column<long>(nullable: false),
+                    UpdatedTransactionId = table.Column<long>(nullable: false),
                     Timestamp = table.Column<DateTime>(rowVersion: true, nullable: true)
                 },
                 constraints: table =>
@@ -116,7 +145,7 @@ namespace PH.Core3.TestContext.Migrations
                         column: x => x.CreatedTransactionId,
                         principalTable: "transaction_audit",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_AspNetUsers_transaction_audit_DeletedTransactionId",
                         column: x => x.DeletedTransactionId,
@@ -124,11 +153,17 @@ namespace PH.Core3.TestContext.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
+                        name: "FK_AspNetUsers_Tenants_TenantId",
+                        column: x => x.TenantId,
+                        principalTable: "Tenants",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
                         name: "FK_AspNetUsers_transaction_audit_UpdatedTransactionId",
                         column: x => x.UpdatedTransactionId,
                         principalTable: "transaction_audit",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -137,15 +172,15 @@ namespace PH.Core3.TestContext.Migrations
                 {
                     Id = table.Column<Guid>(nullable: false),
                     Deleted = table.Column<bool>(nullable: false),
-                    TenantId = table.Column<string>(maxLength: 128, nullable: false),
-                    DeletedTransactionId = table.Column<string>(maxLength: 128, nullable: true),
-                    CreatedTransactionId = table.Column<string>(maxLength: 128, nullable: true),
-                    UpdatedTransactionId = table.Column<string>(maxLength: 128, nullable: true),
+                    TenantId = table.Column<int>(nullable: false),
+                    DeletedTransactionId = table.Column<long>(nullable: true),
+                    CreatedTransactionId = table.Column<long>(nullable: false),
+                    UpdatedTransactionId = table.Column<long>(nullable: false),
                     Timestamp = table.Column<DateTime>(rowVersion: true, nullable: true),
                     EntityLevelLevel = table.Column<int>(nullable: false),
                     ParentId = table.Column<Guid>(nullable: true),
                     RootId = table.Column<Guid>(nullable: false),
-                    Name = table.Column<string>(nullable: true)
+                    Name = table.Column<string>(maxLength: 23, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -155,7 +190,7 @@ namespace PH.Core3.TestContext.Migrations
                         column: x => x.CreatedTransactionId,
                         principalTable: "transaction_audit",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Categories_transaction_audit_DeletedTransactionId",
                         column: x => x.DeletedTransactionId,
@@ -175,11 +210,17 @@ namespace PH.Core3.TestContext.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
+                        name: "FK_Categories_Tenants_TenantId",
+                        column: x => x.TenantId,
+                        principalTable: "Tenants",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
                         name: "FK_Categories_transaction_audit_UpdatedTransactionId",
                         column: x => x.UpdatedTransactionId,
                         principalTable: "transaction_audit",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -294,10 +335,10 @@ namespace PH.Core3.TestContext.Migrations
                 {
                     Id = table.Column<Guid>(nullable: false),
                     Deleted = table.Column<bool>(nullable: false),
-                    TenantId = table.Column<string>(maxLength: 128, nullable: false),
-                    DeletedTransactionId = table.Column<string>(maxLength: 128, nullable: true),
-                    CreatedTransactionId = table.Column<string>(maxLength: 128, nullable: true),
-                    UpdatedTransactionId = table.Column<string>(maxLength: 128, nullable: true),
+                    TenantId = table.Column<int>(nullable: false),
+                    DeletedTransactionId = table.Column<long>(nullable: true),
+                    CreatedTransactionId = table.Column<long>(nullable: false),
+                    UpdatedTransactionId = table.Column<long>(nullable: false),
                     Timestamp = table.Column<DateTime>(rowVersion: true, nullable: true),
                     EntityLevelLevel = table.Column<int>(nullable: false),
                     ParentId = table.Column<Guid>(nullable: true),
@@ -319,7 +360,7 @@ namespace PH.Core3.TestContext.Migrations
                         column: x => x.CreatedTransactionId,
                         principalTable: "transaction_audit",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Alberi_transaction_audit_DeletedTransactionId",
                         column: x => x.DeletedTransactionId,
@@ -339,11 +380,17 @@ namespace PH.Core3.TestContext.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
+                        name: "FK_Alberi_Tenants_TenantId",
+                        column: x => x.TenantId,
+                        principalTable: "Tenants",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
                         name: "FK_Alberi_transaction_audit_UpdatedTransactionId",
                         column: x => x.UpdatedTransactionId,
                         principalTable: "transaction_audit",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
@@ -370,6 +417,11 @@ namespace PH.Core3.TestContext.Migrations
                 name: "IX_Alberi_RootId",
                 table: "Alberi",
                 column: "RootId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Alberi_TenantId",
+                table: "Alberi",
+                column: "TenantId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Alberi_UpdatedTransactionId",
@@ -406,6 +458,11 @@ namespace PH.Core3.TestContext.Migrations
                 table: "AspNetRoles",
                 column: "NormalizedName",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AspNetRoles_TenantId",
+                table: "AspNetRoles",
+                column: "TenantId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoles_UpdatedTransactionId",
@@ -454,6 +511,11 @@ namespace PH.Core3.TestContext.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_AspNetUsers_TenantId",
+                table: "AspNetUsers",
+                column: "TenantId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_AspNetUsers_UpdatedTransactionId",
                 table: "AspNetUsers",
                 column: "UpdatedTransactionId");
@@ -484,6 +546,11 @@ namespace PH.Core3.TestContext.Migrations
                 column: "RootId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Categories_TenantId",
+                table: "Categories",
+                column: "TenantId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Categories_UpdatedTransactionId",
                 table: "Categories",
                 column: "UpdatedTransactionId");
@@ -499,9 +566,14 @@ namespace PH.Core3.TestContext.Migrations
                 columns: new[] { "Id", "Deleted", "CreatedTransactionId" });
 
             migrationBuilder.CreateIndex(
-                name: "IX_transaction_audit_Id_Author_UtcDateTime_Timestamp_TenantId",
+                name: "IX_transaction_audit_TenantId",
                 table: "transaction_audit",
-                columns: new[] { "Id", "Author", "UtcDateTime", "Timestamp", "TenantId" });
+                column: "TenantId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_transaction_audit_Id_StrIdentifier_Author_UtcDateTime_Timest~",
+                table: "transaction_audit",
+                columns: new[] { "Id", "StrIdentifier", "Author", "UtcDateTime", "Timestamp", "TenantId" });
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -538,6 +610,9 @@ namespace PH.Core3.TestContext.Migrations
 
             migrationBuilder.DropTable(
                 name: "transaction_audit");
+
+            migrationBuilder.DropTable(
+                name: "Tenants");
         }
     }
 }

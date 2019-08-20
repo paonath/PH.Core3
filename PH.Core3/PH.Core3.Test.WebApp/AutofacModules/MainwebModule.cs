@@ -66,7 +66,7 @@ namespace PH.Core3.Test.WebApp.AutofacModules
                    {
                        var wPAth = c.ResolveOptional<IHostingEnvironment>()?.WebRootPath ?? "C:\\temp";
                        return new
-                                     PH.Core3.Common.Services.Components.Path.WebPathTranslator(wPAth);
+                           PH.Core3.Common.Services.Components.Path.WebPathTranslator(wPAth);
                    })
                    .AsSelf()
                    .AsImplementedInterfaces()
@@ -75,12 +75,11 @@ namespace PH.Core3.Test.WebApp.AutofacModules
 
             builder.Register(c =>
                    {
-
                        //ClaimsPrincipal principal = null;
                        //if (c.TryResolve(typeof(IPrincipal), out var principal2))
                        //    principal = principal2 as ClaimsPrincipal;
 
-                       var principal = c.Resolve<IPrincipal>()  as ClaimsPrincipal;
+                       var principal = c.Resolve<IPrincipal>() as ClaimsPrincipal;
 
                        string iid = $"{Guid.NewGuid():N}";
                        MappedDiagnosticsLogicalContext.Set("IID", iid);
@@ -93,16 +92,15 @@ namespace PH.Core3.Test.WebApp.AutofacModules
                    .InstancePerLifetimeScope();
 
             builder.Register(c =>
-                {
-                    var ctx = c.Resolve<MyContext>();
-                    var id = c.Resolve<ClaimsPrincipalIdentifier>();
-                    ctx.Identifier = id;
-                    ctx.Author = id.Name;
-                    ctx.TenantId = "ABC";
+                   {
+                       var ctx = c.Resolve<MyContext>();
+                       var id  = c.Resolve<ClaimsPrincipalIdentifier>();
+                       ctx.Identifier = id;
+                       ctx.Author     = id.Name;
+                       //ctx.TenantName = "ABC";
 
-                    return new EntityFrameworkUnitOfWork(ctx, c.Resolve<ILogger<EntityFrameworkUnitOfWork>>());
-
-                })
+                       return new EntityFrameworkUnitOfWork(ctx, c.Resolve<ILogger<EntityFrameworkUnitOfWork>>());
+                   })
                    .AsSelf()
                    .As<IUnitOfWork>()
                    .AsImplementedInterfaces()
@@ -115,12 +113,11 @@ namespace PH.Core3.Test.WebApp.AutofacModules
             //builder.RegisterType<MyController>().PropertiesAutowired();
 
 
-
             builder.RegisterType<ViewRenderService>().AsSelf().AsImplementedInterfaces().InstancePerLifetimeScope();
 
             builder.RegisterType<MailSenderService>().AsSelf().AsImplementedInterfaces().SingleInstance();
 
-            var v1Svcs = typeof(AlberoService).Assembly.GetTypes().Where(t => t.IsAbstract == false ).ToArray();
+            var v1Svcs = typeof(AlberoService).Assembly.GetTypes().Where(t => t.IsAbstract == false).ToArray();
 
             builder.Register(c => new TransientCrudSettings(c.Resolve<IIdentifier>(),
                                                             c.Resolve<ILogger<TransientCrudSettings>>(), true, true,
@@ -130,7 +127,6 @@ namespace PH.Core3.Test.WebApp.AutofacModules
 
             foreach (var serviceType in v1Svcs)
             {
-                
                 builder.RegisterType(serviceType)
                        .AsSelf()
                        .AsImplementedInterfaces()
@@ -139,11 +135,9 @@ namespace PH.Core3.Test.WebApp.AutofacModules
                        {
                            //var svc = (Ecube.Ssgu.Api.Common.Services.IService) e.Instance;
                            //svc.Initialize();
-
                        })
                        .PropertiesAutowired(PropertyWiringOptions.AllowCircularDependencies);
             }
-
         }
     }
 
@@ -163,7 +157,8 @@ namespace PH.Core3.Test.WebApp.AutofacModules
             // here's where you'd do it.
             var properties = instanceType
                              .GetProperties(BindingFlags.Public | BindingFlags.Instance)
-                             .Where(p => p.PropertyType == typeof(ILogger) && p.CanWrite && p.GetIndexParameters().Length == 0);
+                             .Where(p => p.PropertyType == typeof(ILogger) && p.CanWrite &&
+                                         p.GetIndexParameters().Length == 0);
 
             // Set the properties located.
             foreach (var propToSet in properties)
@@ -179,12 +174,16 @@ namespace PH.Core3.Test.WebApp.AutofacModules
                                               {
                                                   new ResolvedParameter(
                                                                         (p, i) => p.ParameterType == typeof(ILogger),
-                                                                        (p, i) => LogManager.GetLogger(p.Member.DeclaringType.Name, p.Member.DeclaringType)
+                                                                        (p, i) =>
+                                                                            LogManager
+                                                                                .GetLogger(p.Member.DeclaringType.Name,
+                                                                                           p.Member.DeclaringType)
                                                                        ),
                                               });
         }
 
-        protected override void AttachToComponentRegistration(IComponentRegistry componentRegistry, [NotNull] IComponentRegistration registration)
+        protected override void AttachToComponentRegistration(IComponentRegistry componentRegistry,
+                                                              [NotNull] IComponentRegistration registration)
         {
             // Handle constructor parameters.
             registration.Preparing += OnComponentPreparing;

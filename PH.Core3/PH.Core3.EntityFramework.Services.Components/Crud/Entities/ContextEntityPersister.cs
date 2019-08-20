@@ -68,14 +68,13 @@ namespace PH.Core3.EntityFramework.Services.Components.Crud.Entities
         /// <param name="logger">Logger</param>
         /// <param name="ctx">Entity Framework Db Context</param>
         /// <param name="settings">Crud Settings</param>
-        /// <param name="tenantId">Tenant Identifier</param>
         // ReSharper disable once IdentifierTypo
         protected ContextEntityPersister([NotNull] IIdentifier coreIdentifier,
                                          [NotNull] ILogger<ContextEntityPersister<TContext, TEntity, TKey>> logger
                                          , [NotNull] TContext ctx
                                          ,[NotNull] TransientCrudSettings settings
-                                         , [NotNull] string tenantId)
-            : base(coreIdentifier,  ctx, settings, tenantId, logger)
+                                         /*, [NotNull] string tenantId*/)
+            : base(coreIdentifier,  ctx, settings, /*tenantId,*/ logger)
         {
             _crudSettings = settings ?? throw new ArgumentNullException(nameof(settings));
             _logger       = logger;

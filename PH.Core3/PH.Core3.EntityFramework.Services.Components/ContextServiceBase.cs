@@ -17,10 +17,10 @@ namespace PH.Core3.EntityFramework.Services.Components
         /// </summary>
         protected readonly TContext Ctx;
 
-        /// <summary>
-        /// Tenant Identifier
-        /// </summary>
-        protected string TenantId { get; private set; }
+        ///// <summary>
+        ///// Tenant Identifier
+        ///// </summary>
+        //protected string TenantId { get; private set; }
 
         
 
@@ -31,35 +31,34 @@ namespace PH.Core3.EntityFramework.Services.Components
         /// </summary>
         /// <param name="coreIdentifier">Identifier</param>
         /// <param name="ctx"><see cref="DbContext"/> db context</param>
-        /// <param name="tenantId">Tenant Identifier</param>
         protected ContextServiceBase([NotNull] IIdentifier coreIdentifier, [NotNull] TContext ctx
-                                     , [NotNull] string tenantId)
+                                     /*, [NotNull] string tenantId*/)
             : base(coreIdentifier)
         {
             Ctx               = ctx ?? throw new ArgumentNullException(nameof(ctx));
-            CheckAndSetTenant(tenantId);
+            //CheckAndSetTenant(tenantId);
         }
 
-        private void CheckAndSetTenant([NotNull] string tenantId)
-        {
-            if (string.IsNullOrEmpty(tenantId))
-            {
-                throw new ArgumentException("Value cannot be null or empty.", nameof(tenantId));
-            }
+        //private void CheckAndSetTenant([NotNull] string tenantId)
+        //{
+        //    if (string.IsNullOrEmpty(tenantId))
+        //    {
+        //        throw new ArgumentException("Value cannot be null or empty.", nameof(tenantId));
+        //    }
 
-            if (string.IsNullOrWhiteSpace(tenantId))
-            {
-                throw new ArgumentException("Value cannot be null or whitespace.", nameof(tenantId));
-            }
+        //    if (string.IsNullOrWhiteSpace(tenantId))
+        //    {
+        //        throw new ArgumentException("Value cannot be null or whitespace.", nameof(tenantId));
+        //    }
 
-            if(tenantId.Length > 128)
-            {
-                throw new ArgumentException(@"Max lenght 128", nameof(tenantId));
-            }
+        //    if(tenantId.Length > 128)
+        //    {
+        //        throw new ArgumentException(@"Max lenght 128", nameof(tenantId));
+        //    }
 
 
-            TenantId = tenantId;
-        }
+        //    TenantId = tenantId;
+        //}
 
 
         

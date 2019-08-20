@@ -62,7 +62,7 @@ namespace PH.Core3.EntityFramework.Mapping
                 throw new ArgumentNullException(nameof(builder));
             }
 
-
+            
 
             builder.Property(x => x.Id)
                    .IsRequired(true);
