@@ -1,6 +1,6 @@
 ﻿using PH.Core3.Common.Bus;
 
-namespace PH.Core3.EntityFramework.Services.Components
+namespace PH.Core3.EntityFramework
 {
     /// <summary>
     /// Automatic Perform Flush on Commit - Require IUnitOfWork on implementation

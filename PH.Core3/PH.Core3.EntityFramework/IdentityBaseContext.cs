@@ -47,25 +47,7 @@ namespace PH.Core3.EntityFramework
 
         
 
-        ///// <summary>
-        ///// Identifier
-        ///// </summary>
-        //public IIdentifier Identifier { get; set; }
-
-        /// <summary>Gets or sets the author.</summary>
-        /// <value>The author.</value>
-        public string Author { get; set; }
-
-        /// <summary>
-        /// Ctx Uid
-        /// </summary>
-        public Guid CtxUid { get; }
-
         
-        /// <summary>
-        /// Transaction Audit
-        /// </summary>
-        public DbSet<TransactionAudit> TransactionAudits { get; set; }
 
 
         private IDbContextTransaction _transaction;
@@ -95,8 +77,7 @@ namespace PH.Core3.EntityFramework
             }
 
             Disposed                = false;
-            Initialized             = false;
-            CtxUid = NewId.NextGuid(); //Guid.NewGuid();
+            CtxUid = NewId.NextGuid(); 
             CancellationTokenSource = new CancellationTokenSource();
             CancellationToken       = CancellationTokenSource.Token;
             ScopeDictionary         = new Dictionary<int, string>();
@@ -286,8 +267,9 @@ namespace PH.Core3.EntityFramework
 
 
                     ParameterExpression paramExpr = Expression.Parameter(entityType, paramName);
-                    Expression bodyTenant = Expression.Equal(Expression.Property(paramExpr, "TenantId"),
-                                                             Expression.Constant(TenantId)
+                    Expression bodyTenant = Expression.Equal(Expression.Property(paramExpr, "TenantId"), 
+                                                             //Expression.Property("CurrentTenant","Id")
+                                                             Expression.Constant(CurrentTenantId)
                                                             );
                     Expression bodyDeleted = Expression.Equal(Expression.Property(paramExpr, "Deleted"),
                                                               Expression.Constant(false)
@@ -323,7 +305,7 @@ namespace PH.Core3.EntityFramework
                 catch (Exception e)
                 {
                     var err = $"Error configuring '{entityName}'";
-                    Logger.LogCritical(err, e);
+                    Logger?.LogCritical(err, e);
                     throw new Exception(err, e);
                 }
 
@@ -362,6 +344,61 @@ namespace PH.Core3.EntityFramework
 
         #endregion
 
+        #region Tenant Methods    
+        
+        /// <summary>Ensures the tenant asynchronous.</summary>
+        /// <returns></returns>
+        /// <exception cref="Exception">Context not initialized</exception>
+        protected override async Task<Tenant> EnsureTenantAsync()
+        {
+            if (!Initialized)
+            {
+                throw new Exception("Context not initialized");
+            }
+
+            var defaultTenant = await Tenants.FirstOrDefaultAsync(x => x.NormalizedName == DefaultTenantName.ToUpperInvariant(), CancellationToken);
+            if (null == defaultTenant)
+            {
+                var ttD = new Tenant()
+                {
+                    Name = DefaultTenantName, NormalizedName = DefaultTenantName.ToUpperInvariant(),
+                    Id   = DefaultTenantId
+                };
+                await Tenants.AddAsync(ttD, CancellationToken);
+                await base.SaveChangesInternalAsync(CancellationToken);
+
+            }
+
+
+
+            string tt   = CurrentTenantSelectedName ?? DefaultTenantName;
+            string norm = tt.ToUpperInvariant();
+
+            var t = await Tenants.FirstOrDefaultAsync(x => x.NormalizedName == norm, CancellationToken);
+
+            if (null == t)
+            {
+                int max = await Tenants.Select(x => x.Id).MaxAsync(CancellationToken);
+                max++;
+
+                t = new Tenant() {Name = tt, NormalizedName = norm, Id = max};
+                
+                var rt = await Tenants.AddAsync(t, CancellationToken);
+                await base.SaveChangesInternalAsync(CancellationToken);
+                CurrentTenantId = max;
+            }
+            else
+            {
+                CurrentTenantId = t.Id;
+            }
+
+            
+           
+            return t;
+        }
+
+        #endregion
+
         #region Unit Of Work 
 
         /// <summary>Begins the transaction.</summary>
@@ -372,9 +409,11 @@ namespace PH.Core3.EntityFramework
             var t = Task.Run(async () =>
             {
                 _transaction = await Database.BeginTransactionAsync(CancellationToken);
+                var tenant  = await EnsureTenantAsync();
+
                 var tyAudit = new TransactionAudit()
                 {
-                    Author = Author, UtcDateTime = DateTime.UtcNow, TenantId = TenantId, StrIdentifier = Identifier.Uid
+                    Author = Author, UtcDateTime = DateTime.UtcNow, TenantId = tenant.Id, StrIdentifier = Identifier.Uid
                 };
                 var ty = await TransactionAudits.AddAsync(tyAudit, CancellationToken);
                 TransactionAudit = ty.Entity;
@@ -433,7 +472,7 @@ namespace PH.Core3.EntityFramework
 
             var d = DateTime.UtcNow - TransactionAudit.UtcDateTime;
             TransactionAudit.MillisecDuration = d.TotalMilliseconds;
-            TransactionAudit.TenantId = TenantId;
+            TransactionAudit.TenantId = CurrentTenantId;
             TransactionAudit.StrIdentifier = Identifier.Uid;
 
 
@@ -523,11 +562,7 @@ namespace PH.Core3.EntityFramework
         /// <value>The uow logger.</value>
         public ILogger UowLogger { get; set; }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether this <see cref="IdentityBaseContext{TUser, TRole, TKey}"/> is initialized.
-        /// </summary>
-        /// <value><c>true</c> if initialized; otherwise, <c>false</c>.</value>
-        public bool Initialized { get; protected set; }
+        
 
         /// <summary>Initializes this instance.</summary>
         /// <returns>IDbContextUnitOfWork instance initialized</returns>

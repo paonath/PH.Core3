@@ -3,7 +3,7 @@ using PH.Core3.Common.Bus;
 using PH.Core3.Common.UnitOfWorkInfrastructure;
 using PH.Core3.UnitOfWork;
 
-namespace PH.Core3.EntityFramework.Services.Components
+namespace PH.Core3.EntityFramework
 {
     /// <summary>
     /// Automatic Perform Flush on Commit
@@ -13,10 +13,12 @@ namespace PH.Core3.EntityFramework.Services.Components
     public class CommittableActionBus : TinyActionBus , ICommittableActionBus
     {
         private readonly IUnitOfWork _uow;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="TinyActionBus"/> class.
         /// </summary>
         /// <param name="logger">The logger.</param>
+        /// <param name="uow">The Unit Of Work</param>
         public CommittableActionBus(ILogger<CommittableActionBus> logger, IUnitOfWork uow) : base(logger)
         {
             _uow             =  uow;

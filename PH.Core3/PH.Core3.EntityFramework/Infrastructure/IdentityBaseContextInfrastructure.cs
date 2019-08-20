@@ -29,6 +29,29 @@ namespace PH.Core3.EntityFramework.Infrastructure
         where TRole : IdentityRole<TKey>, IEntity<TKey>
         where TKey : IEquatable<TKey>
     {
+        
+
+        /// <summary>Gets or sets the author.</summary>
+        /// <value>The author.</value>
+        public string Author { get; set; }
+
+        /// <summary>
+        /// Ctx Uid
+        /// </summary>
+        public Guid CtxUid { get; internal set; }
+
+        
+        /// <summary>
+        /// Transaction Audit
+        /// </summary>
+        public DbSet<TransactionAudit> TransactionAudits { get; set; }
+
+        /// <summary>
+        /// Tenant
+        /// </summary>
+        public DbSet<Tenant> Tenants { get; set; }
+
+
         /// <summary>Gets or sets the audits.</summary>
         /// <value>The audits.</value>
         internal DbSet<Audit.Audit> Audits { get; set; }
@@ -49,6 +72,29 @@ namespace PH.Core3.EntityFramework.Infrastructure
         protected TransactionAudit TransactionAudit;
 
         /// <summary>
+        /// The default tenant identifier
+        /// </summary>
+        internal static int DefaultTenantId = 1;
+
+        /// <summary>The default tenant name</summary>
+        public static string DefaultTenantName = "Default";
+
+        /// <summary>
+        /// The default tenant name normalized
+        /// </summary>
+        internal static string DefaultTenantNameNormalized = "DEFAULT";
+
+        /// <summary>Gets or sets the current tenant identifier.</summary>
+        /// <value>The current tenant identifier.</value>
+        public int CurrentTenantId { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether this <see cref="IdentityBaseContext{TUser, TRole, TKey}"/> is initialized.
+        /// </summary>
+        /// <value><c>true</c> if initialized; otherwise, <c>false</c>.</value>
+        public bool Initialized { get; protected set; }
+        
+        /// <summary>
         /// Initializes a new instance of the <see cref="IdentityBaseContextInfrastructure{TUser, TRole, TKey}"/> class.
         /// </summary>
         /// <param name="options">The options to be used by a <see cref="T:Microsoft.EntityFrameworkCore.DbContext" />.</param>
@@ -56,17 +102,62 @@ namespace PH.Core3.EntityFramework.Infrastructure
             :base(options)
         {
             Changecount = 0;
+            CurrentTenantSelectedName = DefaultTenantName;
+            Initialized = false;
         }
 
         /// <summary>
-        /// Tenant Identifier
+        /// Field for detecting current Tenant. Can be set in ctor of DbContext or using <see cref="TenantName" />
         /// </summary>
-        public string TenantId { get; set; }
+        public string CurrentTenantSelectedName { get; set; }
 
+        /// <summary>
+        /// Tenant Name Identifier
+        /// </summary>
+        public string TenantName
+        {
+            get => GetTenantName();
+            set => SetTenantName(value);
+        }
+
+        /// <summary>Gets the name of the tenant.</summary>
+        /// <returns></returns>
+        protected virtual string GetTenantName() => CurrentTenantSelectedName;
+
+        /// <summary>Sets the name of the tenant.</summary>
+        /// <param name="name">The name.</param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException">name</exception>
+        protected virtual void SetTenantName([NotNull] string name)
+        {
+            if (string.IsNullOrEmpty(name) || string.IsNullOrWhiteSpace(name))
+            {
+                throw new ArgumentNullException(nameof(name));
+            }
+                string n = name.Trim();
+                CurrentTenantSelectedName = n;
+                if (Initialized)
+                {
+                    EnsureTenantAsync().Wait();
+                }
+
+        }
+
+        // <summary>Ensures the tenant asynchronous.</summary>
+        /// <returns></returns>
+        /// <exception cref="Exception">Context not initialized</exception>
+        protected abstract Task<Tenant> EnsureTenantAsync();
+        
         /// <summary>Gets or sets the changecount.</summary>
         /// <value>The changecount.</value>
         public int Changecount { get; protected set; }
 
+
+        protected internal async Task<int> SaveChangesInternalAsync(CancellationToken cancellationToken =
+                                                                        new CancellationToken() )
+        {
+            return await base.SaveChangesAsync(cancellationToken);
+        }
 
         /// <summary>Saves the base changes.</summary>
         /// <param name="identifier">The identifier.</param>
@@ -238,7 +329,7 @@ namespace PH.Core3.EntityFramework.Infrastructure
 
 
         /// <summary>
-        /// Called when [before save changes].
+        /// Called before save changes.
         /// </summary>
         /// <param name="identifier">The identifier.</param>
         /// <param name="author">The author.</param>
@@ -249,6 +340,8 @@ namespace PH.Core3.EntityFramework.Infrastructure
             try
             {
                 ChangeTracker.DetectChanges();
+                
+
                 var auditEntries = new List<AuditEntry>();
 
                 var  transactionId = identifier.Uid;
@@ -257,6 +350,8 @@ namespace PH.Core3.EntityFramework.Infrastructure
 
                 foreach (var entry in ChangeTracker.Entries())
                 {
+                    
+
                     if (entry.Entity is Audit.Audit || entry.Entity is TransactionAudit ||
                         entry.State == EntityState.Detached ||
                         entry.State == EntityState.Unchanged)
@@ -267,11 +362,9 @@ namespace PH.Core3.EntityFramework.Infrastructure
                 
                     if (entry.Entity is IEntity e)
                     {
-                        if (null == e.TenantId)
-                        {
-                            e.TenantId = TenantId;
-                            
-                        }
+
+                        e.TenantId = CurrentTenantId;
+                        
 
                         if (entry.State == EntityState.Added)
                         {

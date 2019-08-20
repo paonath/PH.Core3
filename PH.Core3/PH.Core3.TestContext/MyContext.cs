@@ -18,7 +18,7 @@ namespace PH.Core3.TestContext
         public MyContext([NotNull] DbContextOptions options) 
             : base(options)
         {
-            TenantId = "MyTenant";
+            CurrentTenantSelectedName = "MyTenant";
         }
 
         /// <summary>

@@ -29,13 +29,17 @@ namespace PH.Core3.EntityFramework.Abstractions.Models.Entities
         /// Tenant Identifier
         /// </summary>
         [Required]
-        [StringLength(128)]
-        string TenantId { get; set; }
+        int TenantId { get; set; }
+
+        /// <summary>Gets or sets the tenant.</summary>
+        /// <value>The tenant.</value>
+        [ForeignKey("TenantId")]
+        Tenant Tenant { get; set; }
 
         /// <summary>
         ///  Uid If <see cref="Deleted"/> 
         /// </summary>
-        long DeletedTransactionId { get; set; }
+        long? DeletedTransactionId { get; set; }
 
         /// <summary>
         /// Reference to Delete <see cref="TransactionAudit"/> 
