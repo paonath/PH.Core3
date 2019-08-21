@@ -46,10 +46,10 @@ namespace PH.Core3.EntityFramework.Infrastructure
         /// </summary>
         public DbSet<TransactionAudit> TransactionAudits { get; set; }
 
-        /// <summary>
-        /// Tenant
-        /// </summary>
-        public DbSet<Tenant> Tenants { get; set; }
+        ///// <summary>
+        ///// Tenant
+        ///// </summary>
+        //public DbSet<Tenant> Tenants { get; set; }
 
 
         /// <summary>Gets or sets the audits.</summary>
@@ -71,23 +71,7 @@ namespace PH.Core3.EntityFramework.Infrastructure
         /// </summary>
         protected TransactionAudit TransactionAudit;
 
-        /// <summary>
-        /// The default tenant identifier
-        /// </summary>
-        internal static int DefaultTenantId = 1;
-
-        /// <summary>The default tenant name</summary>
-        public static string DefaultTenantName = "Default";
-
-        /// <summary>
-        /// The default tenant name normalized
-        /// </summary>
-        internal static string DefaultTenantNameNormalized = "DEFAULT";
-
-        /// <summary>Gets or sets the current tenant identifier.</summary>
-        /// <value>The current tenant identifier.</value>
-        public int CurrentTenantId { get; protected set; }
-        protected Tenant CurrentTenant { get; set; }
+        
 
         /// <summary>
         /// Gets or sets a value indicating whether this <see cref="IdentityBaseContext{TUser, TRole, TKey}"/> is initialized.
@@ -103,51 +87,73 @@ namespace PH.Core3.EntityFramework.Infrastructure
             :base(options)
         {
             Changecount = 0;
-            CurrentTenantSelectedName = DefaultTenantName;
+            //CurrentTenantSelectedName = DefaultTenantName;
             Initialized = false;
         }
 
-        /// <summary>
-        /// Field for detecting current Tenant. Can be set in ctor of DbContext or using <see cref="TenantName" />
-        /// </summary>
-        public string CurrentTenantSelectedName { get; set; }
+        #region tenants
 
-        /// <summary>
-        /// Tenant Name Identifier
-        /// </summary>
-        public string TenantName
-        {
-            get => GetTenantName();
-            set => SetTenantName(value);
-        }
+        ///// <summary>
+        ///// The default tenant identifier
+        ///// </summary>
+        //internal static int DefaultTenantId = 1;
 
-        /// <summary>Gets the name of the tenant.</summary>
-        /// <returns></returns>
-        protected virtual string GetTenantName() => CurrentTenantSelectedName;
+        ///// <summary>The default tenant name</summary>
+        //public static string DefaultTenantName = "Default";
 
-        /// <summary>Sets the name of the tenant.</summary>
-        /// <param name="name">The name.</param>
-        /// <returns></returns>
-        /// <exception cref="ArgumentNullException">name</exception>
-        protected virtual void SetTenantName([NotNull] string name)
-        {
-            if (string.IsNullOrEmpty(name) || string.IsNullOrWhiteSpace(name))
-            {
-                throw new ArgumentNullException(nameof(name));
-            }
-                string n = name.Trim();
-                CurrentTenantSelectedName = n;
-                if (Initialized)
-                {
-                    EnsureTenantAsync().Wait();
-                }
+        ///// <summary>
+        ///// The default tenant name normalized
+        ///// </summary>
+        //internal static string DefaultTenantNameNormalized = "DEFAULT";
 
-        }
+        ///// <summary>Gets or sets the current tenant identifier.</summary>
+        ///// <value>The current tenant identifier.</value>
+        //public int CurrentTenantId { get; protected set; }
+        //protected Tenant CurrentTenant { get; set; }
 
-        // <summary>Ensures the tenant asynchronous.</summary>
-        /// <returns></returns>
-        /// <exception cref="Exception">Context not initialized</exception>
-        protected abstract Task<Tenant> EnsureTenantAsync();
+        ///// <summary>
+        ///// Field for detecting current Tenant. Can be set in ctor of DbContext or using <see cref="TenantName" />
+        ///// </summary>
+        //public string CurrentTenantSelectedName { get; set; }
+
+        ///// <summary>
+        ///// Tenant Name Identifier
+        ///// </summary>
+        //public string TenantName
+        //{
+        //    get => GetTenantName();
+        //    set => SetTenantName(value);
+        //}
+
+        ///// <summary>Gets the name of the tenant.</summary>
+        ///// <returns></returns>
+        //protected virtual string GetTenantName() => CurrentTenantSelectedName;
+
+        ///// <summary>Sets the name of the tenant.</summary>
+        ///// <param name="name">The name.</param>
+        ///// <returns></returns>
+        ///// <exception cref="ArgumentNullException">name</exception>
+        //protected virtual void SetTenantName([NotNull] string name)
+        //{
+        //    if (string.IsNullOrEmpty(name) || string.IsNullOrWhiteSpace(name))
+        //    {
+        //        throw new ArgumentNullException(nameof(name));
+        //    }
+        //        string n = name.Trim();
+        //        CurrentTenantSelectedName = n;
+        //        if (Initialized)
+        //        {
+        //            EnsureTenantAsync().Wait();
+        //        }
+
+        //}
+
+        //// <summary>Ensures the tenant asynchronous.</summary>
+        ///// <returns></returns>
+        ///// <exception cref="Exception">Context not initialized</exception>
+        //protected abstract Task<Tenant> EnsureTenantAsync();
+
+        #endregion
         
         /// <summary>Gets or sets the changecount.</summary>
         /// <value>The changecount.</value>
@@ -368,7 +374,7 @@ namespace PH.Core3.EntityFramework.Infrastructure
                     if (entry.Entity is IEntity e)
                     {
 
-                        e.TenantId = CurrentTenantId;
+                        //e.TenantId = CurrentTenantId;
                         
 
                         if (entry.State == EntityState.Added)

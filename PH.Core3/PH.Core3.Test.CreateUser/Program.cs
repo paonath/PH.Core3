@@ -87,7 +87,7 @@ namespace PH.Core3.Test.CreateUser
                 ctx.Initialize();
 
                 //ctx.TenantName = "SGURZ";
-                ctx.TenantName = "Pippo Pippottolo";
+                //ctx.TenantName = "Pippo Pippottolo";
 
                 var userManager = scope.Resolve<ApplicationUserManager>();
 

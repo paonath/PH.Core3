@@ -18,7 +18,7 @@ namespace PH.Core3.EntityFramework.Infrastructure
     /// <typeparam name="TRole">The type of the role.</typeparam>
     /// <typeparam name="TKey">The type of the key.</typeparam>
     /// <seealso cref="ITenantContext" />
-    public interface IIdentityBaseContext<TUser, TRole, TKey> : ITenantContext, IInitializable<IdentityBaseContext<TUser, TRole, TKey>>
+    public interface IIdentityBaseContext<TUser, TRole, TKey> : /*ITenantContext,*/ IInitializable<IdentityBaseContext<TUser, TRole, TKey>>
         where TUser : IdentityUser<TKey>, IEntity<TKey> 
         where TRole : IdentityRole<TKey>, IEntity<TKey> 
         where TKey : IEquatable<TKey>

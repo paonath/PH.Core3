@@ -67,8 +67,8 @@ namespace PH.Core3.EntityFramework.Mapping
             builder.Property(x => x.Id)
                    .IsRequired(true);
 
-            builder.Property(x => x.TenantId)
-                   .IsRequired(true);
+            //builder.Property(x => x.TenantId)
+            //       .IsRequired(true);
             
             builder.Property(x => x.Deleted)
                    .HasColumnName("Deleted")
@@ -99,15 +99,17 @@ namespace PH.Core3.EntityFramework.Mapping
                 {
                     i.Id,
                     i.Deleted,
-                    i.CreatedTransactionId
+                    i.CreatedTransactionId,
+                    i.UpdatedTransactionId,
+                    i.DeletedTransactionId
                 }).IsUnique(false);
             
-            builder
-                .HasIndex(i => i.UpdatedTransactionId)
-                .IsUnique(false);
-            builder
-                .HasIndex(i => i.DeletedTransactionId)
-                .IsUnique(false);
+            //builder
+            //    .HasIndex(i => i.UpdatedTransactionId)
+            //    .IsUnique(false);
+            //builder
+            //    .HasIndex(i => i.DeletedTransactionId)
+            //    .IsUnique(false);
 
         }
     }

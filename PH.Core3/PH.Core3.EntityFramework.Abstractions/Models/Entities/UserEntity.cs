@@ -20,15 +20,15 @@ namespace PH.Core3.EntityFramework.Abstractions.Models.Entities
 
 
 
-        /// <summary>
-        /// Tenant Identifier
-        /// </summary>
-        public int TenantId { get; set; }
+        ///// <summary>
+        ///// Tenant Identifier
+        ///// </summary>
+        //public int TenantId { get; set; }
 
-        /// <summary>Gets or sets the tenant.</summary>
-        /// <value>The tenant.</value>
-        [ForeignKey("TenantId")]
-        public Tenant Tenant { get; set; }
+        ///// <summary>Gets or sets the tenant.</summary>
+        ///// <value>The tenant.</value>
+        //[ForeignKey("TenantId")]
+        //public Tenant Tenant { get; set; }
 
         /// <summary>
         ///  Uid If <see cref="IEntity.Deleted"/> 

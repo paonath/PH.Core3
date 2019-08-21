@@ -267,12 +267,14 @@ namespace PH.Core3.EntityFramework
                         paramName = queryParam.Name;
                     }
 
+                  
 
                     ParameterExpression paramExpr = Expression.Parameter(entityType, paramName);
-                    Expression bodyTenant = Expression.Equal(Expression.Property(paramExpr, "TenantId"), 
-                                                             //Expression.Property("CurrentTenant","Id")
-                                                             Expression.Constant(CurrentTenantId)
-                                                            );
+
+                    //Expression bodyTenant = Expression.Equal(Expression.Property(paramExpr, "TenantId"), 
+                    //                                         Expression.Constant(CurrentTenantId)
+                    //                                        );
+
                     Expression bodyDeleted = Expression.Equal(Expression.Property(paramExpr, "Deleted"),
                                                               Expression.Constant(false)
                                                              );
@@ -282,11 +284,12 @@ namespace PH.Core3.EntityFramework
                         var res = Expression.Lambda(Expression.Invoke(queryFilter, paramExpr), paramExpr);
 
 
-                        body = Expression.AndAlso(Expression.AndAlso(bodyDeleted, bodyTenant), res.Body);
+                        body = Expression.AndAlso(bodyDeleted, res.Body);
                     }
                     else
                     {
-                        body = Expression.AndAlso(bodyDeleted, bodyTenant);
+                        //body = Expression.AndAlso(bodyDeleted, bodyTenant);
+                        body = bodyDeleted;
                     }
 
 
@@ -346,54 +349,54 @@ namespace PH.Core3.EntityFramework
 
         #endregion
 
-        #region Tenant Methods    
+        //#region Tenant Methods    
         
-        /// <summary>Ensures the tenant asynchronous.</summary>
-        /// <returns></returns>
-        /// <exception cref="Exception">Context not initialized</exception>
-        protected override async Task<Tenant> EnsureTenantAsync()
-        {
-            if (!Initialized)
-            {
-                throw new Exception("Context not initialized");
-            }
+        ///// <summary>Ensures the tenant asynchronous.</summary>
+        ///// <returns></returns>
+        ///// <exception cref="Exception">Context not initialized</exception>
+        //protected override async Task<Tenant> EnsureTenantAsync()
+        //{
+        //    if (!Initialized)
+        //    {
+        //        throw new Exception("Context not initialized");
+        //    }
 
-            var defaultTenant = await Tenants.FirstOrDefaultAsync(x => x.NormalizedName == DefaultTenantName.ToUpperInvariant(), CancellationToken);
-            if (null == defaultTenant)
-            {
-                var ttD = new Tenant()
-                {
-                    Name = DefaultTenantName, NormalizedName = DefaultTenantName.ToUpperInvariant()
+        //    var defaultTenant = await Tenants.FirstOrDefaultAsync(x => x.NormalizedName == DefaultTenantName.ToUpperInvariant(), CancellationToken);
+        //    if (null == defaultTenant)
+        //    {
+        //        var ttD = new Tenant()
+        //        {
+        //            Name = DefaultTenantName, NormalizedName = DefaultTenantName.ToUpperInvariant()
                    
-                };
-                await Tenants.AddAsync(ttD, CancellationToken);
-                CurrentTenantId = ttD.Id;
-            }
+        //        };
+        //        await Tenants.AddAsync(ttD, CancellationToken);
+        //        CurrentTenantId = ttD.Id;
+        //    }
 
 
 
-            string tt   = CurrentTenantSelectedName ?? DefaultTenantName;
-            string norm = tt.ToUpperInvariant();
+        //    string tt   = CurrentTenantSelectedName ?? DefaultTenantName;
+        //    string norm = tt.ToUpperInvariant();
 
-            var t = await Tenants.FirstOrDefaultAsync(x => x.NormalizedName == norm, CancellationToken);
+        //    var t = await Tenants.FirstOrDefaultAsync(x => x.NormalizedName == norm, CancellationToken);
 
-            if (null == t)
-            {
+        //    if (null == t)
+        //    {
                
-                t = new Tenant() {Name = tt, NormalizedName = norm};
+        //        t = new Tenant() {Name = tt, NormalizedName = norm};
                 
-                var rt = await Tenants.AddAsync(t, CancellationToken);
+        //        var rt = await Tenants.AddAsync(t, CancellationToken);
             
                
-            }
+        //    }
 
-            CurrentTenantId = t.Id;
-            CurrentTenant = t;
+        //    CurrentTenantId = t.Id;
+        //    CurrentTenant = t;
            
-            return t;
-        }
+        //    return t;
+        //}
 
-        #endregion
+        //#endregion
 
         #region Unit Of Work 
 
@@ -405,11 +408,11 @@ namespace PH.Core3.EntityFramework
             var t = Task.Run(async () =>
             {
                 _transaction = await Database.BeginTransactionAsync(CancellationToken);
-                var tenant  = await EnsureTenantAsync();
+                //var tenant  = await EnsureTenantAsync();
 
                 var tyAudit = new TransactionAudit()
                 {
-                    Author = Author, UtcDateTime = DateTime.UtcNow, StrIdentifier = Identifier.Uid, Tenant = tenant
+                    Author = Author, UtcDateTime = DateTime.UtcNow, StrIdentifier = Identifier.Uid /*, Tenant = tenant*/
                 };
 
                 var ty = await TransactionAudits.AddAsync(tyAudit, CancellationToken);
@@ -470,7 +473,7 @@ namespace PH.Core3.EntityFramework
             var d = DateTime.UtcNow - TransactionAudit.UtcDateTime;
             TransactionAudit.MillisecDuration = d.TotalMilliseconds;
             TransactionAudit.StrIdentifier = Identifier.Uid;
-            TransactionAudit.Tenant = CurrentTenant;
+            //TransactionAudit.Tenant = CurrentTenant;
 
 
 
@@ -602,7 +605,7 @@ namespace PH.Core3.EntityFramework
     /// <typeparam name="TUser">Type of User Entity class</typeparam>
     /// <typeparam name="TRole">Type of Role Entity class</typeparam>
     public abstract class
-        IdentityBaseContext<TUser, TRole> : IdentityBaseContext<TUser, TRole, string>, ITenantContext , IDbContextUnitOfWork
+        IdentityBaseContext<TUser, TRole> : IdentityBaseContext<TUser, TRole, string> /*, ITenantContext*/ , IDbContextUnitOfWork
         where TUser : UserEntity, IEntity<string>
         where TRole : RoleEntity, IEntity<string>
     {
