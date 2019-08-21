@@ -27,6 +27,10 @@ namespace PH.Core3.TestContext
         /// <param name="builder"></param>
         public override void OnCustomModelCreating(ModelBuilder builder)
         {
+            builder.ForSqlServerUseSequenceHiLo("PaoloTestHiLo");
+            
+
+
             builder.ApplyConfiguration(new UserMap());
             builder.ApplyConfiguration(new RoleMap());
             builder.ApplyConfiguration(new AlberoMap());

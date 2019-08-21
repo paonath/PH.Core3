@@ -87,6 +87,7 @@ namespace PH.Core3.EntityFramework.Infrastructure
         /// <summary>Gets or sets the current tenant identifier.</summary>
         /// <value>The current tenant identifier.</value>
         public int CurrentTenantId { get; protected set; }
+        protected Tenant CurrentTenant { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether this <see cref="IdentityBaseContext{TUser, TRole, TKey}"/> is initialized.
@@ -153,6 +154,10 @@ namespace PH.Core3.EntityFramework.Infrastructure
         public int Changecount { get; protected set; }
 
 
+        protected internal int SacheChangesInternal()
+        {
+            return base.SaveChanges();
+        }
         protected internal async Task<int> SaveChangesInternalAsync(CancellationToken cancellationToken =
                                                                         new CancellationToken() )
         {

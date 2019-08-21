@@ -139,10 +139,12 @@ namespace PH.Core3.EntityFramework
         /// that any asynchronous operations have completed before calling another method on this context.
         /// </para>
         /// </remarks>
-        public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
-        {
-            return await base.SaveBaseChangesAsync(Identifier, Author, cancellationToken);
-        }
+        public sealed override async Task<int> SaveChangesAsync(
+            CancellationToken cancellationToken = new CancellationToken()) =>
+            await SaveChangesAsync(true, cancellationToken);
+        //{
+        //    return await base.SaveBaseChangesAsync(Identifier, Author, cancellationToken);
+        //}
 
         /// <summary>
         /// Asynchronously saves all changes made in this context to the database.
@@ -165,7 +167,7 @@ namespace PH.Core3.EntityFramework
         /// that any asynchronous operations have completed before calling another method on this context.
         /// </para>
         /// </remarks>
-        public override async Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = new CancellationToken())
+        public sealed override async Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = new CancellationToken())
         {
             return await base.SaveBaseChangesAsync(Identifier, Author, acceptAllChangesOnSuccess, cancellationToken);
         }
@@ -361,12 +363,11 @@ namespace PH.Core3.EntityFramework
             {
                 var ttD = new Tenant()
                 {
-                    Name = DefaultTenantName, NormalizedName = DefaultTenantName.ToUpperInvariant(),
-                    Id   = DefaultTenantId
+                    Name = DefaultTenantName, NormalizedName = DefaultTenantName.ToUpperInvariant()
+                   
                 };
                 await Tenants.AddAsync(ttD, CancellationToken);
-                await base.SaveChangesInternalAsync(CancellationToken);
-
+                CurrentTenantId = ttD.Id;
             }
 
 
@@ -378,21 +379,16 @@ namespace PH.Core3.EntityFramework
 
             if (null == t)
             {
-                int max = await Tenants.Select(x => x.Id).MaxAsync(CancellationToken);
-                max++;
-
-                t = new Tenant() {Name = tt, NormalizedName = norm, Id = max};
+               
+                t = new Tenant() {Name = tt, NormalizedName = norm};
                 
                 var rt = await Tenants.AddAsync(t, CancellationToken);
-                await base.SaveChangesInternalAsync(CancellationToken);
-                CurrentTenantId = max;
-            }
-            else
-            {
-                CurrentTenantId = t.Id;
+            
+               
             }
 
-            
+            CurrentTenantId = t.Id;
+            CurrentTenant = t;
            
             return t;
         }
@@ -413,8 +409,9 @@ namespace PH.Core3.EntityFramework
 
                 var tyAudit = new TransactionAudit()
                 {
-                    Author = Author, UtcDateTime = DateTime.UtcNow, TenantId = tenant.Id, StrIdentifier = Identifier.Uid
+                    Author = Author, UtcDateTime = DateTime.UtcNow, StrIdentifier = Identifier.Uid, Tenant = tenant
                 };
+
                 var ty = await TransactionAudits.AddAsync(tyAudit, CancellationToken);
                 TransactionAudit = ty.Entity;
 
@@ -472,8 +469,9 @@ namespace PH.Core3.EntityFramework
 
             var d = DateTime.UtcNow - TransactionAudit.UtcDateTime;
             TransactionAudit.MillisecDuration = d.TotalMilliseconds;
-            TransactionAudit.TenantId = CurrentTenantId;
             TransactionAudit.StrIdentifier = Identifier.Uid;
+            TransactionAudit.Tenant = CurrentTenant;
+
 
 
             if (transactionCommitMessage != "")

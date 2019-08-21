@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PH.Core3.TestContext;
 
@@ -15,12 +16,16 @@ namespace PH.Core3.TestContext.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "2.2.6-servicing-10079")
-                .HasAnnotation("Relational:MaxIdentifierLength", 64);
+                .HasAnnotation("Relational:MaxIdentifierLength", 128)
+                .HasAnnotation("Relational:Sequence:.PaoloTestHiLo", "'PaoloTestHiLo', '', '1', '10', '', '', 'Int64', 'False'")
+                .HasAnnotation("SqlServer:HiLoSequenceName", "PaoloTestHiLo")
+                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.SequenceHiLo);
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.SequenceHiLo);
 
                     b.Property<string>("ClaimType");
 
@@ -39,7 +44,8 @@ namespace PH.Core3.TestContext.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.SequenceHiLo);
 
                     b.Property<string>("ClaimType");
 
@@ -104,7 +110,8 @@ namespace PH.Core3.TestContext.Migrations
             modelBuilder.Entity("PH.Core3.EntityFramework.Abstractions.Models.Entities.Tenant", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.SequenceHiLo);
 
                     b.Property<string>("Name")
                         .HasMaxLength(128);
@@ -112,7 +119,7 @@ namespace PH.Core3.TestContext.Migrations
                     b.Property<string>("NormalizedName")
                         .HasMaxLength(128);
 
-                    b.Property<DateTime?>("Timestamp")
+                    b.Property<byte[]>("Timestamp")
                         .IsConcurrencyToken()
                         .ValueGeneratedOnAddOrUpdate();
 
@@ -124,7 +131,8 @@ namespace PH.Core3.TestContext.Migrations
             modelBuilder.Entity("PH.Core3.EntityFramework.Abstractions.Models.Entities.TransactionAudit", b =>
                 {
                     b.Property<long>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.SequenceHiLo);
 
                     b.Property<string>("Author")
                         .IsRequired()
@@ -146,7 +154,7 @@ namespace PH.Core3.TestContext.Migrations
 
                     b.Property<int>("TenantId");
 
-                    b.Property<DateTime?>("Timestamp")
+                    b.Property<byte[]>("Timestamp")
                         .IsConcurrencyToken()
                         .ValueGeneratedOnAddOrUpdate();
 
@@ -156,7 +164,7 @@ namespace PH.Core3.TestContext.Migrations
 
                     b.HasIndex("TenantId");
 
-                    b.HasIndex("Id", "StrIdentifier", "Author", "UtcDateTime", "Timestamp", "TenantId");
+                    b.HasIndex("Id", "StrIdentifier", "Author", "UtcDateTime", "Timestamp");
 
                     b.ToTable("transaction_audit");
                 });
@@ -215,7 +223,7 @@ namespace PH.Core3.TestContext.Migrations
 
                     b.Property<int>("TenantId");
 
-                    b.Property<DateTime?>("Timestamp")
+                    b.Property<byte[]>("Timestamp")
                         .IsConcurrencyToken()
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnName("Timestamp");
@@ -273,7 +281,7 @@ namespace PH.Core3.TestContext.Migrations
 
                     b.Property<int>("TenantId");
 
-                    b.Property<DateTime?>("Timestamp")
+                    b.Property<byte[]>("Timestamp")
                         .IsConcurrencyToken()
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnName("Timestamp");
@@ -327,7 +335,7 @@ namespace PH.Core3.TestContext.Migrations
 
                     b.Property<int>("TenantId");
 
-                    b.Property<DateTime?>("Timestamp")
+                    b.Property<byte[]>("Timestamp")
                         .IsConcurrencyToken()
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnName("Timestamp");
@@ -343,7 +351,8 @@ namespace PH.Core3.TestContext.Migrations
 
                     b.HasIndex("NormalizedName")
                         .IsUnique()
-                        .HasName("RoleNameIndex");
+                        .HasName("RoleNameIndex")
+                        .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.HasIndex("TenantId");
 
@@ -398,7 +407,7 @@ namespace PH.Core3.TestContext.Migrations
 
                     b.Property<int>("TenantId");
 
-                    b.Property<DateTime?>("Timestamp")
+                    b.Property<byte[]>("Timestamp")
                         .IsConcurrencyToken()
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnName("Timestamp");
@@ -422,7 +431,8 @@ namespace PH.Core3.TestContext.Migrations
 
                     b.HasIndex("NormalizedUserName")
                         .IsUnique()
-                        .HasName("UserNameIndex");
+                        .HasName("UserNameIndex")
+                        .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.HasIndex("TenantId");
 

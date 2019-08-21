@@ -14,6 +14,17 @@ namespace PH.Core3.EntityFramework.Abstractions.Models.Entities
         /// </summary>
         public long Id { get; set; }
 
+        /// <summary>
+        /// Tenant Identifier
+        /// </summary>
+        public int TenantId { get; set; }
+
+        /// <summary>Gets or sets the tenant.</summary>
+        /// <value>The tenant.</value>
+        [ForeignKey("TenantId")]
+        public virtual Tenant Tenant { get; set; }
+
+
         /// <summary>Gets or sets the string identifier: unique, assigned.</summary>
         /// <value>The string identifier.</value>
         [StringLength(128)]
@@ -44,16 +55,7 @@ namespace PH.Core3.EntityFramework.Abstractions.Models.Entities
         /// </summary>
         public double MillisecDuration { get; set; }
 
-        /// <summary>
-        /// Tenant Identifier
-        /// </summary>
-        [Required]
-        public int TenantId { get; set; }
-
-        /// <summary>Gets or sets the tenant.</summary>
-        /// <value>The tenant.</value>
-        [ForeignKey("TenantId")]
-        public virtual Tenant Tenant { get; set; }
+        
 
         /// <summary>
         /// Transaction Scopes

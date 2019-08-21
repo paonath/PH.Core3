@@ -12,7 +12,7 @@ namespace PH.Core3.EntityFramework.Mapping
         {
             builder.ToTable("transaction_audit");
 
-            builder.Property(x => x.TenantId).IsRequired();
+            
             builder.Property(x => x.Id).ValueGeneratedOnAdd();
             builder.Property(x => x.UtcDateTime).IsRequired();
             builder.Property(x => x.Author).IsRequired();
@@ -28,8 +28,7 @@ namespace PH.Core3.EntityFramework.Mapping
                     i.StrIdentifier,
                     i.Author,
                     i.UtcDateTime,
-                    i.Timestamp,
-                    i.TenantId
+                    i.Timestamp
                 });
         }
     }

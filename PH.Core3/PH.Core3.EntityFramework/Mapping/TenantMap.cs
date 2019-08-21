@@ -14,7 +14,7 @@ namespace PH.Core3.EntityFramework.Mapping
         {
             builder.ToTable("tenant");
 
-            builder.Property(x => x.Id).ValueGeneratedNever();
+            builder.Property(x => x.Id);
             builder.Property(x => x.Name).IsRequired(true);
 
             builder.HasIndex(i => i.Name).IsUnique(true);

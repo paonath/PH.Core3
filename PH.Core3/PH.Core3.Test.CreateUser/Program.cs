@@ -40,7 +40,8 @@ namespace PH.Core3.Test.CreateUser
 
             serviceCollection.AddDbContext<MyContext>(options =>
                                                           options
-                                                              .UseMySql("server=localhost;database=ctx_core3;user=dev;password=dev;SslMode=none")
+                                                             // .UseMySql("server=localhost;database=ctx_core3;user=dev;password=dev;SslMode=none")
+                                                             .UseSqlServer("Server=192.168.3.83\\SQLEXPRESS;Database=ctx_core3;User Id=dev;Password=dev;MultipleActiveResultSets=true")
                                                               .UseLazyLoadingProxies(true)
                                                      );
 
@@ -85,7 +86,8 @@ namespace PH.Core3.Test.CreateUser
                 var ctx = scope.Resolve<MyContext>();
                 ctx.Initialize();
 
-                ctx.TenantName = "SGURZ";
+                //ctx.TenantName = "SGURZ";
+                ctx.TenantName = "Pippo Pippottolo";
 
                 var userManager = scope.Resolve<ApplicationUserManager>();
 
