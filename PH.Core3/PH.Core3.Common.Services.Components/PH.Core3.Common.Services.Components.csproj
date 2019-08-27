@@ -38,13 +38,8 @@
     <PackageReference Include="JetBrains.Annotations" Version="2019.1.3" />
     <PackageReference Include="MailKit" Version="2.3.0" />
     <PackageReference Include="MimeKit" Version="2.3.0" />
-    <PackageReference Include="PH.UowEntityFramework.EntityFramework.Abstractions" Version="0.0.3" />
+    <PackageReference Include="PH.UowEntityFramework.EntityFramework.Abstractions" Version="0.0.4" />
     <PackageReference Include="System.Runtime.Extensions" Version="4.3.1" />
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="PH.Core3.EntityFramework.Abstractions">
-      <HintPath>..\PH.Core3.EntityFramework.Abstractions\bin\Debug\netstandard2.0\PH.Core3.EntityFramework.Abstractions.dll</HintPath>
-    </Reference>
   </ItemGroup>
 
 </Project>

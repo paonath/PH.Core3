@@ -6,7 +6,10 @@ using Newtonsoft.Json;
 
 namespace PH.Core3.Common.Result
 {
-
+    /// <summary>
+    /// Error class
+    /// </summary>
+    /// <seealso cref="PH.Core3.Common.Result.IError" />
     public class Error : IError
     {
         /// <summary>

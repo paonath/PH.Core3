@@ -15,62 +15,139 @@ namespace PH.Core3.Common.Result
     /// </summary>
     public static class ResultFactory
     {
-        
+        /// <summary>Ok result</summary>
+        /// <typeparam name="T">Type of Content</typeparam>
+        /// <param name="identifier">The identifier.</param>
+        /// <param name="content">The content.</param>
+        /// <returns>Result OK</returns>
         public static IResult<T> Ok<T>([NotNull] IIdentifier identifier, [NotNull] T content)
         {
             return new Result<T>(identifier, content);
         }
 
+        /// <summary>Boolean Ok result</summary>
+        /// <param name="identifier">The identifier.</param>
+        /// <returns>Result OK</returns>
         public static IResult<bool> TrueResult([NotNull] IIdentifier identifier)
             => Ok(identifier, true);
 
+        /// <summary>Boolean Fail result</summary>
+        /// <param name="identifier">The identifier.</param>
+        /// <param name="error">The error.</param>
+        /// <returns>Result FAIL</returns>
         public static IResult<bool> FalseResult([NotNull] IIdentifier identifier, IError error)
             => Fail<bool>(identifier, false, error);
 
 
-
+        /// <summary>Fail Result</summary>
+        /// <typeparam name="T">Type of the Content</typeparam>
+        /// <param name="identifier">The identifier.</param>
+        /// <param name="error">The error.</param>
+        /// <returns>Result FAIL</returns>
         public static IResult<T> Fail<T>([NotNull] IIdentifier identifier, [NotNull] IError error)
         {
             return new Result<T>(identifier,error);
         }
 
+        /// <summary>Fail result</summary>
+        /// <typeparam name="T">Type of the Content</typeparam>
+        /// <param name="identifier">The identifier.</param>
+        /// <param name="exception">The exception.</param>
+        /// <param name="eventId">The event identifier.</param>
+        /// <returns>Result FAIL</returns>
         public static IResult<T> Fail<T>([NotNull] IIdentifier identifier, [NotNull] Exception exception
             ,[CanBeNull] EventId? eventId = null)
             => Fail<T>(identifier, Error.FromException(exception, eventId));
 
-        
+
+        /// <summary>Fail result</summary>
+        ///  <typeparam name="T">Type of the Content</typeparam>
+        /// <param name="identifier">The identifier.</param>
+        /// <param name="message">The message.</param>
+        /// <returns>Result FAIL</returns>
         public static IResult<T> Fail<T>([NotNull] IIdentifier identifier, string message)
             => Fail<T>(identifier, new Error(message));
-        
+
+        /// <summary>Fail result</summary>
+        ///  <typeparam name="T">Type of the Content</typeparam>
+        /// <param name="identifier">The identifier.</param>
+        /// <param name="message">The message.</param>
+        /// <param name="eventId">The event identifier.</param>
+        /// <returns></returns>
         public static IResult<T> Fail<T>([NotNull] IIdentifier identifier, string message, EventId eventId)
             => Fail<T>(identifier, new Error(message, eventId));
-        
-        
+
+
+        /// <summary>Fails result</summary>
+        ///  <typeparam name="T">Type of the Content</typeparam>
+        /// <param name="identifier">The identifier.</param>
+        /// <param name="message">The message.</param>
+        /// <param name="inner">The inner.</param>
+        /// <returns></returns>
         public static IResult<T> Fail<T>([NotNull] IIdentifier identifier, string message, IError inner)
             => Fail<T>(identifier, new Error(message, inner));
-        
+
+        /// <summary>Fail result</summary>
+        ///  <typeparam name="T">Type of the Content</typeparam>
+        /// <param name="identifier">The identifier.</param>
+        /// <param name="message">The message.</param>
+        /// <param name="eventId">The event identifier.</param>
+        /// <param name="inner">The inner.</param>
+        /// <returns></returns>
         public static IResult<T> Fail<T>([NotNull] IIdentifier identifier, string message, EventId eventId, IError inner)
             => Fail<T>(identifier, new Error(message, eventId, inner));
 
-        
-        
-        
+
+
+        /// <summary>Fail result</summary>
+        ///  <typeparam name="T">Type of the Content</typeparam>
+        /// <param name="identifier">The identifier.</param>
+        /// <param name="content">The content.</param>
+        /// <param name="error">The error.</param>
+        /// <returns></returns>
         public static IResult<T> Fail<T>([NotNull] IIdentifier identifier, [CanBeNull] T content
             , [NotNull] IError error)
         {
             return new Result<T>(identifier, content,error);
         }
-        
+
+        /// <summary>Fail result</summary>
+        ///  <typeparam name="T">Type of the Content</typeparam>
+        /// <param name="identifier">The identifier.</param>
+        /// <param name="content">The content.</param>
+        /// <param name="message">The message.</param>
+        /// <returns></returns>
         public static IResult<T> Fail<T>([NotNull] IIdentifier identifier, [CanBeNull] T content, string message)
             => Fail<T>(identifier, content, new Error(message));
-        
+
+        /// <summary>Fail result</summary>
+        ///  <typeparam name="T">Type of the Content</typeparam>
+        /// <param name="identifier">The identifier.</param>
+        /// <param name="content">The content.</param>
+        /// <param name="message">The message.</param>
+        /// <param name="eventId">The event identifier.</param>
+        /// <returns></returns>
         public static IResult<T> Fail<T>([NotNull] IIdentifier identifier, [CanBeNull] T content, string message, EventId eventId)
             => Fail<T>(identifier, content, new Error(message, eventId));
-        
-        
+
+        /// <summary>Fail result</summary>
+        ///  <typeparam name="T">Type of the Content</typeparam>
+        /// <param name="identifier">The identifier.</param>
+        /// <param name="content">The content.</param>
+        /// <param name="message">The message.</param>
+        /// <param name="inner">The inner.</param>
+        /// <returns></returns>
         public static IResult<T> Fail<T>([NotNull] IIdentifier identifier, [CanBeNull] T content, string message, IError inner)
             => Fail<T>(identifier, content, new Error(message, inner));
-        
+
+        /// <summary>Fail result</summary>
+        ///  <typeparam name="T">Type of the Content</typeparam>
+        /// <param name="identifier">The identifier.</param>
+        /// <param name="content">The content.</param>
+        /// <param name="message">The message.</param>
+        /// <param name="eventId">The event identifier.</param>
+        /// <param name="inner">The inner.</param>
+        /// <returns></returns>
         public static IResult<T> Fail<T>([NotNull] IIdentifier identifier,[CanBeNull] T content, string message, EventId eventId, IError inner)
             => Fail<T>(identifier, content, new Error(message, eventId, inner));
 

@@ -26,6 +26,7 @@
     </PackageTags>
   </PropertyGroup>
 
+  
   <ItemGroup>
     <ProjectReference Include="..\PH.Core3.Common.Services.Components\PH.Core3.Common.Services.Components.csproj" />
     <ProjectReference Include="..\PH.Core3.Common.Services\PH.Core3.Common.Services.csproj" />
@@ -41,9 +42,9 @@
     <PackageReference Include="RazorLight" Version="1.1.0" />
 
 
-    <PackageReference Include="PH.UowEntityFramework.EntityFramework.Abstractions" Version="0.0.3" />
-    <PackageReference Include="PH.UowEntityFramework.EntityFramework" Version="0.0.3" />
-    <PackageReference Include="PH.UowEntityFramework.UnitOfWork" Version="0.0.3" />
+    <PackageReference Include="PH.UowEntityFramework.EntityFramework.Abstractions" Version="0.0.4" />
+    <PackageReference Include="PH.UowEntityFramework.EntityFramework" Version="0.0.4" />
+    <PackageReference Include="PH.UowEntityFramework.UnitOfWork" Version="0.0.4" />
   </ItemGroup>
 
 </Project>
