@@ -3,14 +3,14 @@ using System.Runtime.CompilerServices;
 using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
 using PH.Core3.TestContext.Map;
-using PH.Core3.UnitOfWork;
+using PH.UowEntityFramework.EntityFramework;
 
 namespace PH.Core3.TestContext
 {
-    public class MyContext : PH.Core3.EntityFramework.IdentityBaseContext<User,Role,string> 
+    public class MyContext : IdentityBaseContext<User,Role,string> 
     {
-        public DbSet<Albero> Alberi { get; set; }
-        public DbSet<Category> Categories { get; set; }
+        //public DbSet<Albero> Alberi { get; set; }
+        //public DbSet<Category> Categories { get; set; }
 
         
 
@@ -27,14 +27,14 @@ namespace PH.Core3.TestContext
         /// <param name="builder"></param>
         public override void OnCustomModelCreating(ModelBuilder builder)
         {
-            builder.ForSqlServerUseSequenceHiLo("PaoloTestHiLo");
+            //builder.ForSqlServerUseSequenceHiLo("PaoloTestHiLo");
             
 
 
             builder.ApplyConfiguration(new UserMap());
             builder.ApplyConfiguration(new RoleMap());
-            builder.ApplyConfiguration(new AlberoMap());
-            builder.ApplyConfiguration(new CategoryMap());
+            //builder.ApplyConfiguration(new AlberoMap());
+            //builder.ApplyConfiguration(new CategoryMap());
 
         }
 

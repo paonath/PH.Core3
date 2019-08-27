@@ -21,7 +21,7 @@
     <PackageReference Include="Microsoft.Extensions.Logging" Version="2.2.0" />
     <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="4.4.0" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning.ApiExplorer" Version="3.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning.ApiExplorer" Version="3.2.1" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.3" />
     <PackageReference Include="NLog.Web.AspNetCore" Version="4.8.4" />
@@ -44,14 +44,16 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="NLog" Version="4.6.6" />
+    <PackageReference Include="NLog" Version="4.6.7" />
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="2.2.0" />
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql.Design" Version="1.1.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.2.6" />
-    <PackageReference Include="Vsxmd" Version="1.4.2">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
-    </PackageReference>
+   
+
+    
+    <PackageReference Include="PH.UowEntityFramework.EntityFramework.Abstractions" Version="0.0.3" />
+    <PackageReference Include="PH.UowEntityFramework.EntityFramework" Version="0.0.3" />
+    <PackageReference Include="PH.UowEntityFramework.UnitOfWork" Version="0.0.3" />
 
   </ItemGroup>
 
@@ -60,8 +62,6 @@
     <ProjectReference Include="..\PH.Core3.Common.Services.Components\PH.Core3.Common.Services.Components.csproj" />
     <ProjectReference Include="..\PH.Core3.Common.Services\PH.Core3.Common.Services.csproj" />
     <ProjectReference Include="..\PH.Core3.Common\PH.Core3.Common.csproj" />
-    <ProjectReference Include="..\PH.Core3.EntityFramework\PH.Core3.EntityFramework.csproj" />
     <ProjectReference Include="..\PH.Core3.TestContext\PH.Core3.TestContext.csproj" />
-    <ProjectReference Include="..\PH.Core3.UnitOfWork\PH.Core3.UnitOfWork.csproj" />
   </ItemGroup>
 </Project>

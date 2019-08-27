@@ -24,12 +24,12 @@
     <PackageReference Include="Autofac.AspNetCore.Multitenant" Version="1.1.0" />
     <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="4.4.0" />
     <PackageReference Include="JetBrains.Annotations" Version="2019.1.3" />
-    <PackageReference Include="MailKit" Version="2.2.0" />
+    <PackageReference Include="MailKit" Version="2.3.0" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning.ApiExplorer" Version="3.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning.ApiExplorer" Version="3.2.1" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.3" />
-    <PackageReference Include="MimeKit" Version="2.2.0" />
+    <PackageReference Include="MimeKit" Version="2.3.0" />
     <PackageReference Include="NLog.Web.AspNetCore" Version="4.8.4" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="4.0.1" />
     <PackageReference Include="Vsxmd" Version="1.4.2">
@@ -43,11 +43,8 @@
     <ProjectReference Include="..\PH.Core3.Common.Services.Components\PH.Core3.Common.Services.Components.csproj" />
     <ProjectReference Include="..\PH.Core3.Common.Services\PH.Core3.Common.Services.csproj" />
     <ProjectReference Include="..\PH.Core3.Common\PH.Core3.Common.csproj" />
-    <ProjectReference Include="..\PH.Core3.EntityFramework.Abstractions\PH.Core3.EntityFramework.Abstractions.csproj" />
     <ProjectReference Include="..\PH.Core3.EntityFramework.Services.Components\PH.Core3.EntityFramework.Services.Components.csproj" />
-    <ProjectReference Include="..\PH.Core3.EntityFramework\PH.Core3.EntityFramework.csproj" />
     <ProjectReference Include="..\PH.Core3.TestContext\PH.Core3.TestContext.csproj" />
-    <ProjectReference Include="..\PH.Core3.UnitOfWork\PH.Core3.UnitOfWork.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -10,12 +10,9 @@ dotnet pack "P:\Dev\Gitlab\PH.Core3\PH.Core3\PH.Core3.Common.Services\PH.Core3.C
 
 dotnet pack "P:\Dev\Gitlab\PH.Core3\PH.Core3\PH.Core3.Common.Services.Components\PH.Core3.Common.Services.Components.csproj" -c Release --include-source -o "P:\Dev\Gitlab\PH.Core3\PH.Core3\BuildPackages"
 
-dotnet pack "P:\Dev\Gitlab\PH.Core3\PH.Core3\PH.Core3.EntityFramework.Abstractions\PH.Core3.EntityFramework.Abstractions.csproj" -c Release --include-source -o "P:\Dev\Gitlab\PH.Core3\PH.Core3\BuildPackages"
-
-dotnet pack "P:\Dev\Gitlab\PH.Core3\PH.Core3\PH.Core3.EntityFramework\PH.Core3.EntityFramework.csproj" -c Release --include-source -o "P:\Dev\Gitlab\PH.Core3\PH.Core3\BuildPackages"
 
 dotnet pack "P:\Dev\Gitlab\PH.Core3\PH.Core3\\PH.Core3.EntityFramework.Services.Components\PH.Core3.EntityFramework.Services.Components.csproj" -c Release --include-source -o "P:\Dev\Gitlab\PH.Core3\PH.Core3\BuildPackages"
 
-dotnet pack "P:\Dev\Gitlab\PH.Core3\PH.Core3\PH.Core3.UnitOfWork\PH.Core3.UnitOfWork.csproj" -c Release --include-source  -o "P:\Dev\Gitlab\PH.Core3\PH.Core3\BuildPackages"
+
 
 echo "done"

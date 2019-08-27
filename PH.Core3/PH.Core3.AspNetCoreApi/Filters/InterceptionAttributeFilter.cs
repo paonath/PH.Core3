@@ -10,7 +10,6 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using PH.Core3.AspNetCoreApi.Attributes;
 using PH.Core3.Common;
-using PH.Core3.UnitOfWork;
 
 namespace PH.Core3.AspNetCoreApi.Filters
 {

@@ -4,8 +4,9 @@ using JetBrains.Annotations;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using PH.Core3.Common.Identifiers;
 using PH.Core3.Common.Result;
-using PH.Core3.UnitOfWork;
+using PH.UowEntityFramework.UnitOfWork;
 
 namespace PH.Core3.AspNetCoreApi.Controllers
 {
@@ -79,7 +80,7 @@ namespace PH.Core3.AspNetCoreApi.Controllers
             {
                 Logger.LogCritical(e,e.Message);
 
-                var errResult = ResultFactory.Fail<TContent>(Uow.Identifier, e);
+                var errResult = ResultFactory.Fail<TContent>(new Identifier(Uow.Identifier), e);
                 return StatusCode(StatusCodes.Status500InternalServerError, errResult.Error);
             }
 

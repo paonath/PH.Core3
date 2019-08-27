@@ -23,8 +23,13 @@
 
   <ItemGroup>
     <ProjectReference Include="..\PH.Core3.Common\PH.Core3.Common.csproj" />
-    <ProjectReference Include="..\PH.Core3.EntityFramework\PH.Core3.EntityFramework.csproj" />
     <ProjectReference Include="..\PH.Core3.TestContext\PH.Core3.TestContext.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    
+    <PackageReference Include="PH.UowEntityFramework.EntityFramework.Abstractions" Version="0.0.3" />
+    <PackageReference Include="PH.UowEntityFramework.EntityFramework" Version="0.0.3" />
+    <PackageReference Include="PH.UowEntityFramework.UnitOfWork" Version="0.0.3" />
+  </ItemGroup>
 </Project>

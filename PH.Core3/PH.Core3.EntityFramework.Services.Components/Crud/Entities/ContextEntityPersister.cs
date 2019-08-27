@@ -5,12 +5,13 @@ using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using PH.Core3.Common;
+using PH.Core3.Common.Identifiers;
 using PH.Core3.Common.Result;
 using PH.Core3.Common.Services.Components.Crud;
 using PH.Core3.Common.Services.Components.Crud.Entities;
 using PH.Core3.Common.Services.Crud;
 using PH.Core3.Common.Settings;
-using PH.Core3.EntityFramework.Abstractions.Models.Entities;
+using PH.UowEntityFramework.EntityFramework.Abstractions.Models;
 
 namespace PH.Core3.EntityFramework.Services.Components.Crud.Entities
 {

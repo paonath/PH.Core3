@@ -4,8 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using PH.Core3.Common;
 using PH.Core3.Common.Result;
-using PH.Core3.Test.WebApp.Services;
-using PH.Core3.UnitOfWork;
+using PH.UowEntityFramework.UnitOfWork;
 
 namespace PH.Core3.Test.WebApp.Areas.v1.Controllers
 {
@@ -22,16 +21,16 @@ namespace PH.Core3.Test.WebApp.Areas.v1.Controllers
     public class ValuesController : ControllerBase
     {
         private readonly ILogger<ValuesController> _logger;
-        private readonly AlberoService _alberoService;
+        //private readonly AlberoService _alberoService;
         private readonly IIdentifier _identifier;
         private readonly IUnitOfWork _uow;
 
-        public ValuesController(IIdentifier identifier, ILogger<ValuesController> logger, IUnitOfWork uow, AlberoService alberoService)
+        public ValuesController(IIdentifier identifier, ILogger<ValuesController> logger, IUnitOfWork uow/*, AlberoService alberoService*/)
         {
             _identifier = identifier;
             _logger = logger;
             _uow = uow;
-            _alberoService = alberoService;
+            //_alberoService = alberoService;
 
             _logger.BeginScope("test scope");
             _logger.LogInformation("Passo di qui");
@@ -43,9 +42,9 @@ namespace PH.Core3.Test.WebApp.Areas.v1.Controllers
         [NotNull]
         public ActionResult<IEnumerable<string>> Get()
         {
-            var tst = _alberoService.LoadAllAsync();
-            tst.Wait();
-            var r = tst.Result;
+            //var tst = _alberoService.LoadAllAsync();
+            //tst.Wait();
+            //var r = tst.Result;
 
             
 

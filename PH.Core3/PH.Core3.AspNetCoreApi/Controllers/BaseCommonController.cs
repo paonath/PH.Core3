@@ -1,7 +1,8 @@
 ﻿using System;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using PH.Core3.UnitOfWork;
+
+using PH.UowEntityFramework.UnitOfWork;
 
 [assembly: ApiConventionType(typeof(DefaultApiConventions))]
 namespace PH.Core3.AspNetCoreApi.Controllers
@@ -55,7 +56,7 @@ namespace PH.Core3.AspNetCoreApi.Controllers
             }
             catch (Exception e)
             {
-                Logger.LogCritical(e, $"ErrorAsync commit transaction with uid {Uow.Identifier.Uid}");
+                Logger.LogCritical(e, $"ErrorAsync commit transaction with uid {Uow.Identifier}");
                 Rollback();
                 throw;
             }

@@ -15,10 +15,9 @@ using NLog;
 using NLog.Config;
 using NLog.Targets;
 using PH.Core3.Common;
-using PH.Core3.EntityFramework;
-using PH.Core3.EntityFramework.Extensions;
 using PH.Core3.TestContext;
-using PH.Core3.UnitOfWork;
+using PH.UowEntityFramework.EntityFramework.Extensions;
+using PH.UowEntityFramework.UnitOfWork;
 
 namespace PH.Core3.Test.CreateUser
 {
@@ -138,13 +137,14 @@ namespace PH.Core3.Test.CreateUser
                             {
                                 var context = c.Resolve<MyContext>();
                                 context.Author     = "Console App";
-                                context.Identifier = c.Resolve<IIdentifier>();
-                                return new PH.Core3.EntityFramework.EntityFrameworkUnitOfWork(context,
-                                                                                              c.Resolve<ILogger<
-                                                                                                  EntityFrameworkUnitOfWork
-                                                                                              >>());
+                                context.Identifier = c.Resolve<IIdentifier>().Uid;
+                                context.UowLogger = c.Resolve<ILogger<IUnitOfWork>>();
+                                context.Initialize();
+
+                                return context;
+
                             })
-                            .AsSelf()
+                            //.AsSelf()
                             .As<IUnitOfWork>()
                             .AsImplementedInterfaces()
                             .InstancePerLifetimeScope();

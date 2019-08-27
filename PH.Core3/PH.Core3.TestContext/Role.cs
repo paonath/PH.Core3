@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Identity;
-using PH.Core3.EntityFramework.Abstractions.Models.Entities;
+using PH.UowEntityFramework.EntityFramework.Abstractions.Models;
 
 namespace PH.Core3.TestContext
 {
