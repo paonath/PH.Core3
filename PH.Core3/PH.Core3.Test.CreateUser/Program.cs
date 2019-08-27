@@ -15,6 +15,7 @@ using NLog;
 using NLog.Config;
 using NLog.Targets;
 using PH.Core3.Common;
+using PH.Core3.Common.Services.Components.Crud;
 using PH.Core3.TestContext;
 using PH.UowEntityFramework.EntityFramework.Extensions;
 using PH.UowEntityFramework.UnitOfWork;
@@ -82,6 +83,12 @@ namespace PH.Core3.Test.CreateUser
         {
             using (var uow = scope.Resolve<IUnitOfWork>())
             {
+                var dbg = scope.Resolve<DataService>();
+                var t = await dbg.AddAsync(new NewTestDataDto() {data = "Test"});
+                uow.Commit();
+
+
+
                 var ctx = scope.Resolve<MyContext>();
                 ctx.Initialize();
 
@@ -168,7 +175,17 @@ namespace PH.Core3.Test.CreateUser
                                 .OnActivated(e => { })
                                 .PropertiesAutowired(PropertyWiringOptions.AllowCircularDependencies);
             }
+            containerBuilder.Register(c => new TransientCrudSettings(c.Resolve<IIdentifier>(),
+                                                            c.Resolve<ILogger<TransientCrudSettings>>(), true, true,
+                                                            true, true)).AsSelf().AsImplementedInterfaces()
+                   .InstancePerLifetimeScope();
 
+
+            containerBuilder.RegisterType<DataService>().AsSelf()
+                            .AsImplementedInterfaces()
+                            .InstancePerLifetimeScope()
+                            .OnActivated(e => { })
+                            .PropertiesAutowired(PropertyWiringOptions.AllowCircularDependencies);
 
             var container       = containerBuilder.Build();
             var serviceProvider = new AutofacServiceProvider(container);

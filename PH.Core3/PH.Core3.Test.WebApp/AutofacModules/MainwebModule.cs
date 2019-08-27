@@ -16,6 +16,7 @@ using PH.Core3.Common.Services.Components.Crud;
 using PH.Core3.Common.Services.Path;
 using PH.Core3.EntityFramework;
 using PH.Core3.Test.WebApp.HostedService;
+using PH.Core3.Test.WebApp.Services;
 using PH.Core3.TestContext;
 using PH.UowEntityFramework.UnitOfWork;
 using ILogger = Microsoft.Extensions.Logging.ILogger;
@@ -121,7 +122,7 @@ namespace PH.Core3.Test.WebApp.AutofacModules
 
             builder.RegisterType<MailSenderService>().AsSelf().AsImplementedInterfaces().SingleInstance();
 
-            //var v1Svcs = typeof().Assembly.GetTypes().Where(t => t.IsAbstract == false).ToArray();
+            var v1Svcs = typeof(DataService).Assembly.GetTypes().Where(t => t.IsAbstract == false).ToArray();
 
             builder.Register(c => new TransientCrudSettings(c.Resolve<IIdentifier>(),
                                                             c.Resolve<ILogger<TransientCrudSettings>>(), true, true,
@@ -129,19 +130,19 @@ namespace PH.Core3.Test.WebApp.AutofacModules
                    .InstancePerLifetimeScope();
 
 
-            //foreach (var serviceType in v1Svcs)
-            //{
-            //    builder.RegisterType(serviceType)
-            //           .AsSelf()
-            //           .AsImplementedInterfaces()
-            //           .InstancePerLifetimeScope()
-            //           .OnActivated(e =>
-            //           {
-            //               //var svc = (Ecube.Ssgu.Api.Common.Services.IService) e.Instance;
-            //               //svc.Initialize();
-            //           })
-            //           .PropertiesAutowired(PropertyWiringOptions.AllowCircularDependencies);
-            //}
+            foreach (var serviceType in v1Svcs)
+            {
+                builder.RegisterType(serviceType)
+                       .AsSelf()
+                       .AsImplementedInterfaces()
+                       .InstancePerLifetimeScope()
+                       .OnActivated(e =>
+                       {
+                           //var svc = (Ecube.Ssgu.Api.Common.Services.IService) e.Instance;
+                           //svc.Initialize();
+                       })
+                       .PropertiesAutowired(PropertyWiringOptions.AllowCircularDependencies);
+            }
         }
     }
 

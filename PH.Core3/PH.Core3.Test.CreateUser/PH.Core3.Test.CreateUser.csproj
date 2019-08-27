@@ -51,9 +51,9 @@
    
 
     
-    <PackageReference Include="PH.UowEntityFramework.EntityFramework.Abstractions" Version="0.0.4" />
-    <PackageReference Include="PH.UowEntityFramework.EntityFramework" Version="0.0.4" />
-    <PackageReference Include="PH.UowEntityFramework.UnitOfWork" Version="0.0.4" />
+    <PackageReference Include="PH.UowEntityFramework.EntityFramework.Abstractions" Version="0.0.5" />
+    <PackageReference Include="PH.UowEntityFramework.EntityFramework" Version="0.0.5" />
+    <PackageReference Include="PH.UowEntityFramework.UnitOfWork" Version="0.0.5" />
 
   </ItemGroup>
 
@@ -62,6 +62,7 @@
     <ProjectReference Include="..\PH.Core3.Common.Services.Components\PH.Core3.Common.Services.Components.csproj" />
     <ProjectReference Include="..\PH.Core3.Common.Services\PH.Core3.Common.Services.csproj" />
     <ProjectReference Include="..\PH.Core3.Common\PH.Core3.Common.csproj" />
+    <ProjectReference Include="..\PH.Core3.EntityFramework.Services.Components\PH.Core3.EntityFramework.Services.Components.csproj" />
     <ProjectReference Include="..\PH.Core3.TestContext\PH.Core3.TestContext.csproj" />
   </ItemGroup>
 </Project>

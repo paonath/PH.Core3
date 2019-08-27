@@ -4,6 +4,13 @@ using PH.UowEntityFramework.EntityFramework.Mapping;
 
 namespace PH.Core3.TestContext.Map
 {
+
+    internal class TestDataMap : EntityMap<TestData, Guid>
+    {
+
+
+    }
+
     internal class UserMap :  EntityMap<User,string>
         //IEntityTypeConfiguration<User>
     {

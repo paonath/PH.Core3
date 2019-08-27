@@ -154,6 +154,43 @@ namespace PH.Core3.TestContext.Migrations
                     b.ToTable("AspNetRoles");
                 });
 
+            modelBuilder.Entity("PH.Core3.TestContext.TestData", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<long>("CreatedTransactionId")
+                        .HasColumnName("CreatedTransactionId");
+
+                    b.Property<bool>("Deleted")
+                        .HasColumnName("Deleted");
+
+                    b.Property<long?>("DeletedTransactionId")
+                        .HasColumnName("DeletedTransactionId");
+
+                    b.Property<string>("Name");
+
+                    b.Property<byte[]>("Timestamp")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnName("Timestamp");
+
+                    b.Property<long>("UpdatedTransactionId")
+                        .HasColumnName("UpdatedTransactionId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatedTransactionId");
+
+                    b.HasIndex("DeletedTransactionId");
+
+                    b.HasIndex("UpdatedTransactionId");
+
+                    b.HasIndex("Id", "Deleted", "CreatedTransactionId", "UpdatedTransactionId", "DeletedTransactionId");
+
+                    b.ToTable("Data");
+                });
+
             modelBuilder.Entity("PH.Core3.TestContext.User", b =>
                 {
                     b.Property<string>("Id")
@@ -339,6 +376,23 @@ namespace PH.Core3.TestContext.Migrations
                 });
 
             modelBuilder.Entity("PH.Core3.TestContext.Role", b =>
+                {
+                    b.HasOne("PH.UowEntityFramework.EntityFramework.Abstractions.Models.TransactionAudit", "CreatedTransaction")
+                        .WithMany()
+                        .HasForeignKey("CreatedTransactionId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("PH.UowEntityFramework.EntityFramework.Abstractions.Models.TransactionAudit", "DeletedTransaction")
+                        .WithMany()
+                        .HasForeignKey("DeletedTransactionId");
+
+                    b.HasOne("PH.UowEntityFramework.EntityFramework.Abstractions.Models.TransactionAudit", "UpdatedTransaction")
+                        .WithMany()
+                        .HasForeignKey("UpdatedTransactionId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("PH.Core3.TestContext.TestData", b =>
                 {
                     b.HasOne("PH.UowEntityFramework.EntityFramework.Abstractions.Models.TransactionAudit", "CreatedTransaction")
                         .WithMany()

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using PH.Core3.Common;
 using PH.Core3.Common.Result;
+using PH.Core3.Test.WebApp.Services;
 using PH.UowEntityFramework.UnitOfWork;
 
 namespace PH.Core3.Test.WebApp.Areas.v1.Controllers
@@ -25,11 +26,15 @@ namespace PH.Core3.Test.WebApp.Areas.v1.Controllers
         private readonly IIdentifier _identifier;
         private readonly IUnitOfWork _uow;
 
-        public ValuesController(IIdentifier identifier, ILogger<ValuesController> logger, IUnitOfWork uow/*, AlberoService alberoService*/)
+        private readonly DataService _dataService;
+
+        public ValuesController(IIdentifier identifier, ILogger<ValuesController> logger, IUnitOfWork uow, DataService dataService
+            /*, AlberoService alberoService*/)
         {
             _identifier = identifier;
             _logger = logger;
             _uow = uow;
+            _dataService = dataService;
             //_alberoService = alberoService;
 
             _logger.BeginScope("test scope");
@@ -46,6 +51,9 @@ namespace PH.Core3.Test.WebApp.Areas.v1.Controllers
             //tst.Wait();
             //var r = tst.Result;
 
+            var tst = _dataService.AddAsync(new NewTestDataDto() {data = "Test"});
+
+            _uow.Commit("testing");
             
 
         
