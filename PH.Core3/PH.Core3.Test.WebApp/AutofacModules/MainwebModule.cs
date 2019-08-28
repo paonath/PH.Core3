@@ -13,12 +13,12 @@ using PH.Core3.AspNetCoreApi.Services.Components;
 using PH.Core3.Common;
 using PH.Core3.Common.Identifiers;
 using PH.Core3.Common.Services.Components.Crud;
-using PH.Core3.Common.Services.Path;
 using PH.Core3.EntityFramework;
 using PH.Core3.Test.WebApp.HostedService;
 using PH.Core3.Test.WebApp.Services;
 using PH.Core3.TestContext;
 using PH.UowEntityFramework.UnitOfWork;
+using PH.WebPathTranslator;
 using ILogger = Microsoft.Extensions.Logging.ILogger;
 
 namespace PH.Core3.Test.WebApp.AutofacModules
@@ -65,8 +65,7 @@ namespace PH.Core3.Test.WebApp.AutofacModules
             builder.Register(c =>
                    {
                        var wPAth = c.ResolveOptional<IHostingEnvironment>()?.WebRootPath ?? "C:\\temp";
-                       return new
-                           PH.Core3.Common.Services.Components.Path.WebPathTranslator(wPAth);
+                       return new WebPathTranslator.WebPathTranslator(wPAth);
                    })
                    .AsSelf()
                    .AsImplementedInterfaces()

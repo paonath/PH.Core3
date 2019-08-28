@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Logging;
-using PH.Core3.Common.Services.Path;
+using PH.WebPathTranslator;
 
 namespace PH.Core3.AspNetCoreApi.Services.Components
 {

@@ -34,6 +34,8 @@
   </ItemGroup>
   
   <ItemGroup>
+    <PackageReference Include="PH.WebPathTranslator" Version="1.0.1" />
+
     <PackageReference Include="MailKit" Version="2.3.0" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="JetBrains.Annotations" Version="2019.1.3" />
@@ -42,9 +44,9 @@
     <PackageReference Include="RazorLight" Version="1.1.0" />
 
 
-    <PackageReference Include="PH.UowEntityFramework.EntityFramework.Abstractions" Version="0.0.5" />
-    <PackageReference Include="PH.UowEntityFramework.EntityFramework" Version="0.0.5" />
-    <PackageReference Include="PH.UowEntityFramework.UnitOfWork" Version="0.0.5" />
+    <PackageReference Include="PH.UowEntityFramework.EntityFramework.Abstractions" Version="1.0.0" />
+    <PackageReference Include="PH.UowEntityFramework.EntityFramework" Version="1.0.0" />
+    <PackageReference Include="PH.UowEntityFramework.UnitOfWork" Version="1.0.0" />
   </ItemGroup>
 
 </Project>

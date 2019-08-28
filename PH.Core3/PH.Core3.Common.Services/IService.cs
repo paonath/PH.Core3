@@ -12,10 +12,10 @@ namespace PH.Core3.Common.Services
         /// </summary>
         IIdentifier Identifier { get; }
 
-        /// <summary>
-        /// Service Identifier (a int value representing the service and the service name)
-        /// </summary>
-        ServiceIdentifier ServiceIdentifier { get; }
+        ///// <summary>
+        ///// Service Identifier (a int value representing the service and the service name)
+        ///// </summary>
+        //ServiceIdentifier ServiceIdentifier { get; }
     }
 
     

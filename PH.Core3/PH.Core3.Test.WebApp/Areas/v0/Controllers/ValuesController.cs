@@ -44,8 +44,7 @@ namespace PH.Core3.Test.WebApp.Areas.v0.Controllers
         [LogAction(LogLevel.Information, LogActionOutcomeData = true, LogActionIncomeArguments = true, PostfixMessage = "ciao")]
         public async Task<ActionResult<IEnumerable<string>>> Get(int id)
         {
-
-            return new string[] { "value0", "value28" };
+           return new string[] { "value0", "value28" };
            
         }
 

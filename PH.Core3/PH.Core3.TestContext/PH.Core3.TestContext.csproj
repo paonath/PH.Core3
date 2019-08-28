@@ -11,9 +11,9 @@
   <ItemGroup>
 
 
-    <PackageReference Include="PH.UowEntityFramework.EntityFramework.Abstractions" Version="0.0.5" />
-    <PackageReference Include="PH.UowEntityFramework.EntityFramework" Version="0.0.5" />
-    <PackageReference Include="PH.UowEntityFramework.UnitOfWork" Version="0.0.5" />
+    <PackageReference Include="PH.UowEntityFramework.EntityFramework.Abstractions" Version="1.0.0" />
+    <PackageReference Include="PH.UowEntityFramework.EntityFramework" Version="1.0.0" />
+    <PackageReference Include="PH.UowEntityFramework.UnitOfWork" Version="1.0.0" />
 
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="2.2.6" />
     <PackageReference Include="JetBrains.Annotations" Version="2019.1.3" />

@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="PH.UowEntityFramework.EntityFramework.Abstractions" Version="0.0.5" />
+    <PackageReference Include="PH.UowEntityFramework.EntityFramework.Abstractions" Version="1.0.0" />
     
     <PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" Version="2.2.6" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.2.6" />
