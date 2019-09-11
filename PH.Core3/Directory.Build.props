@@ -28,7 +28,7 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)'=='Release'">
-    <SourceRevisionId>build-20190911</SourceRevisionId>
+    <SourceRevisionId>build-$([System.DateTime]::UtcNow.ToString("yyyyMMdd"))</SourceRevisionId>
   </PropertyGroup>
 
 </Project>
