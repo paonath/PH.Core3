@@ -14,5 +14,6 @@ dotnet pack "P:\Dev\Gitlab\PH.Core3\PH.Core3\PH.Core3.Common.Services.Components
 dotnet pack "P:\Dev\Gitlab\PH.Core3\PH.Core3\\PH.Core3.EntityFramework.Services.Components\PH.Core3.EntityFramework.Services.Components.csproj" -c Release --include-symbols --include-source -o "P:\Dev\Gitlab\PH.Core3\PH.Core3\BuildPackages"
 
 
+nuget push "P:\Dev\Gitlab\PH.Core3\PH.Core3\BuildPackages\*.nupkg" -Source https://api.nuget.org/v3/index.json
 
 echo "done"
