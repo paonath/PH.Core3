@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
 
 
     <!-- Generate XML docs -->
@@ -14,7 +14,7 @@
     <PackageId>PH.Core3.AspNetCoreApi</PackageId>
     
     <Description>
-     NetCoreApp2.2 astraction - API Base Package: should be referenced by Asp.Net Core API Project
+     NetCoreApp3.0 astraction - API Base Package: should be referenced by Asp.Net Core API Project
     </Description>
 
     <PackageReleaseNotes>

@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>netstandard2.1</TargetFramework>
 
 
     <!-- Generate XML docs -->
@@ -15,7 +15,7 @@
     <PackageId>PH.Core3.Common.Services</PackageId>
     
     <Description>
-      NetStandard2.0 and NetCoreApp2.2 Utilities for Crud API System - Base Services Abstraction amd Interfaces. Should be referenced by Services project containing Interfaces
+      NetStandard2.1 and NetCoreApp3.0 Utilities for Crud API System - Base Services Abstraction amd Interfaces. Should be referenced by Services project containing Interfaces
     </Description>
 
     <PackageReleaseNotes>
@@ -37,7 +37,6 @@
   <ItemGroup>
     <PackageReference Include="FluentValidation" Version="8.4.0" />
     <PackageReference Include="JetBrains.Annotations" Version="2019.1.3" />
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
     <PackageReference Include="System.ComponentModel.Annotations" Version="4.5.0" />
   </ItemGroup>
 

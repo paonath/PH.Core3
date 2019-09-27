@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Runtime.Serialization;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 
 namespace PH.Core3.Common.Result
 {

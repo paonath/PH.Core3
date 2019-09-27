@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO.Compression;
 using System.Linq;
 using System.Security.Principal;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
@@ -10,7 +12,6 @@ using Autofac.Multitenant;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Hosting.Internal;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
@@ -21,18 +22,24 @@ using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using PH.Core3.AspNetCoreApi.Filters;
+using PH.Core3.Common.Json;
 using PH.Core3.Test.WebApp.AutofacModules;
 using PH.Core3.TestContext;
 using Swashbuckle.AspNetCore.Swagger;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using Swashbuckle.AspNetCore.SwaggerUI;
+using JsonSerializer = Newtonsoft.Json.JsonSerializer;
 
 namespace PH.Core3.Test.WebApp
 {
+
+    
+
     public class Startup
     {
         /// <summary>
@@ -40,13 +47,13 @@ namespace PH.Core3.Test.WebApp
         /// </summary>
         /// <param name="configuration">The configuration.</param>
         /// <param name="hostingEnvironment">the hosting environment</param>
-        public Startup(IConfiguration configuration, IHostingEnvironment hostingEnvironment)
+        public Startup(IConfiguration configuration, IWebHostEnvironment hostingEnvironment)
         {
             _environment  = hostingEnvironment;
             Configuration = configuration;
         }
 
-        private IHostingEnvironment _environment;
+        private IWebHostEnvironment _environment;
 
 
         public static MultitenantContainer ApplicationContainer { get; set; }
@@ -73,13 +80,20 @@ namespace PH.Core3.Test.WebApp
 
             services.Configure<GzipCompressionProviderOptions>(options => options.Level = CompressionLevel.Optimal);
             services
-                .AddMvc(options => options.Filters.Add<InterceptionAttributeFilter>())
+                .AddMvc(options =>
+                {
+                    options.Filters.Add<InterceptionAttributeFilter>();
+                    options.EnableEndpointRouting = false;
+
+                })
                 .AddJsonOptions(options =>
                 {
-                    options.SerializerSettings.DateTimeZoneHandling  = DateTimeZoneHandling.Utc;
-                    options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+                    options.JsonSerializerOptions.Converters.Add(new DateTimeUtcConverter());
+
+                    //options.SerializerSettings.DateTimeZoneHandling  = DateTimeZoneHandling.Utc;
+                    //options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
                 })
-                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
+                .SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
                 .AddControllersAsServices();
 
 
@@ -94,32 +108,7 @@ namespace PH.Core3.Test.WebApp
                     .AddEntityFrameworkStores<MyContext>()
                     .AddDefaultTokenProviders();
             
-            /*
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v0", new Info
-                {
-                    Version        = "v0",
-                    Title          = "ToDo API V0",
-                    Description    = "A simple example ASP.NET Core Web API",
-                    TermsOfService = "None",
-                    Contact = new Contact
-                    {
-                        Name  = "Paolo Innocenti",
-                        Email = "paolo.innocenti@estrobit.com",
-                        Url   = "https://estrobit.com/"
-                    },
-                    //License = new License
-                    //{
-                    //    Name = "Use under LICX",
-                    //    Url  = "https://example.com/license"
-                    //},
-
-                });
-                //c.SwaggerDoc("v0", new Info { Title = "My API", Version = "v0" });
-                c.SwaggerDoc("v1", new Info { Title = "My API", Version = "v1" });
-            });
-            */
+            
 
             services.AddScoped<TenantApiFinder, TenantApiFinder>();
 
@@ -162,8 +151,8 @@ namespace PH.Core3.Test.WebApp
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory
-                              , Microsoft.AspNetCore.Hosting.IApplicationLifetime appLifetime, IApiVersionDescriptionProvider apiVersionProvider)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory
+                              , Microsoft.Extensions.Hosting.IHostApplicationLifetime appLifetime, IApiVersionDescriptionProvider apiVersionProvider)
         {
             if (env.IsDevelopment())
             {
@@ -182,16 +171,7 @@ namespace PH.Core3.Test.WebApp
             // Enable middleware to serve generated Swagger as a JSON endpoint.
             app.UseSwagger( );
 
-            // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.), specifying the Swagger JSON endpoint.
-            //app.UseSwaggerUI(c =>
-            //{
-            //    c.SwaggerEndpoint("/swagger/v0/swagger.json", "My API V0");
-            //    c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
-            //    //c.DocExpansion("none");
-            //    //c.DocExpansion(DocExpansion.None);
-            //    c.DocExpansion(DocExpansion.None);
-
-            //});
+            
             app.UseSwaggerUI(
                              options =>
                              {
@@ -204,17 +184,14 @@ namespace PH.Core3.Test.WebApp
                                  }
                              } );
 
+            //app.UseRouting();
+
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
                                 name: "areaRoutev1",
                                 template: "{area=v1}/api/{controller=Home}/{action=Get}/{id?}");
-                /*
-                routes.MapRoute(
-                                name: "fileRoute",
-                                template: "Files/{action=Attachments}/{id}");
-                //http://localhost:5001/Files/Attachments/08d5fc393bd20a13aa02e3e1dcbdb95b-ReSharper_DefaultKeymap_VSscheme.pdf
-                */
+                
                 routes.MapRoute(
                                 name: "default",
                                 template: "{controller=Home}/{action=Index}/{id?}");

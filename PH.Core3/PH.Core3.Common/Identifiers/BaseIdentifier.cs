@@ -1,5 +1,6 @@
 ﻿using System;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
+
 
 namespace PH.Core3.Common.Identifiers
 {
@@ -11,13 +12,16 @@ namespace PH.Core3.Common.Identifiers
         /// <summary>
         /// Guid
         /// </summary>
-        [JsonProperty(PropertyName = @"_guid")]
+        //[JsonProperty(PropertyName = @"_guid")]
+        //[JsonName("birthdate")]
+        [JsonPropertyName(@"_guid")]
         public Guid BaseIdentifierGuid {get;}
 
         /// <summary>
         /// Utc Date and Time init of current identifier
         /// </summary>
-        [JsonProperty(PropertyName = @"_utc")]
+        //[JsonProperty(PropertyName = @"_utc")]
+        [JsonPropertyName(@"_guid")]
         public DateTime UtcGenerated { get; }
 
 
