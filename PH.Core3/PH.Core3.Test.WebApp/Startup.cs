@@ -16,8 +16,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ApiExplorer;
-using Microsoft.AspNetCore.Mvc.Versioning;
+//using Microsoft.AspNetCore.Mvc.ApiExplorer;
+//using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -45,12 +45,17 @@ namespace PH.Core3.Test.WebApp
         /// <summary>
         /// Initializes a new instance of the <see cref="Startup"/> class.
         /// </summary>
-        /// <param name="configuration">The configuration.</param>
+        
         /// <param name="hostingEnvironment">the hosting environment</param>
-        public Startup(IConfiguration configuration, IWebHostEnvironment hostingEnvironment)
+        public Startup(IWebHostEnvironment hostingEnvironment)
         {
             _environment  = hostingEnvironment;
-            Configuration = configuration;
+            var builder = new ConfigurationBuilder()
+                          .SetBasePath(hostingEnvironment.ContentRootPath)
+                          .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+                          .AddJsonFile($"appsettings.{hostingEnvironment.EnvironmentName}.json", optional: true)
+                          .AddEnvironmentVariables();
+            this.Configuration = builder.Build();
         }
 
         private IWebHostEnvironment _environment;
@@ -58,12 +63,12 @@ namespace PH.Core3.Test.WebApp
 
         public static MultitenantContainer ApplicationContainer { get; set; }
         
-        public IConfiguration Configuration { get; }
+        public IConfiguration Configuration { get; private set; }
 
 
         // This method gets called by the runtime. Use this method to add services to the container.
         [NotNull]
-        public IServiceProvider ConfigureServices([NotNull] IServiceCollection services)
+        public void ConfigureServices([NotNull] IServiceCollection services)
         {
             #region base DI
 
@@ -96,6 +101,7 @@ namespace PH.Core3.Test.WebApp
                 .SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
                 .AddControllersAsServices();
 
+            
 
             var contextConnectionString = Configuration.GetConnectionString("MySqlConnection");
 
@@ -112,47 +118,85 @@ namespace PH.Core3.Test.WebApp
 
             services.AddScoped<TenantApiFinder, TenantApiFinder>();
 
-            services.AddApiVersioning(options =>
+            //services.AddApiVersioning(options =>
+            //{
+            //    options.AssumeDefaultVersionWhenUnspecified = true;
+            //    options.ApiVersionSelector = new PerRouteApiVersionSelector(new TenantApiFinder());
+            //    //options.RouteConstraintName = "area";
+            //});
+
+            //services.AddVersionedApiExplorer( options => options.GroupNameFormat = "'v'VVV" );
+            //services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
+            
+            services.AddSwaggerGen(c =>
             {
-                options.AssumeDefaultVersionWhenUnspecified = true;
-                options.ApiVersionSelector = new PerRouteApiVersionSelector(new TenantApiFinder());
-                //options.RouteConstraintName = "area";
+                c.SwaggerDoc("v1", new Info
+                {
+                    Version        = "v1",
+                    Title          = "API",
+                    Description    = "Test API with ASP.NET Core 3.0",
+                    TermsOfService = "None",
+                    Contact = new Contact()
+                    {
+                        Name  = "Dotnet Detail",
+                        Email = "dotnetdetail@gmail.com",
+                        Url   = "www.dotnetdetail.net"
+                    },
+                    License = new License
+                    {
+                        Name = "ABC",
+                        Url  = "www.dotnetdetail.net"
+                    },
+                });
+
             });
-            services.AddVersionedApiExplorer( options => options.GroupNameFormat = "'v'VVV" );
-            services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
-            services.AddSwaggerGen();
 
             #endregion
 
-            
+
+
+            // This adds the required middleware to the ROOT CONTAINER and is required for multitenancy to work.
+            services.AddAutofacMultitenantRequestServices();
+
+
 
             #region Autofac
 
-            var builder = new ContainerBuilder();
+            //var builder = new ContainerBuilder();
 
-            builder.Populate(services);
-            //builder.RegisterModule<AutofacModules.MainwebModule>(contextConnectionString);
-            builder.RegisterModule(new MainwebModule(contextConnectionString));
-
-
-            var container = builder.Build();
-            var strategy  = new HttpTenantIdentificationStrategy(container.Resolve<IHttpContextAccessor>(), container.Resolve<TenantApiFinder>());
+            //builder.Populate(services);
+            ////builder.RegisterModule<AutofacModules.MainwebModule>(contextConnectionString);
+            //builder.RegisterModule(new MainwebModule(contextConnectionString));
 
 
+            //var container = builder.Build();
+            //var strategy = new HttpTenantIdentificationStrategy(container.Resolve<IHttpContextAccessor>(), container.Resolve<TenantApiFinder>());
 
-            var multitenantContainer = new MultitenantContainer(strategy, container);
 
 
-            ApplicationContainer = multitenantContainer;
+            //var multitenantContainer = new MultitenantContainer(strategy, container);
 
-            return new AutofacServiceProvider(multitenantContainer);
+
+            //ApplicationContainer = multitenantContainer;
+
+            //return new AutofacServiceProvider(multitenantContainer);
 
             #endregion
         }
 
+        public void ConfigureContainer(ContainerBuilder builder)
+        {
+            // This will all go in the ROOT CONTAINER and is NOT TENANT SPECIFIC.
+
+            var contextConnectionString = Configuration.GetConnectionString("MySqlConnection");
+            builder.RegisterModule(new MainwebModule(contextConnectionString));
+            
+
+        }
+
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory
-                              , Microsoft.Extensions.Hosting.IHostApplicationLifetime appLifetime, IApiVersionDescriptionProvider apiVersionProvider)
+                              , Microsoft.Extensions.Hosting.IHostApplicationLifetime appLifetime)
         {
             if (env.IsDevelopment())
             {
@@ -164,28 +208,9 @@ namespace PH.Core3.Test.WebApp
                 app.UseHsts();
             }
 
-            app.UseHttpsRedirection();
-            app.UseStaticFiles();
-            //app.UseMvc();
-
-            // Enable middleware to serve generated Swagger as a JSON endpoint.
-            app.UseSwagger( );
-
             
-            app.UseSwaggerUI(
-                             options =>
-                             {
-                                 foreach ( var description in apiVersionProvider.ApiVersionDescriptions )
-                                 {
-                                     options.SwaggerEndpoint(
-                                                             $"/swagger/{description.GroupName}/swagger.json",
-                                                             description.GroupName.ToUpperInvariant() );
-                                     options.DocExpansion(DocExpansion.None);
-                                 }
-                             } );
 
-            //app.UseRouting();
-
+            app.UseHttpsRedirection();
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
@@ -198,40 +223,56 @@ namespace PH.Core3.Test.WebApp
                
             });
 
-            app.UseStaticFiles();
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Test API V1");
+            });
+
+            
+
+           
         }
 
 
+        public static MultitenantContainer ConfigureMultitenantContainer(IContainer arg)
+        {
+            // This is the MULTITENANT PART. Set up your tenant-specific stuff here.
+            var strategy = new HttpTenantIdentificationStrategy(arg.Resolve<IHttpContextAccessor>(), arg.Resolve<TenantApiFinder>());
+            var mtc      = new MultitenantContainer(strategy, arg);
+            //mtc.ConfigureTenant("a", cb => cb.RegisterType<TenantDependency>().As<IDependency>());
+            return mtc;
+        }
     }
 
-    public class PerRouteApiVersionSelector : IApiVersionSelector
-    {
-        private readonly TenantApiFinder _finder;
+    //public class PerRouteApiVersionSelector : IApiVersionSelector
+    //{
+    //    private readonly TenantApiFinder _finder;
 
-        public PerRouteApiVersionSelector(TenantApiFinder finder)
-        {
-            _finder = finder;
-        }
+    //    public PerRouteApiVersionSelector(TenantApiFinder finder)
+    //    {
+    //        _finder = finder;
+    //    }
 
-        /// <summary>
-        /// Selects an API version given the specified HTTP request and API version information.
-        /// </summary>
-        /// <param name="request">The current <see cref="T:Microsoft.AspNetCore.Http.HttpRequest">HTTP request</see> to select the version for.</param>
-        /// <param name="model">The <see cref="T:Microsoft.AspNetCore.Mvc.Versioning.ApiVersionModel">model</see> to select the version from.</param>
-        /// <returns>The selected <see cref="T:Microsoft.AspNetCore.Mvc.ApiVersion">API version</see>.</returns>
-        [NotNull]
-        public ApiVersion SelectVersion([NotNull] HttpRequest request, ApiVersionModel model)
-        {
-            if (_finder.IsMatch(request.HttpContext, out var tenant, out var version))
-            {
-                return new ApiVersion(version, 0);
-            }
-            else
-            {
-                throw new ArgumentException("Unable to determine API Version from Request Context", nameof(request));
-            }
-        }
-    }
+    //    /// <summary>
+    //    /// Selects an API version given the specified HTTP request and API version information.
+    //    /// </summary>
+    //    /// <param name="request">The current <see cref="T:Microsoft.AspNetCore.Http.HttpRequest">HTTP request</see> to select the version for.</param>
+    //    /// <param name="model">The <see cref="T:Microsoft.AspNetCore.Mvc.Versioning.ApiVersionModel">model</see> to select the version from.</param>
+    //    /// <returns>The selected <see cref="T:Microsoft.AspNetCore.Mvc.ApiVersion">API version</see>.</returns>
+    //    [NotNull]
+    //    public ApiVersion SelectVersion([NotNull] HttpRequest request, ApiVersionModel model)
+    //    {
+    //        if (_finder.IsMatch(request.HttpContext, out var tenant, out var version))
+    //        {
+    //            return new ApiVersion(version, 0);
+    //        }
+    //        else
+    //        {
+    //            throw new ArgumentException("Unable to determine API Version from Request Context", nameof(request));
+    //        }
+    //    }
+    //}
 
     public class SwaggerDefaultValues : IOperationFilter
     {
@@ -244,7 +285,7 @@ namespace PH.Core3.Test.WebApp
         {
             var apiDescription = context.ApiDescription;
 
-            operation.Deprecated = apiDescription.IsDeprecated();
+            //operation.Deprecated = apiDescription.IsDeprecated();
             
 
 
