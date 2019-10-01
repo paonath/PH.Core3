@@ -6,9 +6,21 @@ using JetBrains.Annotations;
 namespace PH.Core3.Common.Json
 {
     /// <summary>
-    /// Serialize and Deserialize JSON Datetime as UTC 
+    /// Serialize and Deserialize JSON Datetime as UTC
     /// </summary>
     /// <seealso cref="DateTime" />
+    /// <example>
+    /// <code>
+    /// ...
+    /// services
+    /// .AddMvc()
+    /// .AddJsonOptions(options =>
+    /// {
+    /// options.JsonSerializerOptions.Converters.Add(new DateTimeUtcConverter());
+    /// }) 
+    /// ...
+    /// </code>
+    /// </example>
     public class DateTimeUtcConverter: System.Text.Json.Serialization.JsonConverter<DateTime>
     {
         /// <summary>

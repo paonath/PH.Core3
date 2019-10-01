@@ -29,6 +29,12 @@
     </PackageTags>
 
   </PropertyGroup>
+  <ItemGroup>
+    <None Include="..\nuget_es_img.png" Pack="true" PackagePath="" />
+  </ItemGroup>
+  <PropertyGroup>
+    <PackageIcon>nuget_es_img.png</PackageIcon>
+  </PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\PH.Core3.Common.Services\PH.Core3.Common.Services.csproj" />
