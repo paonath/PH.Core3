@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>netstandard2.1</TargetFramework>
 
     <!-- Generate XML docs -->
     <DocumentationFile>bin\$(Configuration)\PH.Core3.EntityFramework.Services.Components.xml</DocumentationFile>
@@ -19,10 +19,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="PH.UowEntityFramework.EntityFramework.Abstractions" Version="1.0.1" />
+    <PackageReference Include="PH.UowEntityFramework.EntityFramework.Abstractions" Version="2.0.1" />
     
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" Version="2.2.6" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.2.6" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" Version="3.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.0.0" />
   </ItemGroup>
 
   <ItemGroup>

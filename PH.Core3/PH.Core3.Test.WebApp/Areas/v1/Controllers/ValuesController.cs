@@ -16,7 +16,7 @@ namespace PH.Core3.Test.WebApp.Areas.v1.Controllers
     /// Controller V1
     /// </summary>
     [Route("api/v1/[controller]")]
-    [ApiVersion( "1" )]
+    //[ApiVersion( "1" )]
     //[Route( "api/v{version:apiVersion}/[controller]" )]
     [ApiController]
     public class ValuesController : ControllerBase

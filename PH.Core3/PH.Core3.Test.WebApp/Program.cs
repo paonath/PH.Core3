@@ -4,10 +4,12 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using Autofac.Extensions.DependencyInjection;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using NLog;
 using NLog.Config;
@@ -19,7 +21,7 @@ namespace PH.Core3.Test.WebApp
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
            // BuildWebHost(args).Run();
            // NLog: setup the logger first to catch all errors
@@ -32,7 +34,27 @@ namespace PH.Core3.Test.WebApp
                logger.Info($"Assembly: {fullName}");
 
 
-               BuildWebHost(args).Run(); 
+               //BuildWebHost(args).Run(); 
+
+               // ASP.NET Core 3.0+:
+               // The UseServiceProviderFactory call attaches the
+               // Autofac provider to the generic hosting mechanism.
+               var host = Host.CreateDefaultBuilder(args)
+                              //.UseServiceProviderFactory(new AutofacServiceProviderFactory())
+                              .UseServiceProviderFactory(new AutofacMultitenantServiceProviderFactory(Startup.ConfigureMultitenantContainer))
+                              .ConfigureWebHostDefaults(webHostBuilder => {
+                                  webHostBuilder
+                                      .UseContentRoot(Directory.GetCurrentDirectory())
+                                      .UseIISIntegration()
+                                      .UseStartup<Startup>();
+                              })
+                              .Build();
+
+               //host.Run();
+
+               await host.RunAsync();
+
+
            }
            catch (Exception ex)
            {
@@ -51,29 +73,32 @@ namespace PH.Core3.Test.WebApp
         //    WebHost.CreateDefaultBuilder(args)
         //           .UseStartup<Startup>();
 
-        public static IWebHost BuildWebHost(string[] args) =>
-            WebHost.CreateDefaultBuilder(args)
-                   .ConfigureAppConfiguration((builderContext, config) =>
-                   {
-                       var env = builderContext.HostingEnvironment;
+        //public static IWebHost BuildWebHost(string[] args) =>
+        //    WebHost.CreateDefaultBuilder(args)
+        //           .ConfigureAppConfiguration((builderContext, config) =>
+        //           {
+        //               var env = builderContext.HostingEnvironment;
 
-                       config.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-                             .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: false, reloadOnChange: true);
-                   })
+        //               config.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+        //                     .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: false, reloadOnChange: true);
+        //           })
 
-                   #region new Nlog
-                   .ConfigureLogging(logging =>
-                   {
-                       logging.ClearProviders();
-                       logging.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Trace);
-                   })
-                   .UseNLog(new NLogAspNetCoreOptions(){  CaptureMessageTemplates = true, CaptureMessageProperties =true, IncludeScopes = true , IgnoreEmptyEventId = true }) // NLog: setup NLog for Dependency injection
-                   #endregion
+        //           #region new Nlog
+        //           .ConfigureLogging(logging =>
+        //           {
+        //               logging.ClearProviders();
+        //               logging.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Trace);
+        //           })
+        //           .UseNLog(new NLogAspNetCoreOptions(){  CaptureMessageTemplates = true, CaptureMessageProperties =true, IncludeScopes = true , IgnoreEmptyEventId = true }) // NLog: setup NLog for Dependency injection
+        //           #endregion
 
-                   .UseStartup<Startup>()
-                   .UseAutofacMultitenantRequestServices(() => Startup.ApplicationContainer)
-                   .UseUrls("http://localhost:5000")
-                   .Build();
+        //           .UseServiceProviderFactory(new AutofacServiceProviderFactory())
+        //           .UseStartup<Startup>()
+        //           //.UseAutofacMultitenantRequestServices(() => Startup.ApplicationContainer)
+        //           .UseAutofacMultitenantRequestServices()
+        //           //.UseServiceProviderFactory(new AutofacMultitenantServiceProviderFactory(Startup.ConfigureMultitenantContainer))
+        //           .UseUrls("http://localhost:5000")
+        //           .Build();
 
 
         [NotNull]
