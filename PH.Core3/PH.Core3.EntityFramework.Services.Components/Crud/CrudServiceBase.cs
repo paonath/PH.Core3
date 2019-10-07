@@ -58,6 +58,7 @@ namespace PH.Core3.EntityFramework.Services.Components.Crud
             _logger = logger;
         }
 
+      
 
         /// <summary>
         /// Wrap a entity to a <see cref=" Result{TDto}">dto</see> to return to consuming services.

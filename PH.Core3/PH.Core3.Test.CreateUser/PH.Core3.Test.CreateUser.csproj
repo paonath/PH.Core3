@@ -9,7 +9,6 @@
 
   <ItemGroup>
     <PackageReference Include="Autofac" Version="4.9.4" />
-    <PackageReference Include="FluentValidation" Version="8.4.0" />
     <PackageReference Include="JetBrains.Annotations" Version="2019.1.1" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="2.2.0" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
@@ -17,7 +16,6 @@
     <PackageReference Include="NLog.Web.AspNetCore" Version="4.8.1" />
     
     <PackageReference Include="PH.PicoCrypt2" Version="1.0.2" />
-    <PackageReference Include="System.ComponentModel.Annotations" Version="4.5.0" />
     <PackageReference Include="Microsoft.Extensions.Logging" Version="2.2.0" />
     <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="4.4.0" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
@@ -50,10 +48,7 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.2.6" />
    
 
-    
-    <PackageReference Include="PH.UowEntityFramework.EntityFramework.Abstractions" Version="1.0.0" />
-    <PackageReference Include="PH.UowEntityFramework.EntityFramework" Version="1.0.0" />
-    <PackageReference Include="PH.UowEntityFramework.UnitOfWork" Version="1.0.0" />
+
 
   </ItemGroup>
 

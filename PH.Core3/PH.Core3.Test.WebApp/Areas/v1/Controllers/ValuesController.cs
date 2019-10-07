@@ -4,8 +4,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using PH.Core3.Common;
 using PH.Core3.Common.Result;
-using PH.Core3.Test.WebApp.Services;
+using PH.Core3.Test.CreateUser;
 using PH.UowEntityFramework.UnitOfWork;
+using DataService = PH.Core3.Test.WebApp.Services.DataService;
 
 namespace PH.Core3.Test.WebApp.Areas.v1.Controllers
 {

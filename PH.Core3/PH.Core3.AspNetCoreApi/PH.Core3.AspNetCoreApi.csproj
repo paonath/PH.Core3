@@ -44,9 +44,9 @@
     <PackageReference Include="RazorLight" Version="1.1.0" />
 
 
-    <PackageReference Include="PH.UowEntityFramework.EntityFramework.Abstractions" Version="1.0.0" />
-    <PackageReference Include="PH.UowEntityFramework.EntityFramework" Version="1.0.0" />
-    <PackageReference Include="PH.UowEntityFramework.UnitOfWork" Version="1.0.0" />
+    <PackageReference Include="PH.UowEntityFramework.EntityFramework.Abstractions" Version="1.0.2" />
+    <PackageReference Include="PH.UowEntityFramework.EntityFramework" Version="1.0.2" />
+    <PackageReference Include="PH.UowEntityFramework.UnitOfWork" Version="1.0.2" />
   </ItemGroup>
 
 </Project>
