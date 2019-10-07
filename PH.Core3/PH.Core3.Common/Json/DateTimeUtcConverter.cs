@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Globalization;
 using System.Text.Json;
 using JetBrains.Annotations;
 
@@ -33,7 +34,7 @@ namespace PH.Core3.Common.Json
         public override DateTime Read(ref Utf8JsonReader reader, [NotNull] Type typeToConvert, JsonSerializerOptions options)
         {
             Debug.Assert(typeToConvert == typeof(DateTime));
-            return DateTime.Parse(reader.GetString());
+            return DateTime.Parse(reader.GetString(), CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal);
         }
 
         /// <summary>Writes a specified value as JSON.</summary>
