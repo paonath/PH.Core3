@@ -8,6 +8,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{27CF4846-DF45-499B-9B87-6FC83D1F20EB}"
 	ProjectSection(SolutionItems) = preProject
 		Directory.Build.props = Directory.Build.props
+		nuget_es_img.png = nuget_es_img.png
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PH.Core3.Common.Services", "PH.Core3.Common.Services\PH.Core3.Common.Services.csproj", "{4FE472A0-B7DA-4989-A684-06C35CB73880}"

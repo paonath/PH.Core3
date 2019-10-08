@@ -87,7 +87,7 @@ namespace PH.Core3.Test.WebApp
 
             services.AddDbContext<MyContext>(options =>
                                                  options
-                                                     .UseSqlServer("Server=192.168.3.83\\SQLEXPRESS;Database=ctx_core3;User Id=dev;Password=dev;MultipleActiveResultSets=true")
+                                                     .UseSqlServer("Server=192.168.3.162\\SQLEXPRESS;Database=ctx_core3;User Id=dev;Password=dev;MultipleActiveResultSets=true")
                                                      .UseLazyLoadingProxies(true)
                                             );
             services.AddIdentity<User, Role>()
