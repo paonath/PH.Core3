@@ -16,5 +16,5 @@ PH.Core3.Common:  [![NuGet Badge](https://buildstats.info/nuget/PH.Core3.Common)
 
 ## NetStandard2.0 and NetCoreApp2.2
 
-NetStandard2.0 and NetCoreApp2.2 should use the release [1.2.5](https://github.com/paonath/PH.Core3/releases/tag/1.2.5)
+NetStandard2.0 and NetCoreApp2.2 should use the release [1.2.6](https://github.com/paonath/PH.Core3/releases/tag/v1.2.6)
 
