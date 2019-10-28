@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
@@ -57,13 +58,15 @@ namespace PH.Core3.Test.CreateUser
             try
             {
                 logger.Info("Init App");
+                ShowThreadInformation("Init App");
+
                 var fullName = typeof(Program).GetTypeInfo().Assembly.FullName;
                 logger.Info($"Assembly: {fullName}");
 
                 using (var scope = Init(serviceCollection))
                 {
-                    var t = PerformCode(scope);
-                    t.Wait();
+                    PerformCodeCaller(scope).GetAwaiter().GetResult();
+                    ShowThreadInformation("PerformCodeCaller result");
                 }
             }
             catch (Exception ex)
@@ -79,13 +82,122 @@ namespace PH.Core3.Test.CreateUser
             }
         }
 
+
+        private static Object lockObj = new Object();
+
+        private static void ShowThreadInformation(String taskName)
+        {
+            String msg    = null;
+            Thread thread = Thread.CurrentThread;
+            lock(lockObj) {
+                msg = $"{taskName} thread information\n" +
+                      $"   Background: {thread.IsBackground}\n" +
+                      $"   Thread Pool: {thread.IsThreadPoolThread}\n" +
+                      $"   Thread ID: {thread.ManagedThreadId}\n";
+            }
+            Console.WriteLine(msg);
+        }
+
+
+        private static async Task<User> CreateUserAsync(User user, string password, ILifetimeScope scope)
+        {
+            ShowThreadInformation("CreateUserAsync - Begin");
+            var userManager = scope.Resolve<ApplicationUserManager>();
+            var ty = await userManager.CreateAsync(user, password).ConfigureAwait(false);
+            
+            ShowThreadInformation("CreateUserAsync - End");
+            return user;
+        }
+
+        private static async Task<int> MySaveChanges(MyContext ctx)
+        {
+            ShowThreadInformation("MySaveChanges - Begin");
+            var c = await ctx.SaveChangesAsync().ConfigureAwait(false);
+            await WaitMe().ConfigureAwait(false);
+            ShowThreadInformation("MySaveChanges - End");
+            return c;
+        }
+
+
+        private static async Task WaitMe()
+        {
+            ShowThreadInformation("WaitMe");
+            await Task.Delay(1000);
+
+            return;
+        }
+
+        private static async Task<(string Username, string Password)> GetUserAndPwdFromConsole()
+        {
+            await WaitMe().ConfigureAwait(false);
+
+            ShowThreadInformation("PerformInternal - Provide Email");
+            Console.WriteLine("Provide Email");
+            var user = Console.ReadLine();
+
+            await WaitMe().ConfigureAwait(false);
+            Console.WriteLine("Provide Password");
+            var password = Console.ReadLine();
+
+            (string Username, string Password) r = (user, password);
+
+            return r;
+        }
+
+        private static async Task<int> PerformInternal(ILifetimeScope scope)
+        {
+            await WaitMe().ConfigureAwait(false);
+            int c = 0;
+
+            var user = await GetUserAndPwdFromConsole().ConfigureAwait(false);
+
+
+            var ctx = scope.Resolve<MyContext>();
+
+           
+            await WaitMe().ConfigureAwait(false);
+
+            var u = await CreateUserAsync(new User() {Email = user.Username, UserName = user.Username}, user.Password, scope)
+                        .ConfigureAwait(false);
+
+            ShowThreadInformation("PerformInternal > CreateUserAsync - End");
+
+
+            var tyu = await MySaveChanges(ctx).ConfigureAwait(false);
+
+            ShowThreadInformation("PerformInternal - SaveChangesAsync 1");
+            c += tyu;
+
+
+            u.AccessFailedCount = 2;
+            await ctx.Users.UpdateAsync(u).ConfigureAwait(false);
+            ShowThreadInformation("PerformInternal - UpdateAsync");
+            int full = await MySaveChanges(ctx).ConfigureAwait(false);
+
+            ShowThreadInformation("PerformInternal - SaveChangesAsync 2");
+
+            c += full;
+
+            return c;
+        }
+
+
+        private static async Task PerformCodeCaller(ILifetimeScope scope)
+        {
+            ShowThreadInformation("PerformCodeCaller");
+             await PerformCode(scope);
+
+        }
+
         private static async Task PerformCode(ILifetimeScope scope)
         {
+            ShowThreadInformation("PerformCode");
+            await WaitMe().ConfigureAwait(false);
             using (var uow = scope.Resolve<IUnitOfWork>())
             {
-                var dbg = scope.Resolve<DataService>();
-                var t = await dbg.AddAsync(new NewTestDataDto() {data = "Test"});
-                uow.Commit();
+                //var dbg = scope.Resolve<DataService>();
+                //var t = await dbg.AddAsync(new NewTestDataDto() {data = "Test"});
+                //uow.Commit();
 
 
 
@@ -97,22 +209,8 @@ namespace PH.Core3.Test.CreateUser
 
                 var userManager = scope.Resolve<ApplicationUserManager>();
 
-                Console.WriteLine("Provide Email");
-                var user = Console.ReadLine();
-
-                Console.WriteLine("Provide Password");
-                var password = Console.ReadLine();
-
-                var u  = new User() {Email = user, UserName = user};
-                var ty = await userManager.CreateAsync(u, password);
-
-
-                var tyu = await ctx.SaveChangesAsync();
-
-                u.AccessFailedCount = 2;
-                await ctx.Users.UpdateAsync(u);
-                await ctx.SaveChangesAsync();
-
+                var x = await PerformInternal(scope).ConfigureAwait(false);
+                await WaitMe().ConfigureAwait(false);
 
                 uow.Commit("create user");
             }

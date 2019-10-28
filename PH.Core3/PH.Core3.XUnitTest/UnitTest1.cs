@@ -148,9 +148,8 @@ namespace PH.Core3.XUnitTest
         {
             var lazy = new Lazy<IResult<TOuput>>(() =>
             {
-                var r = GetOutput();
-                r.Wait();
-                return r.Result;
+                var r = GetOutput().GetAwaiter().GetResult();
+                return r;
             });
 
             return Task.FromResult(lazy);

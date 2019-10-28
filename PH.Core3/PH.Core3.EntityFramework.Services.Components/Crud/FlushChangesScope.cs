@@ -38,10 +38,8 @@ namespace PH.Core3.EntityFramework.Services.Components.Crud
         /// <param name="disposing">True if disposing</param>
         protected override void Dispose(bool disposing)
         {
-            var t = _dbContext.SaveChangesAsync();
-            t.Wait();
-
-            //
+            var t = _dbContext.SaveChangesAsync().GetAwaiter().GetResult();
+           
         }
     }
 }

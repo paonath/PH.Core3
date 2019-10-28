@@ -86,6 +86,22 @@ namespace PH.Core3.Common.Extensions
         }
 
 
+        /// <summary>Errors the and return fail.</summary>
+        /// <typeparam name="T">type of result</typeparam>
+        /// <param name="l">The logger</param>
+        /// <param name="identifier">The identifier.</param>
+        /// <param name="exception">The exception.</param>
+        /// <param name="message">The message.</param>
+        /// <returns>Result fail</returns>
+        [NotNull]
+        public static IResult<T> ErrorAndReturnFail<T>(this ILogger l, [NotNull] IIdentifier identifier, [NotNull] Exception exception, [CanBeNull] string message = "")
+        {
+            var msg = string.IsNullOrEmpty(message) ? exception.Message : message;
+            l.LogError(exception, msg);
+            return ResultFactory.Fail<T>(identifier, Error.FromException(exception));
+        }
+
+
         /// <summary>
         /// Log Error and return fail
         /// </summary>
@@ -151,6 +167,21 @@ namespace PH.Core3.Common.Extensions
             => ErrorAndReturnFail<T>(l, i,
                                      new Error(errorMessage, eventId) {OutputMessage = outputMessage});
 
+
+        /// <summary>Criticals the and return fail.</summary>
+        /// <typeparam name="T">type of result</typeparam>
+        /// <param name="l">The logger.</param>
+        /// <param name="identifier">The identifier.</param>
+        /// <param name="exception">The exception.</param>
+        /// <param name="message">The message.</param>
+        /// <returns></returns>
+        public static IResult<T> CriticalAndReturnFail<T>(this ILogger l, [NotNull] IIdentifier identifier, [NotNull] Exception exception, [CanBeNull] string message = "")
+        {
+            var msg = string.IsNullOrEmpty(message) ? exception.Message : message;
+            l.LogCritical(exception, msg);
+            return ResultFactory.Fail<T>(identifier, Error.FromException(exception));
+        }
+
         /// <summary>Criticals the and return fail.</summary>
         /// <typeparam name="T">type of result</typeparam>
         /// <param name="l">The logger.</param>
@@ -164,19 +195,19 @@ namespace PH.Core3.Common.Extensions
             return ResultFactory.Fail<T>(i, error);
         }
 
-        /// <summary>Criticals the and return fail.</summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="l">The logger instance.</param>
-        /// <param name="i">The identifier.</param>
-        /// <param name="exception">The exception.</param>
-        /// <returns></returns>
-        [NotNull]
-        public static IResult<T> CriticalAndReturnFail<T>(this ILogger l, [NotNull] IIdentifier i,[NotNull] Exception exception)
-        {
-            l.LogCritical(exception, exception.Message);
-            var err = Error.FromException(exception);
-            return ResultFactory.Fail<T>(i, err);
-        }
+        ///// <summary>Criticals the and return fail.</summary>
+        ///// <typeparam name="T"></typeparam>
+        ///// <param name="l">The logger instance.</param>
+        ///// <param name="i">The identifier.</param>
+        ///// <param name="exception">The exception.</param>
+        ///// <returns></returns>
+        //[NotNull]
+        //public static IResult<T> CriticalAndReturnFail<T>(this ILogger l, [NotNull] IIdentifier i,[NotNull] Exception exception)
+        //{
+        //    l.LogCritical(exception, exception.Message);
+        //    var err = Error.FromException(exception);
+        //    return ResultFactory.Fail<T>(i, err);
+        //}
 
         /// <summary>Criticals the and return fail.</summary>
         /// <typeparam name="T">type of result</typeparam>
