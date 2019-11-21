@@ -71,7 +71,8 @@ namespace PH.Core3.Test.WebApp
                    #endregion
 
                    .UseStartup<Startup>()
-                   .UseAutofacMultitenantRequestServices(() => Startup.ApplicationContainer)
+                   .UseAutofacMultitenantRequestServices()
+                   //.UseAutofacMultitenantRequestServices(() => Startup.ApplicationContainer)
                    .UseUrls("http://localhost:5000")
                    .Build();
 
