@@ -10,33 +10,6 @@ using JetBrains.Annotations;
 namespace PH.Core3.Common.Result
 {
 
-    //internal class LazyEvaluatorResolver<T> 
-    //{
-    //    private readonly LazyEvaluatorAsync<T> _evaluatorAsync;
-
-
-    //    public async Task<IResult<T>> ResolveAsync()
-    //    {
-    //        return await _evaluatorAsync.ResolveAsync();
-    //    }
-    //}
-
-    //public class ChainHelper
-    //{
-    //    private LazyResult<T> _lazyResult;
-
-    //    public IResult<T> Result => _lazyResult;
-
-    //    public ChainHelper(LazyResult<T> lazyResult)
-    //    {
-    //        _lazyResult = lazyResult;
-    //    }
-
-
-    //    public void RaiseExit<TExit>() => _lazyResult.RaiseExit<TExit>();
-
-
-    //}
 
     internal class LazyResult<T> : Result<T> , IResult<T>
     {
