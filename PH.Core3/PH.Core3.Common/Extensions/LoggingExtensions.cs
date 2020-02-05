@@ -4,7 +4,9 @@ using System.Text;
 using FluentValidation.Results;
 using JetBrains.Annotations;
 using Microsoft.Extensions.Logging;
-using PH.Core3.Common.Result;
+
+using PH.Results;
+using PH.Results.Internals;
 
 namespace PH.Core3.Common.Extensions
 {
@@ -15,44 +17,7 @@ namespace PH.Core3.Common.Extensions
     {
 
         
-        /// <summary>
-        /// Log error
-        /// </summary>
-        /// <param name="l">logger</param>
-        /// <param name="error">error</param>
-        public static void LogOnlyError(this ILogger l, [NotNull] IError error)
-        {
-            if (error.ErrorEventId.HasValue)
-            {
-                var evId = error.ErrorEventId.Value;
-                l.Log(LogLevel.Error,evId, error.ErrorMessage);
-            }
-            else
-            {
-                l.LogError(error.ErrorMessage);
-            }
-        }
-
-        /// <summary>
-        /// log critical
-        /// </summary>
-        /// <param name="l">logger</param>
-        /// <param name="error">error</param>
-        public static void LogOnlyCritical(this ILogger l, [NotNull] IError error)
-        {
-            if (error.ErrorEventId.HasValue)
-            {
-                var evId = error.ErrorEventId.Value;
-                l.Log(LogLevel.Critical,evId, error.ErrorMessage);
-            }
-            else
-            {
-                l.LogCritical(error.ErrorMessage);
-            }
-
-            
-        }
-
+       
         #region IResult<T>
 
 
@@ -64,6 +29,7 @@ namespace PH.Core3.Common.Extensions
         /// <param name="errorMessage">The error message.</param>
         /// <returns></returns>
         [NotNull]
+        [Obsolete("Remove usage and use ResultFactory from PH.Results", true)]
         public static IResult<T> ErrorWithContentAndReturnFail<T>(this ILogger logger, [NotNull] IIdentifier identifier,
                                                                                   [NotNull] T content, [NotNull] string errorMessage)
          => ErrorWithContentAndReturnFail(logger, identifier, content, new Error(errorMessage));
@@ -77,11 +43,12 @@ namespace PH.Core3.Common.Extensions
         /// <param name="error">The error.</param>
         /// <returns></returns>
         [NotNull]
+        [Obsolete("Remove usage and use ResultFactory from PH.Results", true)]
         public static IResult<T> ErrorWithContentAndReturnFail<T>(this ILogger logger, [NotNull] IIdentifier identifier,
                                                                                   [NotNull] T content, [NotNull] IError error)
         {
 
-            LogOnlyError(logger, error);
+            logger.LogError(error);
             return ResultFactory.Fail<T>(identifier, content, error);
         }
 
@@ -94,6 +61,7 @@ namespace PH.Core3.Common.Extensions
         /// <param name="message">The message.</param>
         /// <returns>Result fail</returns>
         [NotNull]
+        [Obsolete("Remove usage and use ResultFactory from PH.Results", true)]
         public static IResult<T> ErrorAndReturnFail<T>(this ILogger l, [NotNull] IIdentifier identifier, [NotNull] Exception exception, [CanBeNull] string message = "")
         {
             var msg = string.IsNullOrEmpty(message) ? exception.Message : message;
@@ -111,9 +79,10 @@ namespace PH.Core3.Common.Extensions
         /// <typeparam name="T">type of result</typeparam>
         /// <returns>Result fail</returns>
         [NotNull]
+        [Obsolete("Remove usage and use ResultFactory from PH.Results")]
         public static IResult<T> ErrorAndReturnFail<T>(this ILogger l, [NotNull] IIdentifier i,[NotNull] IError error)
         {
-           LogOnlyError(l, error);
+           l.LogError(error);
             return ResultFactory.Fail<T>(i, error);
         }
 
@@ -125,6 +94,7 @@ namespace PH.Core3.Common.Extensions
         /// <param name="eventId">The event identifier.</param>
         /// <returns></returns>
         [NotNull]
+        [Obsolete("Remove usage and use ResultFactory from PH.Results", true)]
         public static IResult<T> ErrorAndReturnFail<T>(this ILogger l, [NotNull] IIdentifier i,[NotNull] ValidationResult fluentValidationResult,EventId? eventId = null)
         {
             StringBuilder sb = PrepareValidationFailures(fluentValidationResult, eventId, out var errors);
@@ -145,6 +115,7 @@ namespace PH.Core3.Common.Extensions
         /// <param name="outputMessage">The output message.</param>
         /// <returns></returns>
         [NotNull]
+        [Obsolete("Remove usage and use ResultFactory from PH.Results", true)]
         public static IResult<T> ErrorAndReturnFail<T>(this ILogger l, [NotNull] IIdentifier i,
                                                        [NotNull] string errorMessage, EventId? eventId = null,
                                                        string outputMessage = "")
@@ -160,7 +131,7 @@ namespace PH.Core3.Common.Extensions
         /// <param name="eventId">The event identifier.</param>
         /// <param name="outputMessage">The output message.</param>
         /// <returns></returns>
-        [NotNull]
+        [Obsolete("Remove usage and use ResultFactory from PH.Results", true)]
         public static IResult<T> ErrorAndReturnFail<T>(this ILogger l, [NotNull] IIdentifier i,
                                                        [NotNull] string errorMessage, EventId eventId,
                                                        string outputMessage = "")
@@ -175,6 +146,7 @@ namespace PH.Core3.Common.Extensions
         /// <param name="exception">The exception.</param>
         /// <param name="message">The message.</param>
         /// <returns></returns>
+        [Obsolete("Remove usage and use ResultFactory from PH.Results", true)]
         public static IResult<T> CriticalAndReturnFail<T>(this ILogger l, [NotNull] IIdentifier identifier, [NotNull] Exception exception, [CanBeNull] string message = "")
         {
             var msg = string.IsNullOrEmpty(message) ? exception.Message : message;
@@ -189,26 +161,14 @@ namespace PH.Core3.Common.Extensions
         /// <param name="error">The error.</param>
         /// <returns></returns>
         [NotNull]
+        [Obsolete("Remove usage and use ResultFactory from PH.Results", true)]
         public static IResult<T> CriticalAndReturnFail<T>(this ILogger l, [NotNull] IIdentifier i,[NotNull] IError error)
         {
-            l.LogOnlyCritical(error);
+            l.LogCritical(error);
             return ResultFactory.Fail<T>(i, error);
         }
 
-        ///// <summary>Criticals the and return fail.</summary>
-        ///// <typeparam name="T"></typeparam>
-        ///// <param name="l">The logger instance.</param>
-        ///// <param name="i">The identifier.</param>
-        ///// <param name="exception">The exception.</param>
-        ///// <returns></returns>
-        //[NotNull]
-        //public static IResult<T> CriticalAndReturnFail<T>(this ILogger l, [NotNull] IIdentifier i,[NotNull] Exception exception)
-        //{
-        //    l.LogCritical(exception, exception.Message);
-        //    var err = Error.FromException(exception);
-        //    return ResultFactory.Fail<T>(i, err);
-        //}
-
+        
         /// <summary>Criticals the and return fail.</summary>
         /// <typeparam name="T">type of result</typeparam>
         /// <param name="l">The logger.</param>
@@ -217,6 +177,7 @@ namespace PH.Core3.Common.Extensions
         /// <param name="eventId">The event identifier.</param>
         /// <returns></returns>
         [NotNull]
+        [Obsolete("Remove usage and use ResultFactory from PH.Results", true)]
         public static IResult<T> CriticalAndReturnFail<T>(this ILogger l, [NotNull] IIdentifier i,[NotNull] ValidationResult fluentValidationResult,EventId? eventId = null)
         {
             StringBuilder sb = PrepareValidationFailures(fluentValidationResult, eventId, out var errors);
@@ -233,6 +194,7 @@ namespace PH.Core3.Common.Extensions
         /// <param name="outputMessage">The output message.</param>
         /// <returns></returns>
         [NotNull]
+        [Obsolete("Remove usage and use ResultFactory from PH.Results", true)]
         public static IResult<T> CriticalAndReturnFail<T>(this ILogger l, [NotNull] IIdentifier i,
                                                           [NotNull] string errorMessage, EventId? eventId = null,
                                                           string outputMessage = "")
@@ -249,6 +211,7 @@ namespace PH.Core3.Common.Extensions
         /// <param name="outputMessage">The output message.</param>
         /// <returns></returns>
         [NotNull]
+        [Obsolete("Remove usage and use ResultFactory from PH.Results", true)]
         public static IResult<T> CriticalAndReturnFail<T>(this ILogger l, [NotNull] IIdentifier i, [NotNull] string errorMessage,EventId eventId, string outputMessage = "")
             => CriticalAndReturnFail<T>(l, i,
                                         new Error(errorMessage,eventId)
@@ -260,6 +223,7 @@ namespace PH.Core3.Common.Extensions
         #region private methods
 
         [NotNull]
+        [Obsolete("Remove usage and use ResultFactory from PH.Results", true)]
         internal static StringBuilder PrepareValidationFailures([NotNull] ValidationResult fluentValidationResult,
                                                                EventId? eventId, [NotNull] out Error[] errors)
         {
@@ -284,134 +248,6 @@ namespace PH.Core3.Common.Extensions
 
         #endregion
 
-        #region old...
-
-
-        #region IResult
-
-        ///// <summary>
-        ///// Log error and return IResult fail
-        ///// </summary>
-        ///// <param name="l">logger</param>
-        ///// <param name="i">identifier</param>
-        ///// <param name="errorMessage">error message</param>
-        ///// <param name="outputMessage">output message</param>
-        ///// <returns>Iresult on fail</returns>
-        //[NotNull]
-        //public static IResult ErrorAndReturnFail(this ILogger l, [NotNull] IIdentifier i, [NotNull] string errorMessage,string outputMessage = "")
-        //{
-        //    l.LogError(errorMessage);
-        //    return ResultFactory.Fail(i, errorMessage, null, outputMessage);
-        //}
-
-        ///// <summary>
-        ///// Log error and return IResult fail
-        ///// </summary>
-        ///// <param name="l">logger</param>
-        ///// <param name="i">identifier</param>
-        ///// <param name="errorMessage">error message</param>
-        ///// <param name="eventId">event id</param>
-        ///// <param name="outputMessage">output message</param>
-        ///// <returns>Iresult on fail</returns>
-        //[NotNull]
-        //public static IResult ErrorAndReturnFail(this ILogger l, [NotNull] IIdentifier i, [NotNull] string errorMessage,EventId? eventId = null, string outputMessage = "")
-        //{
-        //    l.LogError(errorMessage);
-        //    return ResultFactory.Fail(i, errorMessage, eventId, outputMessage);
-        //}
-
-        ///// <summary>
-        ///// Log error and return IResult fail
-        ///// </summary>
-        ///// <param name="l">logger</param>
-        ///// <param name="i">identifier</param>
-        ///// <param name="errorMessage">error message</param>
-        ///// <param name="eventId">event id</param>
-        ///// <param name="outputMessage">output message</param>
-        ///// <returns>Iresult on fail</returns>
-        //[NotNull]
-        //public static IResult ErrorAndReturnFail(this ILogger l, [NotNull] IIdentifier i, [NotNull] string errorMessage,EventId eventId, string outputMessage = "")
-        //{
-        //    l.LogError(errorMessage);
-        //    return ResultFactory.Fail(i, errorMessage, eventId, outputMessage);
-        //}
-
-        ///// <summary>
-        ///// Log error and return IResult fail from fluent validation result
-        ///// </summary>
-        ///// <param name="l">logger</param>
-        ///// <param name="i">identifier</param>
-
-        ///// <param name="fluentValidationResult">fluent validation result</param>
-        ///// <returns>Iresult on fail</returns>
-        //[NotNull]
-        //public static IResult ErrorAndReturnFail(this ILogger l, [NotNull] IIdentifier i,[NotNull] ValidationResult fluentValidationResult)
-        //{
-        //    StringBuilder sb = PrepareValidationFailures(fluentValidationResult, null, out var errors);
-        //    l.LogError(sb.ToString());
-        //    return ResultFactory.Fail(i, errors);
-        //}
-
-        ///// <summary>
-        ///// Log critical and return IResult fail from fluent validation result
-        ///// </summary>
-        ///// <param name="l">logger</param>
-        ///// <param name="i">identifier</param>
-        ///// <param name="fluentValidationResult">fluent validation result</param>
-        ///// <param name="eventId">event id</param>
-        ///// <returns>Iresult on fail</returns>
-        //[NotNull]
-        //public static IResult CriticalAndReturnFail(this ILogger l, [NotNull] IIdentifier i,[NotNull] ValidationResult fluentValidationResult,EventId? eventId = null)
-        //{
-        //    StringBuilder sb = PrepareValidationFailures(fluentValidationResult, eventId, out var errors);
-        //    l.LogCritical(sb.ToString());
-        //    return ResultFactory.Fail(i, errors);
-        //}
-
-        ///// <summary>Criticals the and return fail.</summary>
-        ///// <param name="l">The logger.</param>
-        ///// <param name="i">The identifier.</param>
-        ///// <param name="errorMessage">The error message.</param>
-        ///// <param name="outputMessage">The output message.</param>
-        ///// <returns>IResult fail</returns>
-        //[NotNull]
-        //public static IResult CriticalAndReturnFail(this ILogger l, [NotNull] IIdentifier i, [NotNull] string errorMessage,string outputMessage = "")
-        //{
-        //    l.LogCritical(errorMessage);
-        //    return ResultFactory.Fail(i, errorMessage, null, outputMessage);
-        //}
-
-        ///// <summary>Criticals the and return fail.</summary>
-        ///// <param name="l">The logger.</param>
-        ///// <param name="i">The identifier.</param>
-        ///// <param name="errorMessage">The error message.</param>
-        ///// <param name="eventId">The event identifier.</param>
-        ///// <param name="outputMessage">The output message.</param>
-        ///// <returns>IResult</returns>
-        //[NotNull]
-        //public static IResult CriticalAndReturnFail(this ILogger l, [NotNull] IIdentifier i, [NotNull] string errorMessage,EventId? eventId = null, string outputMessage = "")
-        //{
-        //    l.LogCritical(errorMessage);
-        //    return ResultFactory.Fail(i, errorMessage, eventId, outputMessage);
-        //}
-
-        ///// <summary>Criticals the and return fail.</summary>
-        ///// <param name="l">The logger.</param>
-        ///// <param name="i">The identifier.</param>
-        ///// <param name="errorMessage">The error message.</param>
-        ///// <param name="eventId">The event identifier.</param>
-        ///// <param name="outputMessage">The output message.</param>
-        ///// <returns></returns>
-        //[NotNull]
-        //public static IResult CriticalAndReturnFail(this ILogger l, [NotNull] IIdentifier i, [NotNull] string errorMessage,EventId eventId, string outputMessage = "")
-        //{
-        //    l.LogCritical(errorMessage);
-        //    return ResultFactory.Fail(i, errorMessage, eventId, outputMessage);
-        //}
-
-        #endregion
-
-
-        #endregion
+      
     }
 }

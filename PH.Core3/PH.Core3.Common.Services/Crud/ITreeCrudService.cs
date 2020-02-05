@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
 using PH.Core3.Common.Models.ViewModels;
-using PH.Core3.Common.Result;
+
+using PH.Results;
+using PH.Results.Internals;
 
 namespace PH.Core3.Common.Services.Crud
 {

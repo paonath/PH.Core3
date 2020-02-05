@@ -2,7 +2,9 @@
 using System.Threading.Tasks;
 using PH.Core3.Common.CoreSystem;
 using PH.Core3.Common.Models.ViewModels;
-using PH.Core3.Common.Result;
+using PH.Results;
+using PH.Results.Internals;
+
 
 namespace PH.Core3.Common.Services.Crud
 {
@@ -21,7 +23,7 @@ namespace PH.Core3.Common.Services.Crud
         /// Find  by Id
         /// </summary>
         /// <param name="id">Id</param>
-        /// <returns><see cref="PH.Core3.Common.Result"/> instance</returns>
+        /// <returns><see cref="Result{TContent}"/> instance</returns>
         Task<IResult<TDto>> FindByIdAsync(TKey id);
         
         /// <summary>

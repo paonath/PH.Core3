@@ -6,10 +6,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using PH.Core3.Common;
 using PH.Core3.Common.Identifiers;
-using PH.Core3.Common.Result;
+
 using PH.Core3.Common.Services.Components.Crud;
 using PH.Core3.Common.Services.Crud;
 using PH.Core3.Common.Settings;
+using PH.Results;
+using PH.Results.Internals;
 using PH.UowEntityFramework.EntityFramework.Abstractions.Models;
 
 namespace PH.Core3.EntityFramework.Services.Components.Crud.Entities
@@ -92,7 +94,7 @@ namespace PH.Core3.EntityFramework.Services.Components.Crud.Entities
         /// Find  by Id
         /// </summary>
         /// <param name="id">Id</param>
-        /// <returns><see cref="PH.Core3.Common.Result"/> instance</returns>
+        /// <returns><see cref="Result{TContent}"/> instance</returns>
         [ItemNotNull]
         public async Task<IResult<TEntity>> EntityFindByIdAsync([NotNull] TKey id)
         {
