@@ -22,7 +22,7 @@ namespace PH.Core3.XUnitTest
             }
             else
             {
-                var bad = ResultFactory.Fail<int>(id, new Error("Sbaglio apposta"));
+                var bad = ResultFactory.Fail<int>(id, Error.Instance("Sbaglio apposta"));
                 return bad;
             }
 

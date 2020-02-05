@@ -4,12 +4,12 @@
     <Copyright>Copyright PH 2019 (c) paonath@gmail.com. All rights reserved.</Copyright>
     <Authors>Paolo Innocenti</Authors>
     <Company>paonath@gmail.com</Company>
-    <Version>1.2.11</Version>
+    <Version>1.3.0</Version>
 
    
 
     <!--NUGET -->
-    <PackageVersion>1.2.11</PackageVersion>
+    <PackageVersion>1.3.0</PackageVersion>
    
     <RepositoryUrl>https://github.com/paonath/PH.Core3</RepositoryUrl>
     <PackageProjectUrl>https://github.com/paonath/PH.Core3</PackageProjectUrl>
@@ -22,7 +22,7 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)'=='Debug'">
-    <SourceRevisionId>build$([System.DateTime]::UtcNow.ToString("yyyyMMddHHmmss"))</SourceRevisionId>
+    <SourceRevisionId>build-$([System.DateTime]::UtcNow.ToString("yyyyMMddHHmmss"))</SourceRevisionId>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)'=='Release'">

@@ -180,7 +180,7 @@ namespace PH.Core3.EntityFramework.Services.Components.Crud
                 
             }
 
-            var error = new Error(si.ToString());
+            var error = Error.Instance(si.ToString());
             return (sb, error);
         }
 

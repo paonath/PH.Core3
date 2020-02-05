@@ -32,7 +32,7 @@ namespace PH.Core3.Common.Extensions
         [Obsolete("Remove usage and use ResultFactory from PH.Results", true)]
         public static IResult<T> ErrorWithContentAndReturnFail<T>(this ILogger logger, [NotNull] IIdentifier identifier,
                                                                                   [NotNull] T content, [NotNull] string errorMessage)
-         => ErrorWithContentAndReturnFail(logger, identifier, content, new Error(errorMessage));
+         => ErrorWithContentAndReturnFail(logger, identifier, content, Error.Instance(errorMessage));
         
 
         /// <summary>Log Error and return fail with content</summary>
@@ -98,10 +98,8 @@ namespace PH.Core3.Common.Extensions
         public static IResult<T> ErrorAndReturnFail<T>(this ILogger l, [NotNull] IIdentifier i,[NotNull] ValidationResult fluentValidationResult,EventId? eventId = null)
         {
             StringBuilder sb = PrepareValidationFailures(fluentValidationResult, eventId, out var errors);
-            var err = new Error(sb.ToString())
-            {
-                ErrorEventId = eventId
-            };
+            var err = Error.Instance(sb.ToString(), null, eventId);
+            
 
             return ErrorAndReturnFail<T>(l, i, err);
         }
@@ -119,8 +117,12 @@ namespace PH.Core3.Common.Extensions
         public static IResult<T> ErrorAndReturnFail<T>(this ILogger l, [NotNull] IIdentifier i,
                                                        [NotNull] string errorMessage, EventId? eventId = null,
                                                        string outputMessage = "")
-            => ErrorAndReturnFail<T>(l, i,
-                                     new Error(errorMessage) {ErrorEventId = eventId, OutputMessage = outputMessage});
+        {
+            var r =(Error)Error.Instance(errorMessage, null, eventId);
+            r.OutputMessage = outputMessage;
+            return ErrorAndReturnFail<T>(l, i, r);
+
+        }
 
 
         /// <summary>Errors the and return fail.</summary>
@@ -135,8 +137,13 @@ namespace PH.Core3.Common.Extensions
         public static IResult<T> ErrorAndReturnFail<T>(this ILogger l, [NotNull] IIdentifier i,
                                                        [NotNull] string errorMessage, EventId eventId,
                                                        string outputMessage = "")
-            => ErrorAndReturnFail<T>(l, i,
-                                     new Error(errorMessage, eventId) {OutputMessage = outputMessage});
+        {
+            var r =(Error)Error.Instance(errorMessage, null, eventId);
+            r.OutputMessage = outputMessage;
+            return ErrorAndReturnFail<T>(l, i, r);
+        }
+           // => ErrorAndReturnFail<T>(l, i,
+            //                         new Error(errorMessage, eventId) {OutputMessage = outputMessage});
 
 
         /// <summary>Criticals the and return fail.</summary>
@@ -181,7 +188,7 @@ namespace PH.Core3.Common.Extensions
         public static IResult<T> CriticalAndReturnFail<T>(this ILogger l, [NotNull] IIdentifier i,[NotNull] ValidationResult fluentValidationResult,EventId? eventId = null)
         {
             StringBuilder sb = PrepareValidationFailures(fluentValidationResult, eventId, out var errors);
-            var err = new Error(sb.ToString()) {ErrorEventId = eventId};
+            var err =  Error.Instance(sb.ToString(), null, eventId) ;
             return CriticalAndReturnFail<T>(l, i, err);
         }
 
@@ -198,24 +205,36 @@ namespace PH.Core3.Common.Extensions
         public static IResult<T> CriticalAndReturnFail<T>(this ILogger l, [NotNull] IIdentifier i,
                                                           [NotNull] string errorMessage, EventId? eventId = null,
                                                           string outputMessage = "")
-            => CriticalAndReturnFail<T>(l, i,
-                                        new Error(errorMessage)
-                                            {ErrorEventId = eventId, OutputMessage = outputMessage});
+        {
+            var r =(Error)Error.Instance(errorMessage, null, eventId);
+            r.OutputMessage = outputMessage;
+            return CriticalAndReturnFail<T>(l, i, r);
+        }
+          //  => CriticalAndReturnFail<T>(l, i,
+           //                             new Error(errorMessage)
+             //                               {ErrorEventId = eventId, OutputMessage = outputMessage});
 
-        /// <summary>Criticals the and return fail.</summary>
-        /// <typeparam name="T">type of result</typeparam>
-        /// <param name="l">The logger.</param>
-        /// <param name="i">The identifier.</param>
-        /// <param name="errorMessage">The error message.</param>
-        /// <param name="eventId">The event identifier.</param>
-        /// <param name="outputMessage">The output message.</param>
-        /// <returns></returns>
-        [NotNull]
-        [Obsolete("Remove usage and use ResultFactory from PH.Results", true)]
-        public static IResult<T> CriticalAndReturnFail<T>(this ILogger l, [NotNull] IIdentifier i, [NotNull] string errorMessage,EventId eventId, string outputMessage = "")
-            => CriticalAndReturnFail<T>(l, i,
-                                        new Error(errorMessage,eventId)
-                                            {OutputMessage = outputMessage});
+             /// <summary>Criticals the and return fail.</summary>
+             /// <typeparam name="T">type of result</typeparam>
+             /// <param name="l">The logger.</param>
+             /// <param name="i">The identifier.</param>
+             /// <param name="errorMessage">The error message.</param>
+             /// <param name="eventId">The event identifier.</param>
+             /// <param name="outputMessage">The output message.</param>
+             /// <returns></returns>
+             [NotNull]
+             [Obsolete("Remove usage and use ResultFactory from PH.Results", true)]
+             public static IResult<T> CriticalAndReturnFail<T>(this ILogger l, [NotNull] IIdentifier i,
+                                                               [NotNull] string errorMessage, EventId eventId,
+                                                               string outputMessage = "")
+             {
+                 var r =(Error)Error.Instance(errorMessage, null, eventId);
+                 r.OutputMessage = outputMessage;
+                 return CriticalAndReturnFail<T>(l, i, r);
+             }
+            //=> CriticalAndReturnFail<T>(l, i,
+            //                            new Error(errorMessage,eventId)
+            //                                {OutputMessage = outputMessage});
 
         #endregion
 
@@ -239,7 +258,7 @@ namespace PH.Core3.Common.Extensions
 
                 sb.Append(msg);
                 //errs.Add(Error.Parse(msg, eventId));
-                errs.Add(new Error(msg) {ErrorEventId = eventId});
+                errs.Add(Error.Instance(msg, null, eventId));
             }
 
             errors = errs.ToArray();

@@ -339,7 +339,7 @@ namespace PH.Core3.EntityFramework.Services.Components.Crud.Entities
             var en = await FindEntityByIdAsync(id);
             if(null == en)
             {
-                return ResultFactory.Fail<bool>(Identifier, false, new Error($"{EntityTypeName} with id '{id}' not found"));
+                return ResultFactory.Fail<bool>(Identifier, false, Error.Instance($"{EntityTypeName} with id '{id}' not found"));
             }
             
             return await RemoveAsync(en);

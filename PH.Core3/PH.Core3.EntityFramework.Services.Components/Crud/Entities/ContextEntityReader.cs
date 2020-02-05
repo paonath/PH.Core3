@@ -102,7 +102,7 @@ namespace PH.Core3.EntityFramework.Services.Components.Crud.Entities
             if (null == e)
             {
                 return ResultFactory.Fail<TEntity>(Identifier,
-                                                       new Error($"{EntityTypeName} with id '{id}' not found"));
+                                                        Error.Instance($"{EntityTypeName} with id '{id}' not found"));
             }
             else
             {
