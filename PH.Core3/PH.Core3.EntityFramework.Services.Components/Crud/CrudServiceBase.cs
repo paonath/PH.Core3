@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Text;
 using System.Threading.Tasks;
+using FluentValidation.Results;
 using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -9,9 +12,11 @@ using PH.Core3.Common;
 using PH.Core3.Common.CoreSystem;
 using PH.Core3.Common.Extensions;
 using PH.Core3.Common.Models.ViewModels;
-using PH.Core3.Common.Result;
+
 using PH.Core3.Common.Services.Components.Crud;
 using PH.Core3.Common.Services.Crud;
+using PH.Results;
+using PH.Results.Internals;
 using PH.UowEntityFramework.EntityFramework.Abstractions.Models;
 
 namespace PH.Core3.EntityFramework.Services.Components.Crud
@@ -61,7 +66,7 @@ namespace PH.Core3.EntityFramework.Services.Components.Crud
       
 
         /// <summary>
-        /// Wrap a entity to a <see cref=" Result{TDto}">dto</see> to return to consuming services.
+        /// Wrap a entity to a <see cref=" Result{TContent}">dto</see> to return to consuming services.
         /// </summary>
         /// <param name="entity">entity</param>
         /// <returns>Result </returns>
@@ -158,6 +163,27 @@ namespace PH.Core3.EntityFramework.Services.Components.Crud
         }
         */
 
+        internal static (StringBuilder errorDescr, Error error) PrepareValidationFailures([NotNull] ValidationResult fluentValidationResult)
+        {
+            StringBuilder sb   = new StringBuilder();
+            StringBuilder si = new StringBuilder();
+            foreach (var failure in fluentValidationResult.Errors)
+            {
+                string msg = $"{failure.ErrorMessage}; ";
+                if (!StringExtensions.IsNullString(failure.PropertyName) && failure.PropertyName != "*")
+                {
+                    msg = $"PropertyName '{failure.PropertyName}' - ErrorMessage '{failure.ErrorMessage}'; ";
+                }
+
+                sb.Append(msg);
+                si.Append(msg);
+                
+            }
+
+            var error = new Error(si.ToString());
+            return (sb, error);
+        }
+
 
         /// <summary>
         /// Async Add new Dto item
@@ -170,7 +196,12 @@ namespace PH.Core3.EntityFramework.Services.Components.Crud
             var t = await ParseDtoAndValidateAsync(entity);
             if (!t.InsertValidationResult.IsValid)
             {
-                return _logger.ErrorAndReturnFail<TDto>(Identifier, t.InsertValidationResult);
+                var err = PrepareValidationFailures(t.InsertValidationResult);
+               // _logger.LogError(err.errorDescr.ToString());
+               _logger.LogError($"add err: {err.errorDescr.ToString()}");
+                return ResultFactory.Fail<TDto>(Identifier, err.error);
+
+                
             }
 
             try
@@ -181,7 +212,11 @@ namespace PH.Core3.EntityFramework.Services.Components.Crud
             }
             catch (Exception e)
             {
-                return _logger.CriticalAndReturnFail<TDto>(Identifier, e);
+                var err = ResultFactory.Fail<TDto>(Identifier, e);
+                _logger.LogCritical(err.Error);
+                return err;
+
+                //return _logger.CriticalAndReturnFail<TDto>(Identifier, e);
             }
         }
 
@@ -190,14 +225,19 @@ namespace PH.Core3.EntityFramework.Services.Components.Crud
         /// Async remove a Dto
         /// </summary>
         /// <param name="entity">Content to delete</param>
-        /// <returns><see cref="PH.Core3.Common.Result"/> containing True or error</returns>
+        /// <returns><see cref="Result{TContent}"/> containing True or error</returns>
         [ItemNotNull]
         public virtual async Task<IResult<bool>> RemoveAsync([NotNull] TDto entity)
         {
             var t = await GetEntityForDeleteAsync(entity.Id);
             if (!t.DeleteValidationResult.IsValid)
             {
-                return _logger.ErrorAndReturnFail<bool>(Identifier, t.DeleteValidationResult);
+                var err = PrepareValidationFailures(t.DeleteValidationResult);
+                //_logger.LogError(err.errorDescr.ToString());
+                _logger.LogError($"remove err: {err.errorDescr.ToString()}");
+                return ResultFactory.Fail<bool>(Identifier, err.error);
+
+                //return _logger.ErrorAndReturnFail<bool>(Identifier, t.DeleteValidationResult);
             }
 
             try
@@ -206,7 +246,10 @@ namespace PH.Core3.EntityFramework.Services.Components.Crud
             }
             catch (Exception e)
             {
-                return _logger.CriticalAndReturnFail<bool>(Identifier, e);
+                var err = ResultFactory.Fail<bool>(Identifier, e);
+                _logger.LogError(e, $"Unable to remove: {e.Message}");
+                return err;
+                //return _logger.CriticalAndReturnFail<bool>(Identifier, e);
             }
         }
 
@@ -222,14 +265,19 @@ namespace PH.Core3.EntityFramework.Services.Components.Crud
             var e = await FindEntityByIdAsync(entity.Id);
             if (null == e)
             {
-                return _logger.CriticalAndReturnFail<TDto>(Identifier,
-                                                           $"Unable to find {EntityTypeName} with id {entity.Id}");
+                var err = ResultFactory.Fail<TDto>(Identifier, $"Unable to find {EntityTypeName} with id {entity.Id}");
+                _logger.LogError(err.Error);
+                return err;
             }
 
             var toUpdate = await MergeWithDtoAndValidateAsync(e, entity);
             if (!toUpdate.UpdateValidationResult.IsValid)
             {
-                return _logger.ErrorAndReturnFail<TDto>(Identifier, toUpdate.UpdateValidationResult);
+                var err = PrepareValidationFailures(toUpdate.UpdateValidationResult);
+                _logger.LogError($"update err: {err.errorDescr.ToString()}");
+                return ResultFactory.Fail<TDto>(Identifier, err.error);
+
+                //return _logger.ErrorAndReturnFail<TDto>(Identifier, toUpdate.UpdateValidationResult);
 
             }
 
@@ -243,7 +291,10 @@ namespace PH.Core3.EntityFramework.Services.Components.Crud
             }
             catch (Exception exception)
             {
-                return _logger.CriticalAndReturnFail<TDto>(Identifier, exception);
+                var r = ResultFactory.Fail<TDto>(Identifier, exception);
+                _logger.LogCritical(exception, exception.Message);
+                return r;
+                //return _logger.CriticalAndReturnFail<TDto>(Identifier, exception);
             }
         }
     }

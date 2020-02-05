@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
-using PH.Core3.Common.Result;
+
+using PH.Results;
+using PH.Results.Internals;
 
 namespace PH.Core3.Common.Services.Crud
 {
@@ -17,7 +19,7 @@ namespace PH.Core3.Common.Services.Crud
         /// Async update a entity
         /// </summary>
         /// <param name="entity">Content to Update</param>
-        /// <returns><see cref="PH.Core3.Common.Result"/> result</returns>
+        /// <returns><see cref="Result{TContent}"/> result</returns>
         Task<IResult<T>> EntityUpdateAsync([NotNull] T entity);
 
     }

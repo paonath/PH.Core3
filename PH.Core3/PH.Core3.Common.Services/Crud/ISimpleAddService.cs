@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
-using PH.Core3.Common.Result;
+using PH.Results;
+using PH.Results.Internals;
 
 namespace PH.Core3.Common.Services.Crud
 {
@@ -17,7 +18,7 @@ namespace PH.Core3.Common.Services.Crud
         /// Async Add new Item
         /// </summary>
         /// <param name="entity">Item to Add</param>
-        /// <returns><see cref="Result{T}"/> containing added Item or error</returns>
+        /// <returns><see cref="Result{TContent}"/> containing added Item or error</returns>
         Task<IResult<T>> EntityAddAsync([NotNull] T entity);
     }
 }

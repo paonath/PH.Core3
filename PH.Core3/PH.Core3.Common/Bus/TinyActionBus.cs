@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.Extensions.Logging;
-using PH.Core3.Common.Result;
+
 
 namespace PH.Core3.Common.Bus
 {

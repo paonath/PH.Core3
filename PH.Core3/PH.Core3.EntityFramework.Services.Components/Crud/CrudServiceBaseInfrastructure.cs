@@ -7,9 +7,10 @@ using Microsoft.Extensions.Logging;
 using PH.Core3.Common;
 using PH.Core3.Common.CoreSystem;
 using PH.Core3.Common.Models.ViewModels;
-using PH.Core3.Common.Result;
+
 using PH.Core3.Common.Services.Components.Crud;
 using PH.Core3.EntityFramework.Services.Components.Crud.Entities;
+using PH.Results;
 using PH.UowEntityFramework.EntityFramework.Abstractions.Models;
 
 namespace PH.Core3.EntityFramework.Services.Components.Crud

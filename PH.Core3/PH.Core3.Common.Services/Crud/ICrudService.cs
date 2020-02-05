@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using JetBrains.Annotations;
 using PH.Core3.Common.CoreSystem;
 using PH.Core3.Common.Models.ViewModels;
-using PH.Core3.Common.Result;
+using PH.Results;
 
 namespace PH.Core3.Common.Services.Crud
 {

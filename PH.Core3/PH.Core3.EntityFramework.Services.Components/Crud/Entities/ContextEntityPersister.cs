@@ -6,11 +6,13 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using PH.Core3.Common;
 using PH.Core3.Common.Identifiers;
-using PH.Core3.Common.Result;
+
 using PH.Core3.Common.Services.Components.Crud;
 using PH.Core3.Common.Services.Components.Crud.Entities;
 using PH.Core3.Common.Services.Crud;
 using PH.Core3.Common.Settings;
+using PH.Results;
+using PH.Results.Internals;
 using PH.UowEntityFramework.EntityFramework.Abstractions.Models;
 
 namespace PH.Core3.EntityFramework.Services.Components.Crud.Entities
@@ -315,12 +317,12 @@ namespace PH.Core3.EntityFramework.Services.Components.Crud.Entities
         /// Mark an Entity as Deleted
         /// </summary>
         /// <param name="entity">Entity to Remove</param>
-        /// <returns><see cref="PH.Core3.Common.Result"/> containing True or error</returns>
+        /// <returns><see cref="Result{TContent}"/> containing True or error</returns>
         [ItemNotNull]
         public async Task<IResult<bool>> RemoveAsync([NotNull] TEntity entity)
         {
             var delResult = await DeleteEntityAsync(entity);
-            return ResultFactory.TrueResult(Identifier);
+            return ResultFactory.Ok(Identifier, true);
         }
 
 
@@ -328,7 +330,7 @@ namespace PH.Core3.EntityFramework.Services.Components.Crud.Entities
         /// Async Remove existing Item
         /// </summary>
         /// <param name="id">value of the Id property</param>
-        /// <returns><see cref="PH.Core3.Common.Result"/> containing True or error</returns>
+        /// <returns><see cref="Result{TContent}"/> containing True or error</returns>
         [ItemNotNull]
         public async Task<IResult<bool>> RemoveByIdAsync([NotNull] TKey id)
         {
@@ -337,7 +339,7 @@ namespace PH.Core3.EntityFramework.Services.Components.Crud.Entities
             var en = await FindEntityByIdAsync(id);
             if(null == en)
             {
-                return ResultFactory.FalseResult(Identifier, new Error($"{EntityTypeName} with id '{id}' not found"));
+                return ResultFactory.Fail<bool>(Identifier, false, new Error($"{EntityTypeName} with id '{id}' not found"));
             }
             
             return await RemoveAsync(en);

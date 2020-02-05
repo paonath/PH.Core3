@@ -3,7 +3,8 @@ using System.Threading.Tasks;
 using JetBrains.Annotations;
 using PH.Core3.Common.Extensions;
 using PH.Core3.Common.Identifiers;
-using PH.Core3.Common.Result;
+using PH.Results;
+using PH.Results.Internals;
 using Xunit;
 
 namespace PH.Core3.XUnitTest
